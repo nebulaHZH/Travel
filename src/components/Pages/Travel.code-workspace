@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\.."
+		},
+		{
+			"path": "..\\..\\..\\..\\project\\project-one\\demo2"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Travel"
+	}
+}

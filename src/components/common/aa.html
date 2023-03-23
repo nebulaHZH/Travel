@@ -1,0 +1,96 @@
+```bash
+  <style type="text/css">
+        div,ul,li,p{
+            margin: 0;
+            padding: 0;
+        }
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        li{
+            list-style: none;
+        }
+        /*最外层设置一个相同的宽高*/
+        .nav_headir{
+            width: 100%;
+            height: 60px;
+        }
+        .nav{
+            width: 100%;
+            height: 60px;
+            font-size: 14px;
+            font-weight: bolder;
+            font-family: 微软雅黑;
+            color: black;
+            border: 1px solid silver;
+            z-index: 99;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .nav_box{
+            width: 550px;
+            height: 100%;
+            margin: 0 auto;
+
+        }
+        .nav_box ul{
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav_box ul li{
+            float: left;
+            line-height: 50px;
+            cursor:pointer;
+        }
+        .nav_box_t{
+            width: 100%;
+            height:200px ;
+            background-color: pink;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            display: none;
+            z-index: 99;
+        }
+        .center_box{
+            height: 80px;
+            width: 100%;
+            background-color: black;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="nav_headir">
+    <div class="nav">
+        <div class="nav_box">
+            <ul class="nav_item">
+                <li><a href="#">8系列</a>
+                    <div class="nav_box_t">
+
+                    </div>
+                </li>
+                <li><a href="#">7T系列</a>
+                    <div class="nav_box_t">
+
+                    </div>
+                </li>
+                <li><a href="#">商城</a>
+                    <div class="nav_box_t">
+
+                    </div>
+                </li>
+                <li><a href="#">品牌</a></li>
+                <li><a href="#">服务</a></li>
+                <li><a href="#">论坛</a></li>
+                <li><a href="#">零售店</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="center_box">
+ </div>
+</body>
+</html>
