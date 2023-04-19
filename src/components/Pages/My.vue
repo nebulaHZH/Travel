@@ -1,5 +1,5 @@
 <template>
-    <div style="background-color:bisque ;height: max-content;">
+    <div style="background-color:bisque ;height: max-content;padding: 0;">
         <div style="width: 100%;height:200px">
             <div class="top">
                 <div style="width: max-content;position: relative;">
@@ -18,7 +18,7 @@
             </div>
             
         </div>
-        <div style="margin-top: 80px;margin-left: 12%;width: max-content;margin-bottom: 40px;margin-bottom: 20px;padding: 20px;" >
+        <div style="margin-top: 80px;margin-left: 12%;width: max-content;margin-bottom: 40px;" >
             <a-radio-group v-model:value="values"  size="large" style="width:max-content;">
                 <a-radio-button value="news">最新动态</a-radio-button>
                 <a-radio-button value="notes">我的游记</a-radio-button>
@@ -33,11 +33,35 @@
             <span style="font-weight: 600;margin-left: 30px;">浏览数：</span>
             <span>{{ browserCount}}</span>
         </div>
-        <div v-if="values=== 'notes'" class="myNotes" >
-            <a-row v-for="item in items" ref="items">
-                <div style="text-align: left;background-color: transparent;; height: max-content;" :id="item.id">
-                    <img src="https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg" style="border-radius: 35px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
-                    <div style="margin-left: 50px;margin-top: 10px;width: max-content;float: left;">
+        <div v-if="values=== 'notes'" class="myNotes" style="background-color: white;width: 100%;;">
+            <div style="width: 100%;background-color: white;width: 88%%;margin-left: 12%;border-radius:10px">
+                <a-row v-for="item in items" ref="items">
+                <div style="text-align: left;background-color: transparent;; height: max-content;margin-top: 30px;" :id="item.id">
+                    <div style="float: right;margin-right: 10%;margin-top: 10px;">
+                        
+                        <a-dropdown :getPopupContainer="(trigger) => trigger.parentNode">
+                            <div  style="width: 20px;height: 20px;border-radius: 5px;background: transparent;background-size: contain;background-repeat: no-repeat;background-image: url('https://s1.chu0.com/src/img/png/f8/f874e6406cd6423aa409becfc3cfb925.png?e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:sBLlo-MOGFnTMjBRYrZZuZ4ohWo=');">
+                        </div>
+                            
+                            
+                            <template #overlay>
+                            <div style="text-align: center;">
+                                <a-menu style="width: max-content;margin: 0;">
+                                    <a-menu-item style="margin-left: -50px;padding: 0;">
+                                        <a-button style="margin: 0;">编辑</a-button>
+                                    </a-menu-item>
+                                    <a-menu-item style="margin-left: -50px;padding: 0;margin-top: -8px;">
+                                        <a-button >删除</a-button>
+                                    </a-menu-item>
+                                </a-menu>
+                            </div>
+                            
+                            </template>
+                        </a-dropdown>
+                        
+                    </div>
+                    <img src="https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg" style="border-radius: 10px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
+                    <div style="margin-left: 50px;width: max-content;float: left;">
                         <span style="font-size: 20px;">巴厘岛 | 总有一个假日，要属于bali</span>
                         <div style="width: 100%;height:max-content">
                             <div style="text-align: left;position: relative;display: flex;">
@@ -51,13 +75,9 @@
                         </div>
                         
                         <div style="margin-top: 5px;min-width: 800px;">
-                            <a-textarea 
-                            defaultValue="是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。"
-                            style="resize:none;;color: gray;margin-left: -10px;"
-                            :bordered="false"
-                            placeholder="Borderless" />
+                            <pre style="width:800px;white-space: pre-wrap;word-wrap: break-word;text-align: left;">是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。</pre>
                         </div>
-                        <div>
+                        <div style="float: right;margin-right: 10%;margin-top: 20px;">
                             <span  key="comment-basic-like">
                                 <a-tooltip title="Like">
                                 <template v-if="item.islike">
@@ -68,17 +88,28 @@
                                 </template>
                                 </a-tooltip>
                                 <span style="padding-left: 8px; cursor: auto">
-                                {{ item.count }}
+                                {{ item.likeCount }}
                                 </span>
+                            </span>
+                            <span>
+                                <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.aigei.com/src/img/png/c8/c8c2eeb58230418b9868bdd246b1716b.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:XGdsndtyiYMYv9kO9SAP7V8WSmU=" alt="">
+                                <span style="margin-left: 10px;">{{ item.commentCount }}</span>
+                            </span>
+                            <span>
+                                <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
+                                <span style="margin-left: 10px;">{{ item.browserCount }}</span>
                             </span>
                         </div>
                     </div>
                 </div>
-            </a-row>
-            <a-pagination style="margin-top:20px;padding-bottom: 20px;" v-model:current="current" :total="50" show-less-items />
+                </a-row>
+                <a-pagination style="margin-top:20px;padding-bottom: 20px;" v-model:current="current" :total="50" show-less-items />
+            </div>
+            
         
         </div>
         <div v-if="values === 'collection'" class="myCollection" >
+            <br>
             <div style="float: left;padding: 0;margin-top: 60px;border-radius: 5px;height: 650px;overflow-y: auto;border-width: 0.005cm;" class="myTeamsLeftList" >
                 <a-button style="font-weight: 500;font-size:larger;;width: 172px;height: 50px;">
                     <img src="https://s1.aigei.com/src/img/png/83/83c0164a722043789df68e793c9b0ecd.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:HP1AjZiW-IrqT9k30sRzezOpvZk=" alt="" style="width: 20px;height:20px;overflow: hidden;float: left;">
@@ -92,9 +123,9 @@
                     </a-button>
                 </div>
             </div>
-            <div style="float:right;margin-right: 10%;margin-top: 60px;" class="myTeamsRightList">
+            <div style="float:right;;margin-top: 60px;margin-right: 7%;" class="myTeamsRightList">
                 <div v-for="selection in selections" key="selection" style="padding: 0;">
-                    <a-row type="flex" justify="space-around" align="middle" v-for="row of 1" key="row" style="margin-bottom: 30px;margin-left: 0;">              
+                    <a-row type="flex" justify="space-around"  v-for="row of 1" key="row" style="margin-bottom: 30px;margin-left: 0;">              
                     <a-col :span="5" v-for="column of 4" key="column">
                         <a-card hoverable style="width: 260px;border-radius: 10px;">
                             <template #cover>
@@ -122,6 +153,7 @@
             </div>
         </div>
         <div v-if="values === 'teams'" class="myTeams">
+            <br>
             <div style="float: left;padding: 0;margin-top: 60px;border-radius: 5px;height: 650px;overflow-y: auto;border-width: 0.005cm;" class="myTeamsLeftList" >
                 <a-button style="font-weight: 500;font-size:larger;;width: 172px;height: 50px;">
                     <img src="https://s1.aigei.com/src/img/png/83/83c0164a722043789df68e793c9b0ecd.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:HP1AjZiW-IrqT9k30sRzezOpvZk=" alt="" style="width: 20px;height:20px;overflow: hidden;float: left;">
@@ -129,15 +161,15 @@
                 </a-button>
                 <div v-for="item in teams" >
                     
-                    <a-button style="font-weight: 500;font-size:larger;;width: 172px;height: 50px;">
+                    <a-button style="font-weight: 500;font-size:larger;;width: 170px;height: 50px;">
                         <img src="https://s1.aigei.com/src/img/png/1c/1c702401b53947b79e6a424df8c06696.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:KHVn3X2XiPLjs645LnFB6VVzbZE=" alt="" style="width: 20px;height:20px;overflow: hidden;float: left;;">
                         {{item.name.substring(0,6)}}
                     </a-button>
                 </div>
             </div>
-            <div style="float:right;margin-right: 10%;margin-top: 60px;" class="myTeamsRightList">
+            <div style="float:right;margin-right: 10%;margin-top: 60px;padding: 0;width: max-content;">
                 <!-- 这部分是团队标题栏 -->
-                <div style="width: 100%;height:200px">
+                <div style="width: 100%;height:200px;margin: 0;padding: 0;">
                     <div class="top">
                         <div style="width: max-content;position: relative;">
                             <img class="head" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,webp/quality,q_100" alt="" >
@@ -185,10 +217,23 @@
             <br>
             </div>
         </div>
-        <div v-if="values === 'likes'" class="myLike">
-            最新动态
+        <div v-if="values === 'likes'" class="myLike" style="width: 100%;background-color: white;">
+            <br>
+            <div style="background-color: white;width: 76%;margin-left: 12%;">
+                <div v-for="item in myLikes" style="text-align: left;width: 100%;border: solid 0.01ch;height: max-content;margin-top: 20px;border-radius: 10px;">
+                    <div style="float: right;margin-right: 9%;margin-top: 60px;">
+                        <a-button type="primary" @click="isLikeFunction($event)" style="width:100px">{{item.islike}}</a-button>
+                    </div>
+                    <img class="myLikeHead" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,jpg/quality,q_100" alt="" >
+                    <span style="margin-left:30px;font-weight: 600;margin-top: 40px;position: absolute;width: max-content;">{{item.name}}</span>
+                    <span style=" margin-left:30px;font-weight: 300;margin-top: 70px;position: absolute;width: max-content;max-width: 700px;text-align: left;max-height: 400px;">{{item.cover}}</span>
+                
+                </div>
+
+            </div>
+            <a-pagination style="margin-top:20px;padding-bottom: 20px;" v-model:current="current" :total="50" show-less-items />
         </div>
-        <div v-if="values === 'news'" class="myNews" style="margin-top: 200px;background-color: white;border-radius: 5px;">
+        <div v-if="values === 'news'" class="myNews" style="margin-top: 20px;background-color: white;border-radius: 5px;">
             <div style="text-align:left">
                 <a-radio-group v-model:value="newValues"  size="large" style="width:max-content;margin-left: 185px;margin-top: 20px;">
                     <a-radio-button value="newNews">动态</a-radio-button>
@@ -197,22 +242,203 @@
                 </a-radio-group>
             </div>
             
-            <div v-if="newValues === 'newNews'" style="text-align:left;margin-left: 180px">
-                <div style="width: max-content;position: relative;">
-                    <img class="newHead" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,webp/quality,q_100" alt="" >
-                    <span class="newName" style="">骆驼驼Mango</span>
-                    <div>
-                        <pre>豆瓣9.0、2.2亿的点击量、海量的媒体采访......11位分集导演纵览古今，从多个全然不同的角度切入，为动画呈现了动画是如何承载中国的文化传统以及哲学积淀。
-
-其中有着这样一部作品——它娓娓道来，极富想象力地展现了一位乡村少年质朴、有趣的童年图景，并由此引起了观众对于时光易逝、童年不再的乡愁与思索。
-
-这部作品，就是由刘毛宁执导的《中国奇谭》第四集——《乡村巴士带走了王孩儿和神仙》。 作者：动画学术趴 https://www.bilibili.com/read/cv22268997?from=category_0 出处：bilibili</pre>
+            <div v-if="newValues === 'newNews'" style="text-align:left;margin-left: 10%;border: solid 0.01cm;margin-top: 30px;margin-right: 10%;border-radius: 10px;">
+                <div v-for="item in newsMessage" style="width: max-content;position: relative;">
+                    <img class="newHead" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,jpg/quality,q_100" alt="" >
+                    <span style="margin-left:30px;font-weight: 600;margin-top: 120px;position: absolute;width: max-content;">{{item.writer}}</span>
+                    <span style=" margin-left:30px;font-weight: 600;margin-top: 160px;position: absolute;width: max-content;">{{item.team}}</span>
+                    <div style="margin-left: 90px;border: solid 0.01pc;padding: 10px;border-radius: 5px;">
+                        <pre style="width:1000px;white-space: pre-wrap;word-wrap: break-word">豆瓣9.0、2.2亿的点击量、海量的媒体采访......11位分集导演纵览古今，从多个全然不同的角度切入，为动画呈现了动画是如何承载中国的文化传统以及哲学积淀。其中有着这样一部作品——它娓娓道来，极富想象力地展现了一位乡村少年质朴、有趣的童年图景，并由此引起了观众对于时光易逝、童年不再的乡愁与思索。这部作品，就是由刘毛宁执导的《中国奇谭》第四集——《乡村巴士带走了王孩儿和神仙》。 作者：动画学术趴 https://www.bilibili.com/read/cv22268997?from=category_0 出处：bilibili</pre>
+                        <div  style="margin-left: 1%;margin-right: 1%;">
+                            <a-row  >
+                                <a-col v-for="ss in item.imgs">
+                                    <img  :src="ss.url" alt="" style="width: 200px;height: 200px;margin: 20px;">
+                                </a-col>
+                            </a-row>
+                            
+                        </div>
                     </div>
+                    
+                    
+                    <br>
+                    <br>
                 </div>
             </div>
+            <div v-if="newValues==='newNotes'" style="text-align:left;margin-left: 10%;border: solid 0.01cm;margin-top: 30px;margin-right: 10%;border-radius: 10px;">
+                <div style="width: 100%;background-color: white;width: 88%%;margin-left: 0%;border-radius:10px">
+                <a-row v-for="item in items" ref="items">
+                <div style="text-align: left;background-color: transparent;; height: max-content;margin-top: 30px;" :id="item.id">
+                    <div style="float: right;margin-right: 10%;margin-top: 10px;">
+                        
+                        <a-dropdown :getPopupContainer="(trigger) => trigger.parentNode">
+                            <div  style="width: 20px;height: 20px;border-radius: 5px;background: transparent;background-size: contain;background-repeat: no-repeat;background-image: url('https://s1.chu0.com/src/img/png/f8/f874e6406cd6423aa409becfc3cfb925.png?e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:sBLlo-MOGFnTMjBRYrZZuZ4ohWo=');">
+                        </div>
+                            
+                            
+                            <template #overlay>
+                            <div style="text-align: center;">
+                                <a-menu style="width: max-content;margin: 0;">
+                                    <a-menu-item style="margin-left: -50px;padding: 0;">
+                                        <a-button style="margin: 0;">编辑</a-button>
+                                    </a-menu-item>
+                                    <a-menu-item style="margin-left: -50px;padding: 0;margin-top: -8px;">
+                                        <a-button >删除</a-button>
+                                    </a-menu-item>
+                                </a-menu>
+                            </div>
+                            
+                            </template>
+                        </a-dropdown>
+                        
+                    </div>
+                    <img src="https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg" style="border-radius: 10px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
+                    <div style="margin-left: 50px;width: max-content;float: left;">
+                        <span style="font-size: 20px;">巴厘岛 | 总有一个假日，要属于bali</span>
+                        <div style="width: 100%;height:max-content">
+                            <div style="text-align: left;position: relative;display: flex;">
+                                <a-avatar class="ant-dropdown-link" @click.prevent style="margin-top:10px;width: 20px;height: 20px;">
+                                    <template #icon>
+                                    <img src="https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg" alt="">
+                                    </template>
+                                </a-avatar>
+                                <span style="margin-left:10px;margin-top: 8px;">用户名</span>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 5px;min-width: 800px;">
+                            <pre style="width:800px;white-space: pre-wrap;word-wrap: break-word;text-align: left;">是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。</pre>
+                        </div>
+                        <div style="float: right;margin-right: 10%;margin-top: 20px;">
+                            <span  key="comment-basic-like">
+                                <a-tooltip title="Like">
+                                <template v-if="item.islike">
+                                    <LikeFilled @click="like(item.id)" />
+                                </template>
+                                <template v-else>
+                                    <LikeOutlined @click="like(item.id)" />
+                                </template>
+                                </a-tooltip>
+                                <span style="padding-left: 8px; cursor: auto">
+                                {{ item.likeCount }}
+                                </span>
+                            </span>
+                            <span>
+                                <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.aigei.com/src/img/png/c8/c8c2eeb58230418b9868bdd246b1716b.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:XGdsndtyiYMYv9kO9SAP7V8WSmU=" alt="">
+                                <span style="margin-left: 10px;">{{ item.commentCount }}</span>
+                            </span>
+                            <span>
+                                <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
+                                <span style="margin-left: 10px;">{{ item.browserCount }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                </a-row>
+                <a-pagination style="margin-top:20px;padding-bottom: 20px;" v-model:current="current" :total="50" show-less-items />
+            </div>
+            </div>
+            <div v-if="newValues==='newMessage'" style="text-align:left;margin-left: 10%;margin-top: 30px;margin-right: 10%;border-radius: 10px;">
+            <div class="messageList" >
+                <div v-for="item in messages" >
+                    <a-button style="font-weight: 500;font-size:small;;width: 172px;height: 50px;">
+                        {{item.name.substring(0,11)}}
+                    </a-button>
+                </div>
+            </div>
+            <div style="border: solid 0.01ch;margin-left: 190px;min-height: 500px;margin-top: 60px;margin-right: 7%;text-align: center;" class="myTeamsRightList">
+                <div style="float:right;margin-right: 40px;margin-top: 20px;">
+                    <a-button type="danger">删除</a-button>
+                </div>
+                <div style="border: solid 0.01cap;margin-top: 60px;">
+                    <span style="font-size: larger;max-width: 700px;;">有关软件协同的说明通知</span>
+                </div>
+                
+                <div>
+                    <pre style="width:800px;white-space: pre-wrap;word-wrap: break-word;text-align: left;margin: 10%;">{{ texts }}</pre>
+                </div>
+                <div style="float: right;margin-right: 60px;">
+                    <span>时间：2023.3.24 </span>
+                </div>
+                <br>
+                <br>
+            <br>
+            </div>  
+            </div>
+            <br>
+            <br>
         </div>
-        <div v-if="values === 'history'"  class="myHistory">
-            我的关注
+        <div v-if="values === 'history'"  class="myHistory" style="background-color: white;width: 100%;;">
+            <div style="width: 100%;background-color: white;width: 88%%;margin-left: 12%;border-radius:10px">
+                <a-row v-for="item in itemHistroy" ref="items">
+                <div style="text-align: left;background-color: transparent;; height: max-content;margin-top: 30px;" :id="item.id">
+                    <div style="float: right;margin-right: 10%;margin-top: 10px;">
+                        
+                        <a-dropdown :getPopupContainer="(trigger) => trigger.parentNode">
+                            <div  style="width: 20px;height: 20px;border-radius: 5px;background: transparent;background-size: contain;background-repeat: no-repeat;background-image: url('https://s1.chu0.com/src/img/png/f8/f874e6406cd6423aa409becfc3cfb925.png?e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:sBLlo-MOGFnTMjBRYrZZuZ4ohWo=');">
+                        </div>
+                            
+                            
+                            <template #overlay>
+                            <div style="text-align: center;">
+                                <a-menu style="width: max-content;margin: 0;">
+                                    <a-menu-item style="margin-left: -50px;padding: 0;">
+                                        <a-button style="margin: 0;">编辑</a-button>
+                                    </a-menu-item>
+                                    <a-menu-item style="margin-left: -50px;padding: 0;margin-top: -8px;">
+                                        <a-button >删除</a-button>
+                                    </a-menu-item>
+                                </a-menu>
+                            </div>
+                            
+                            </template>
+                        </a-dropdown>
+                        
+                    </div>
+                    <img src="https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg" style="border-radius: 10px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
+                    <div style="margin-left: 50px;width: max-content;float: left;">
+                        <span style="font-size: 20px;">巴厘岛 | 总有一个假日，要属于bali</span>
+                        <div style="width: 100%;height:max-content">
+                            <div style="text-align: left;position: relative;display: flex;">
+                                <a-avatar class="ant-dropdown-link" @click.prevent style="margin-top:10px;width: 20px;height: 20px;">
+                                    <template #icon>
+                                    <img src="https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg" alt="">
+                                    </template>
+                                </a-avatar>
+                                <span style="margin-left:10px;margin-top: 8px;">用户名</span>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 5px;min-width: 800px;">
+                            <pre style="width:800px;white-space: pre-wrap;word-wrap: break-word;text-align: left;">是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。</pre>
+                        </div>
+                        <div style="float: right;margin-right: 10%;margin-top: 20px;">
+                            <span  key="comment-basic-like">
+                                <a-tooltip title="Like">
+                                <template v-if="item.islike">
+                                    <LikeFilled @click="like(item.id)" />
+                                </template>
+                                <template v-else>
+                                    <LikeOutlined @click="like(item.id)" />
+                                </template>
+                                </a-tooltip>
+                                <span style="padding-left: 8px; cursor: auto">
+                                {{ item.likeCount }}
+                                </span>
+                            </span>
+                            <span>
+                                <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.aigei.com/src/img/png/c8/c8c2eeb58230418b9868bdd246b1716b.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:XGdsndtyiYMYv9kO9SAP7V8WSmU=" alt="">
+                                <span style="margin-left: 10px;">{{ item.commentCount }}</span>
+                            </span>
+                            <span>
+                                <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
+                                <span style="margin-left: 10px;">{{ item.browserCount }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                </a-row>
+                <a-pagination style="margin-top:20px;padding-bottom: 20px;" v-model:current="current" :total="50" show-less-items />
+            </div>
         </div>
 
     </div>
@@ -236,7 +462,7 @@ const chageLikeState=()=>{
 }
 const likeCount = ref(20)
 const browserCount = ref(20000)
-const values=ref('collection')
+const values=ref('news')
 // 这个是单选框更换部分
 
 // 这里是我的收藏部分
@@ -276,31 +502,160 @@ const teams=[
 ]
 //这里是最新动态部分
 const newValues = ref('newNews')
+const newsMessage = [
+    {
+        writer:'h2asx',
+        team:'撒啊了',
+        imgs:[//只能上传四张图片
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+        ]
+    },
+    {
+        writer:'h2asx',
+        team:'撒啊了',
+        imgs:[
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+            ]
+    },
+    {
+        writer:'h2asx',
+        team:'大苏打',
+        imgs:[
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+        ]
+    },
+    {
+        writer:'h2asx',
+        team:'8iyuj',    
+        imgs:[
+        ]
+    }
+]
+const texts = 
+"群居、肉食、附魔的胡狼，只剩一对母女相依为命，在白山黑水的风雪中唱着《胡不归去》的挽歌。"+
+"依靠工具和组织的恐怖直立猿，形成了更强大的狩猎团体，但首领同样是单亲家庭，小虎母亲的缺位可能亦与狼有关。"+
+"林林可以变人，但妈妈始终只有狼的形象，对女儿的教导也是失去人形，失去一点，失去兽形，失去一切。"+
+"拥有双重形态的林林，没有成为两个种族和解交流的沟通使者，即便坐在一张桌子上一起吃饭，人类的熟食带来的是能力的剥夺。反而林林最终以人的形态为狼妈妈复仇，跟人族的家长同归于尽。"+
+"对于这段风雪中奇缘，人类代表的选择是不与狼共屋。小虎没有为父寻仇，转而做出了一个违背祖宗的决定，我不做猎人了，林林。"+
+"掠夺者向生产者的转变，暗合着采集型的狩猎生活，转入种田流的农耕文明。"+
+"以自然人格化的视角，我愿将《林林》的戏剧冲突称为『新仙女木事件』。新故事、狼仙女孩其名四木、酷寒气候、人类从打猎转职种地……"+
+"林海雪原，隔出一抔农桑田，刀耕火种姑且对丛林法则有所调和。"+
+"而真实的神州，以白山黑水为主体的天地间，的确曾是游牧族群与农耕王朝的千古战场，也是华夏文明工业化的先行起点。"
+const messages=[
+    {name:'哔哩哔哩隐私政策的修订通知'},
+    {name:'拜年纪全片回顾上线！'},
+    {name:'拜年纪直播即将开始！'},
+    {name:'拜年纪倒计时一天！'},
+    {name:'2023拜年纪开启预约啦！'},
+    {name:'终于！你的B站专属年度报告来了！'},
+    {name:'终于！你的B站专属年度报告来了！'},
+    {name:'终于！你的B站专属年度报告来了！'},
+    {name:'终于！你的B站专属年度报告来了！'},
+    {name:'终于！你的B站专属年度报告来了！'},
+    {name:'终于！你的B站专属年度报告来了！'},
+    {name:'终于！你的B站专属年度报告来了！'},
 
+]
 // 这里是我的游记部分
 const items = [
     {name:'aaaaaaaaaaaaaaaa',
-    count:10,
+    likeCount:10,
+    commentCount:200,
+    browserCount:1000,
     id:'10101',
     islike:true},
     {name:'aaaaaaaaaaaaaaaa',
-    count:12,
+    likeCount:12,
+    commentCount:200,
+    browserCount:1000,
     id:'10102',
     islike:false},
     
     {name:'aaaaaaaaaaaaaaaa',
-    count:13,
+    likeCount:13,
+    browserCount:1000,
+    commentCount:200,
     id:'10103',
     islike:false},
     {name:'aaaaaaaaaaaaaaaa',
-    count:13,
+    likeCount:13,
+    commentCount:200,
+    browserCount:1000,
     id:'10103',
     islike:false},
     {name:'aaaaaaaaaaaaaaaa',
-    count:13,
+    likeCount:13,
+    commentCount:200,
+    browserCount:1000,
     id:'10103',
     islike:false},
 ]
+// 这里是我的关注部分：
+const myLikes=[
+    {
+        name:'abcda',
+        islike:'取消关注',
+        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
+    },
+    {
+        name:'sdada',
+        islike:'取消关注',
+        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
+    },
+    {
+        name:'abcdasda',
+        islike:'取消关注',
+        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
+    },
+    {
+        name:'absaacda',
+        islike:'取消关注',
+        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
+    },
+    {
+        name:'absaacda',
+        islike:'取消关注',
+        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
+    },
+    {
+        name:'absaacda',
+        islike:'取消关注',
+        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
+    },
+    {
+        name:'absaacda',
+        islike:'取消关注',
+        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
+    },
+    {
+        name:'absaacda',
+        islike:'取消关注',
+        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
+    },
+    {
+        name:'absaacda',
+        islike:'取消关注',
+        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
+    },
+]
+function isLikeFunction(e:any){
+    console.log(e.currentTarget.innerText==='关注')
+    if (e.currentTarget.innerText==='关注') {
+
+        e.currentTarget.innerText='取消关注'
+    } else {
+        e.currentTarget.innerText='关注'
+    }
+    
+}
 const current=ref(1)
 // 这里是点赞收藏评论数：
 
@@ -313,6 +668,40 @@ const like = (id: string) => {
             }
         })
     };
+//我的历史部分：
+const itemHistroy = [
+    {name:'aaaaaaaaaaaaaaaa',
+    likeCount:10,
+    commentCount:200,
+    browserCount:1000,
+    id:'10101',
+    islike:true},
+    {name:'aaaaaaaaaaaaaaaa',
+    likeCount:12,
+    commentCount:200,
+    browserCount:1000,
+    id:'10102',
+    islike:false},
+    
+    {name:'aaaaaaaaaaaaaaaa',
+    likeCount:13,
+    browserCount:1000,
+    commentCount:200,
+    id:'10103',
+    islike:false},
+    {name:'aaaaaaaaaaaaaaaa',
+    likeCount:13,
+    commentCount:200,
+    browserCount:1000,
+    id:'10103',
+    islike:false},
+    {name:'aaaaaaaaaaaaaaaa',
+    likeCount:13,
+    commentCount:200,
+    browserCount:1000,
+    id:'10103',
+    islike:false},
+]
 </script>
 
 <style scoped lang="scss">
@@ -340,7 +729,7 @@ const like = (id: string) => {
     margin-top: 115px;
     position: absolute;
     width: max-content;
-    background-color: blanchedalmond;
+    
 }
 .top{
     background-image: url('https://img.zcool.cn/tubelocation/844564131f7d000e991000e46abc.jpg?x-oss-process=image/format,webp/quality,q_100');
@@ -377,7 +766,6 @@ const like = (id: string) => {
     width: max-content;
     background-color: #e1ebf5;
     border-radius: 20px;
-    margin-left: 12%;
     margin-top: 50px;
 }
 .myCollection{
@@ -402,6 +790,26 @@ const like = (id: string) => {
     width: 100px;
     margin-top: 100px;
     margin-left: 10px;
+    height:100px;
+    border: solid;
+    border-radius: 50%;
+    margin-bottom: 30px;
+    padding: 0;
+    overflow: hidden;
+}
+.messageList{
+    float: left;
+    padding: 0;
+    border-radius: 5px;
+    height: 500px;
+    overflow-y: auto;
+    border-width: 0.005cm;
+}
+// 我的关注部分
+.myLikeHead{
+    margin-left: 20px;
+    width: 100px;
+    margin-top: 20px;
     height:100px;
     border: solid;
     border-radius: 50%;

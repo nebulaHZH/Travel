@@ -37,19 +37,3 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
    1.用户类型有误
       写如何解决有误的方法
    2.**************
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <button>sssssss</button>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
-</html>
-<style lang="scss">
-</style>

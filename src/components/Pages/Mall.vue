@@ -31,30 +31,28 @@
             </div>
         </div>
         <div style="margin-top: 200px;">
-            <div v-for="selection in selections" key="selection">
-                    <a-row type="flex" justify="space-around" align="middle" v-for="row of 1" key="row" style="margin-bottom: 30px;margin-left: 0;">              
-                    <a-col :span="6.5" v-for="column of 4" key="column">
-                        <a-card hoverable style="width: 300px;border-radius: 10px;">
-                            <template #cover>
-                            <img
-                                
-                                src="https://img14.360buyimg.com/n7/jfs/t1/187265/35/32321/43201/64008f01F1081ce7c/808779cce08abe06.jpg"
-                                style="width: 300px;height:270px;overflow: hidden;border-radius: 10px;"
-                            />
-                            </template>
-                        <div>
-                            <span style="float:left;font-weight: 500;">52TOYS Panda Roll</span>
-                        </div>        
-                        <br>
-                        <div>
-                            <span style="text-align: left;float:left">
-                                生日礼物熊猫潮玩手办 单只 52TOYS Panda Roll日常第二弹系列盲盒 生日礼物熊猫潮玩手办
-                            </span>
-                        </div>
-                        </a-card>
-                    </a-col>
-                </a-row>
-            </div>
+            <a-row type="flex" justify="space-around" align="middle" v-for="items in selections" key="row" style="margin-bottom: 30px;margin-left: 0;">              
+                <a-col :span="6.5" v-for="item in items" key="column">
+                    <a-card hoverable style="width: 300px;border-radius: 10px;" @click="toDetail">
+                        <template #cover>
+                        <img
+                            
+                            :src="item.imgsrc"
+                            style="width: 300px;height:270px;overflow: hidden;border-radius: 10px;"
+                        />
+                        </template>
+                    <div style="text-align: left;">
+                        <span style="float:left;font-weight: 500;">{{ item.name }}</span>
+                    </div>        
+                    <br>
+                    <div>
+                        <span style="text-align: left;float:left;font-size: 24px;color: red;">
+                            ￥{{ item.price }}
+                        </span>
+                    </div>
+                    </a-card>
+                </a-col>
+            </a-row>
             <a-pagination v-model:current="current" :total="50" show-less-items />
             <br>
         </div>
@@ -76,13 +74,104 @@ const changes = ()=>{
     if(groups.value == purchases.value){
     }
 }
+const toDetail=()=>{
+    window.open("/MallDetail",'_blank')
+}
 // 这里是卡片的数据
 const selections=[
-            {name:"热点景区"},
-            {name:"优质游记"},
-            {name:"热门团队"},
-            {name:"周边商城"},
-        ]
+    [
+        {
+            name:'卡莎手办模型,野兽王国-星之守护者卡莎1/9可动手办',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202303/20230324094324_56566.big.jpg',
+            price:'1399'
+        },
+        {
+            name:'犬坂吠吠毛绒挂件 Genshin',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202303/20230330102138_76234.big.jpg',
+            price:'615'
+        },
+        {
+            name:'猫咪悠米',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202301/20230131093415_62519.big.jpg',
+            price:'470'
+        },
+        {
+            name:'Q版表情包系列 便签本 须弥城 Genshin',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202301/20230111095257_39702.big.jpg',
+            price:'260'
+        },
+
+    ],    
+    [
+        {
+            name:'Q版表情包系列 便签本 须弥城 Genshin',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202303/20230324094324_56566.big.jpg',
+            price:'1399'
+        },
+        {
+            name:'小蜜蜂魄罗',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202303/20230330102138_76234.big.jpg',
+            price:'615'
+        },
+        {
+            name:'猫咪悠米',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202301/20230131093415_62519.big.jpg',
+            price:'470'
+        },
+        {
+            name:'阿狸',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202301/20230111095257_39702.big.jpg',
+            price:'260'
+        },
+
+    ], 
+    [
+        {
+            name:'卡莎手办模型',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202303/20230324094324_56566.big.jpg',
+            price:'1399'
+        },
+        {
+            name:'小蜜蜂魄罗',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202303/20230330102138_76234.big.jpg',
+            price:'615'
+        },
+        {
+            name:'猫咪悠米',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202301/20230131093415_62519.big.jpg',
+            price:'470'
+        },
+        {
+            name:'阿狸',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202301/20230111095257_39702.big.jpg',
+            price:'260'
+        },
+
+    ], 
+    [
+        {
+            name:'卡莎手办模型',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202303/20230324094324_56566.big.jpg',
+            price:'1399'
+        },
+        {
+            name:'小蜜蜂魄罗',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202303/20230330102138_76234.big.jpg',
+            price:'615'
+        },
+        {
+            name:'猫咪悠米',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202301/20230131093415_62519.big.jpg',
+            price:'470'
+        },
+        {
+            name:'阿狸',
+            imgsrc:'https://game.gtimg.cn/images/zb/x5/uploadImg/goods/202301/20230111095257_39702.big.jpg',
+            price:'260'
+        },
+
+    ],       
+]
 const current=ref(1)
 </script>
 
