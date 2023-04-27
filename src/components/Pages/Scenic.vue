@@ -59,7 +59,7 @@ import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue';
 import {onMounted, ref} from 'vue'
 import type { CascaderProps } from 'ant-design-vue';
 import location from '../common/location'
-import {useRouter} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import { officialViewPageList, officialViewPageListData,officialGetIntroByIdData } from '../../api/official/official';
 import { useCounterStore } from '../../pinia';
 import { storeToRefs } from 'pinia';
@@ -68,24 +68,16 @@ console.log(location)
 const options: CascaderProps['options'] = location
 const scenic= ref([])
 const current=ref(1)
-const route = useRouter()
 const load = useCounterStore();
 const {scenicDetail} = storeToRefs(load);
+const router = useRouter();
 const upToScenic = (id:number) =>{
   console.log('aaaa')
-  let msg:officialGetIntroByIdData={
-    detailId: 1, //这里是登录的用户的id
-    offId: id//官方的id
-  }
-  officialGetIntroById(msg).then((res)=>{
-    console.log(res.data.data)
-    scenicDetail.value = res.data.data
-  })
-  route.push({
-    path:'./ScenicDetail'
-    // query:{
-    //   msg:'这里要传的参数'
-    // }
+  router.push({
+    path:'./ScenicDetail',
+    query:{
+      id:id
+    }
   })
 }
 onMounted(() => {
