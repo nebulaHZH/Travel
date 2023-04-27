@@ -15,7 +15,10 @@
             <a-button style="primary">按时间</a-button>
         </div>
         <div style="margin-top: 120px;">
-            <div v-if="parseInt(items?.length/4) !== 0" style="text-align: left: ;">
+            <div v-if="parseInt(items?.length) === 0">
+                <span style="font-size: 25px;font-weight: 600">暂时没有更多相关</span>
+            </div>
+            <div v-else-if="values === 'article'" style="text-align: left: ;">
                 <a-row type="flex" justify="space-around" align="middle" v-for="row in 2" key="row" style="margin-bottom: 30px;margin-left: 0;text-align: left: ;">              
                     <a-col :span="4" v-for="item in items?.slice(4*row-4,4*row)" key="column" @click="toDetail(item?.id)">
                         <a-card hoverable style="width: 300px">
@@ -27,7 +30,103 @@
                                 />
                                 </template>
                             <div>
-                                <span style="float:left;">{{ item.title }}</span>
+                                <span style="float:left;" v-html="item.title"></span>
+                            </div>        
+                            <br>
+                            <div>
+                                <span>
+                                    {{ item.intro }}
+                                </span>
+                            </div>
+                        </a-card>
+                    </a-col>
+                </a-row>
+            </div>
+            <div v-else-if="values === 'official'" style="text-align: left: ;">
+                <a-row type="flex" justify="space-around" align="middle" v-for="row in 2" key="row" style="margin-bottom: 30px;margin-left: 0;text-align: left: ;">              
+                    <a-col :span="4" v-for="item in items?.slice(4*row-4,4*row)" key="column" @click="toDetail(item?.id)">
+                        <a-card hoverable style="width: 300px">
+                            <template #cover>
+                                <img
+                                    alt="example"
+                                    :src=item.coverUrl
+                                    style="width: 300px;height:220px;overflow: hidden;"
+                                />
+                                </template>
+                            <div>
+                                <span style="float:left;" v-html="item.officialName"></span>
+                            </div>        
+                            <br>
+                            <div>
+                                <span>
+                                    {{ item.intro }}
+                                </span>
+                            </div>
+                        </a-card>
+                    </a-col>
+                </a-row>
+            </div>
+            <div v-else-if="values === 'team'" style="text-align: left: ;">
+                <a-row type="flex" justify="space-around" align="middle" v-for="row in 2" key="row" style="margin-bottom: 30px;margin-left: 0;text-align: left: ;">              
+                    <a-col :span="4" v-for="item in items?.slice(4*row-4,4*row)" key="column" @click="toDetail(item?.id)">
+                        <a-card hoverable style="width: 300px">
+                            <template #cover>
+                                <img
+                                    alt="example"
+                                    :src=item.coverUrl
+                                    style="width: 300px;height:220px;overflow: hidden;"
+                                />
+                                </template>
+                            <div>
+                                <span style="float:left;" v-html="item?.teamName"></span>
+                            </div>        
+                            <br>
+                            <div>
+                                <span>
+                                    {{ item.intro }}
+                                </span>
+                            </div>
+                        </a-card>
+                    </a-col>
+                </a-row>
+            </div>
+            <div v-else-if="values === 'user'" style="text-align: left: ;">
+                <a-row type="flex" justify="space-around" align="middle" v-for="row in 2" key="row" style="margin-bottom: 30px;margin-left: 0;text-align: left: ;">              
+                    <a-col :span="4" v-for="item in items?.slice(4*row-4,4*row)" key="column" @click="toDetail(item?.id)">
+                        <a-card hoverable style="width: 300px">
+                            <template #cover>
+                                <img
+                                    alt="example"
+                                    :src=item.coverUrl
+                                    style="width: 300px;height:220px;overflow: hidden;"
+                                />
+                                </template>
+                            <div>
+                                <span style="float:left;"  v-html="item.userName"></span>
+                            </div>        
+                            <br>
+                            <div>
+                                <span>
+                                    {{ item.intro }}
+                                </span>
+                            </div>
+                        </a-card>
+                    </a-col>
+                </a-row>
+            </div>
+            <div v-else-if="values === 'derivative'" style="text-align: left: ;">
+                <a-row type="flex" justify="space-around" align="middle" v-for="row in 2" key="row" style="margin-bottom: 30px;margin-left: 0;text-align: left: ;">              
+                    <a-col :span="4" v-for="item in items?.slice(4*row-4,4*row)" key="column" @click="toDetail(item?.id)">
+                        <a-card hoverable style="width: 300px">
+                            <template #cover>
+                                <img
+                                    alt="example"
+                                    :src=item.coverUrl
+                                    style="width: 300px;height:220px;overflow: hidden;"
+                                />
+                                </template>
+                            <div>
+                                <span style="float:left;" v-html="item.derivativeName"></span>
                             </div>        
                             <br>
                             <div>
@@ -97,7 +196,7 @@ const toDetail=(id:number)=>{
         })
     }else if(values.value === 'user'){
         router.push({
-            path:'/ScenicDetail',
+            path:'/My',
             query:{
                 id:id
             }

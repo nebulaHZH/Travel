@@ -20,7 +20,7 @@
                 <div><img src="../../assets/navPicture.png" alt=""></div>
             </a-carousel>
             <div style="position: absolute;margin-top: -60px;background-color: rgba(255, 255, 255, 0.8);width: max-content;padding-left: 60px;padding-right: 60px;line-height: 40px;margin-left: 60px;border-radius: 10px;">
-                <h2 style="height: 40px;font-weight: 400;font-size: larger;color: black;">{{ scenicDetail.officialName }}</h2>
+                <h2 style="height: 40px;font-weight: 400;font-size: larger;color: black;">{{ scenicDetail?.officialName }}</h2>
             </div>
         </div>
         <div>
@@ -72,7 +72,7 @@
                             />
                         </div>
                         <div style="margin-top: 40px;">
-                            <span style="font-size: larger;padding: 10px;background-color: blueviolet;color: white;border-radius: 5px;"   >{{ scenicDetail.officialName }}</span>
+                            <span style="font-size: larger;padding: 10px;background-color: blueviolet;color: white;border-radius: 5px;"   >{{ scenicDetail?.officialName }}</span>
 
                         </div>
                         <div>
@@ -109,16 +109,16 @@
                                         <span  key="comment-basic-like">
                                             <LikeOutlined />
                                             <span style="padding-left: 8px; cursor: auto">
-                                            {{ item.likeCount }}
+                                            {{ item?.likeCount }}
                                             </span>
                                         </span>
                                         <span>
                                             <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.aigei.com/src/img/png/c8/c8c2eeb58230418b9868bdd246b1716b.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:XGdsndtyiYMYv9kO9SAP7V8WSmU=" alt="">
-                                            <span style="margin-left: 10px;">{{ item.likeCount }}</span>
+                                            <span style="margin-left: 10px;">{{ item?.likeCount }}</span>
                                         </span>
                                         <span>
                                             <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
-                                            <span style="margin-left: 10px;">{{ item.reviewCount}}</span>
+                                            <span style="margin-left: 10px;">{{ item?.reviewCount}}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -398,7 +398,8 @@ const options = reactive({
 const recommend = ref('recommendWrite')
 const markdown =scenicDetail.value?.detail
 const mds = new md()
-let markdowns = computed(()=>(mds.render(markdown)))
+const markdowns = ref()
+markdowns.value = computed(()=>(mds?.render(markdown)))
 // 周边
 const groups = ref<any>()
 const purchase = ref<string>('purchase')

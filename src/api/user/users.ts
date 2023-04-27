@@ -29,11 +29,13 @@ export function codeSendRequest(data:codeSendRequestData){
     })
 }
 // -------------根据id查询用户---------------
-export function getUserById(data:bigint){
+export function getUserById(data:number){
     return service({
-        url:"/user/get/vo",
+        url:"/api/user/get/vo",
         method:"GET",
-        data
+        params:{
+            id:data
+        }
     })
 }
 

@@ -18,12 +18,12 @@
                         :data="{'biz':'user_avatar'}"
                         :before-upload="beforeUpload2"
                     >
-                    <img  style="width: 100px;height: 100px;border-radius: 50%" class="head" :src=avatar alt="" >
+                    <img  style="width: 100px;height: 100px;border-radius: 50%" class="head" :src=message?.userAvatar alt="" >
                     </a-upload-dragger>
                     
-                    <span class="myName" style="">骆驼驼Mango</span>
+                    <span class="myName" style="">{{ message?.userName }}</span>
                     <a-button class="apply">申请官方</a-button>
-                    <a-input class="motor"  placeholder='没有消息就是好消息~~'/>
+                    <a-input class="motor"  :placeholder="message?.signature"/>
                     <a-button class="edit" ghost="true">
                         <img class="editIcon" src="https://s1.aigei.com/src/img/png/c1/c1397c87cde441dca3252b026ac0c39d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:7-_pE33tleIC5NDkx0MFWJ-JKcg=" alt="" style="width: 20px;">
                     </a-button>
@@ -258,18 +258,18 @@
                     <a-radio-button value="newMessage">消息</a-radio-button>
                 </a-radio-group>
             </div>
-            
-            <div v-if="newValues === 'newNews'" style="text-align:left;margin-left: 10%;border: solid 0.01cm;margin-top: 30px;margin-right: 10%;border-radius: 10px;">
-                <div v-for="item in newsMessage" style="width: max-content;position: relative;">
-                    <img class="newHead" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,jpg/quality,q_100" alt="" >
-                    <span style="margin-left:30px;font-weight: 600;margin-top: 120px;position: absolute;width: max-content;">{{item.writer}}</span>
-                    <span style=" margin-left:30px;font-weight: 600;margin-top: 160px;position: absolute;width: max-content;">{{item.team}}</span>
-                    <div style="margin-left: 90px;border: solid 0.01pc;padding: 10px;border-radius: 5px;">
-                        <pre style="width:1000px;white-space: pre-wrap;word-wrap: break-word">豆瓣9.0、2.2亿的点击量、海量的媒体采访......11位分集导演纵览古今，从多个全然不同的角度切入，为动画呈现了动画是如何承载中国的文化传统以及哲学积淀。其中有着这样一部作品——它娓娓道来，极富想象力地展现了一位乡村少年质朴、有趣的童年图景，并由此引起了观众对于时光易逝、童年不再的乡愁与思索。这部作品，就是由刘毛宁执导的《中国奇谭》第四集——《乡村巴士带走了王孩儿和神仙》。 作者：动画学术趴 https://www.bilibili.com/read/cv22268997?from=category_0 出处：bilibili</pre>
+           
+            <div v-if="newValues === 'newNews'" style="text-align:left;margin-left: 10%;background: linear-gradient(to bottom right, rgba(0,229,238,0.1), white);margin-top: 30px;margin-right: 10%;border-radius: 10px;box-shadow:5px 5px 5px 5px rgba(0,229,238,0.1);">
+                <div v-for="item in news" style="width: 100%;position: relative;">
+                    <img class="newHead" :src="item?.user?.userAvatar">
+                    <span style="margin-left:30px;font-weight: 600;margin-top: 120px;position: absolute;width: max-content;">{{item?.user?.userName}}</span>
+                    <span style=" margin-left:30px;font-weight: 600;margin-top: 160px;position: absolute;width: max-content;">团队id：{{item?.teamId}}</span>
+                    <div style="border: solid 0.01pc;padding: 10px;border-radius: 5px;">
+                        <pre style="width:1000px;white-space: pre-wrap;word-wrap: break-word">  {{ item?.content }}</pre>
                         <div  style="margin-left: 1%;margin-right: 1%;">
                             <a-row  >
-                                <a-col v-for="ss in item.imgs">
-                                    <img  :src="ss.url" alt="" style="width: 200px;height: 200px;margin: 20px;">
+                                <a-col>
+                                    <img  :src="item?.imageUrl" alt="" style="width: 200px;height: 200px;margin: 20px;">
                                 </a-col>
                             </a-row>
                             
@@ -462,10 +462,14 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import { LikeFilled,LikeOutlined } from '@ant-design/icons-vue';
 import { UploadChangeParam, UploadProps, message } from 'ant-design-vue';
+import { getUserById } from '../../api/user/users';
+import { teamNewsList, teamNewsListData } from '../../api/team/teamNews';
+import { useRoute } from 'vue-router';
 const likes = ref<string>('关注')
+const news = ref()
 const chageLikeState=()=>{
     console.log(likes.value)
     if(likes.value==="关注"){
@@ -478,6 +482,31 @@ const chageLikeState=()=>{
     }
     return likes.value
 }
+//加载数据----------
+const message = ref()
+const {query} = useRoute()
+onMounted(()=>{
+    console.log(query.key)
+    if(query.key!==''){
+        values.value=query.key
+    }
+    const id = 1 ///////////////////////////////这里到时候改成对应进入的个人空间
+    getUserById(id).then((res)=>{
+        message.value = res.data.data
+    })
+    //获取动态：
+    const msg:teamNewsListData={
+        current: 0,
+        pageSize: 10,
+        sortField: 'create_time',
+        teamId: 4   //////////////////////////这里到时候改成新的接口，接口还没写
+    }
+    teamNewsList(msg).then((res)=>{
+        console.log(res.data.data.records)
+        news.value = res.data.data.records
+        console.log(news.value)
+    })
+})
 // 上传头像：
 const fileList = ref([])
 const avatar = ref("https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,webp/quality,q_100")
@@ -551,43 +580,6 @@ const teams=[
 ]
 //这里是最新动态部分
 const newValues = ref('newNews')
-const newsMessage = [
-    {
-        writer:'h2asx',
-        team:'撒啊了',
-        imgs:[//只能上传四张图片
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-        ]
-    },
-    {
-        writer:'h2asx',
-        team:'撒啊了',
-        imgs:[
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            ]
-    },
-    {
-        writer:'h2asx',
-        team:'大苏打',
-        imgs:[
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-        ]
-    },
-    {
-        writer:'h2asx',
-        team:'8iyuj',    
-        imgs:[
-        ]
-    }
-]
 const texts = 
 "群居、肉食、附魔的胡狼，只剩一对母女相依为命，在白山黑水的风雪中唱着《胡不归去》的挽歌。"+
 "依靠工具和组织的恐怖直立猿，形成了更强大的狩猎团体，但首领同样是单亲家庭，小虎母亲的缺位可能亦与狼有关。"+

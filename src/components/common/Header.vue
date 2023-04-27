@@ -29,10 +29,11 @@
 <!-- 搜索栏部分 -->
                 <div class="search" style="background: transparent;">
                     <a-menu-item key="search"   class="searchInput">
-                        <div ref="dropwn">
+                        <a-input-search v-on:keyup.enter="search" @search="search"  class="ant-dropdown-link" v-model:value="info" placeholder="请输入想查询的内容" id="MainSearch" size="default" />
+                        <!-- <div ref="dropwn">
                             <a-dropdown trigger="click" :getPopupContainer="(trigger:any) => trigger.parentNode">
                             
-                            <a-input-search v-on:keyup.enter="search" @search="search"  class="ant-dropdown-link" v-model:value="info" placeholder="请输入想查询的内容" id="MainSearch" size="default" />
+                            
                             <DownOutlined />
                             <template #overlay>
                             <a-menu  class="searchcard" style="position:absolute;z-index: 999;margin-top: 0;">
@@ -44,7 +45,7 @@
                                     </div>
                                     <br>
                                     <div class="tags">
-                                        <!-- 这里用v-for 遍历把tag填入 -->
+                                        
                                             <div>
                                                 <a-tag closable  @close.prevent :change="filled">苏州园林</a-tag>
                                                 <a-tag closable @close="log">北京</a-tag>
@@ -66,7 +67,7 @@
                             </a-menu>
                             </template>
                         </a-dropdown> 
-                    </div>
+                    </div> -->
                 </a-menu-item>
                 </div>
 <!-- 右边的导航栏 -->
@@ -75,7 +76,7 @@
                     <a-menu-item key="my" class="titleRight" >
                         
                         <a-dropdown :getPopupContainer="(trigger:any) => trigger.parentNode">
-                            <router-link to="/My">
+                            <router-link to="/My?key=news">
                                 <a-avatar class="ant-dropdown-link" >
                                     <template #icon>
                                     <user-outlined />
@@ -107,8 +108,9 @@
                     </a-menu-item>
 <!-- 动态 -->
                     <a-menu-item key="space" class="titleRight" >
-                        <a-dropdown  :getPopupContainer="(trigger:any) => trigger.parentNode" v-model="news">
-                            <a class="ant-dropdown-link" href="/My?newNews" @mouseover="changeNews">动态</a>
+                        <a class="ant-dropdown-link" href="/My?key=news" @mouseover="changeNews">动态</a>
+                        <!-- <a-dropdown  :getPopupContainer="(trigger:any) => trigger.parentNode" v-model="news"> -->
+                            
                             <!-- <template #overlay @click.stop>
                                 <div style="text-align: center;margin-left: -500px;padding: 0;" >
                                     <a-card
@@ -222,12 +224,13 @@
                                     </a-card>
                                 </div>
                             </template> -->
-                        </a-dropdown>
+                        <!-- </a-dropdown> -->
                     </a-menu-item>
 <!-- 收藏 -->
                     <a-menu-item key="collection"  class="titleRight" >
-                        <a-dropdown v-model="vise"  :getPopupContainer="(trigger:any) => trigger.parentNode"  style="margin-top:12px;" :visible="vise">
-                            <router-link class="titleIcon"   @mouseover="change" to="/My">收藏</router-link>
+                        <a class="ant-dropdown-link" href="/My?key=collection"   @mouseover="change" >收藏</a>
+                        <!-- <a-dropdown v-model="vise"  :getPopupContainer="(trigger:any) => trigger.parentNode"  style="margin-top:12px;" :visible="vise"> -->
+                            
                             <!-- <template #overlay>
                             <div
                             @mouseleave="change"
@@ -276,12 +279,13 @@
                             </div>
                             
                             </template> -->
-                        </a-dropdown>
+                        <!-- </a-dropdown> -->
                     </a-menu-item>
 <!-- 历史 -->
                     <a-menu-item v-model="visible" key="history"  class="titleRight" >
-                        <a-dropdown  :getPopupContainer="(trigger:any) => trigger.parentNode">
-                            <router-link to="./My" class="ant-dropdown-link" @mouseover="changeHistory">历史</router-link>
+                        <a href="/My?key=history" class="ant-dropdown-link" @mouseover="changeHistory">历史</a>
+                        <!-- <a-dropdown  :getPopupContainer="(trigger:any) => trigger.parentNode"> -->
+                            
                             <!-- <template #overlay>
                                 <div style="text-align: center;">
                                 <a-menu style="margin-left: 40%;margin-top: 15px;width: max-content;border-radius: 10px;height: 500px;overflow: scroll;overflow-x: hidden;">
@@ -313,7 +317,7 @@
                                 </a-menu>
                             </div>
                             </template> -->
-                        </a-dropdown>
+                        <!-- </a-dropdown> -->
                     </a-menu-item>
 <!-- 管理中心 -->
                     <a-menu-item key="administrator" class="titleRight">
@@ -382,12 +386,13 @@ const search = ()=>{
     if(info.value === ''){
         message.error('尚未输入关键词')
     }else{
-        router.push({
+       const s =  router.resolve({
             path:'/Search',
             query:{
                 key:info.value
             }
         })
+        window.open(s.href)
     }
     
 }
