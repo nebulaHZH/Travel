@@ -483,6 +483,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/bpmn-moddle@^5.1.6":
+  version "5.1.6"
+  resolved "https://registry.npmmirror.com/@types/bpmn-moddle/-/bpmn-moddle-5.1.6.tgz"
+  integrity sha512-bPM7kJlIhhMA0IQbZxfSSYoJ4Wm+1VHnNVvQ4k+ZZqwrJXRIW4fruP/wx0QbWJ3JbGNwDEWrLc8C//d0bQxWcg==
+
 "@types/connect-history-api-fallback@^1.3.5":
   version "1.3.5"
   resolved "https://registry.npmmirror.com/@types/connect-history-api-fallback/-/connect-history-api-fallback-1.3.5.tgz"

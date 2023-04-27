@@ -3,9 +3,9 @@
         <div style="width: 100%;height:200px">
             <div class="top">
                 <div style="width: max-content;position: relative;">
-                    <img class="head" :src=spotDetail.user.userAvatar alt="" >
-                    <span class="myName" style="">{{ spotDetail.user.userName }}</span>
-                    <span class="motor">更新于 ：{{ spotDetail.createTime }}</span>
+                    <img class="head" :src=spotDetail?.user?.userAvatar alt="" >
+                    <span class="myName" style="">{{ spotDetail?.user?.userName }}</span>
+                    <span class="motor">更新于 ：{{ spotDetail?.createTime }}</span>
                     
                 </div>
             </div>
@@ -36,9 +36,9 @@ import { useCounterStore } from '../../pinia';
 import { storeToRefs } from 'pinia';
 const load = useCounterStore();
 const {spotDetail} = storeToRefs(load);
-const markdown = spotDetail.value.detail
+const markdown = spotDetail.value?.detail
 const mds = new md()
-const SpotName = spotDetail.value.title
+const SpotName = spotDetail.value?.title
 let markdowns = computed(()=>(mds.render(markdown)))
 const getLikes = ref('关注')
 </script>

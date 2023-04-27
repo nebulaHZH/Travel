@@ -57,7 +57,8 @@ export function officialGetResourceById(data:bigint){
 export interface officialGetResourceListData{
     intro: string,
     sortField: string,
-    title: string
+    title: string,
+    officialId:number
   }
 export function officialGetResourceList(data:officialGetResourceListData){
     return service({

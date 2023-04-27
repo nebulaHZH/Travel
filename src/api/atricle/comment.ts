@@ -5,7 +5,8 @@ export interface commentAddRequestData{
     commentObjId: number,
     commentObjType: number,
     content: string,
-    location: string
+    parentUserId: number,
+    topId: number
   }
 export function commentAddRequest(data:commentAddRequestData){
     return service({

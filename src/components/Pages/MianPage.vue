@@ -173,13 +173,14 @@ import { officialGetDerivativeList, officialGetDerivativeListData,officialGetDer
 import { getVo, teamQueryRequest, teamQueryRequestData } from '../../api/team/teamMember'
 import { useCounterStore } from '../../pinia';
 import { storeToRefs } from 'pinia';
-import router from '../../router'
+import { useRouter } from 'vue-router'
 const load = useCounterStore();
 const {scenicDetail,teamDetails,travelDetail,derivativeDetail} = storeToRefs(load);
 const selection=ref([])
 const travel = ref([])
 const derivative = ref([])
 const teams = ref([])
+const router = useRouter()
 onMounted(() => {
     let msg:officialViewPageListData={
         current: 0,
@@ -215,19 +216,10 @@ onMounted(() => {
     })
 })
 const linkToScenicDetail=(id:number)=>{
-    let msg:officialGetIntroByIdData={
-        detailId: 1,
-        offId: id
-    }
-    officialGetIntroById(msg).then((res)=>{
-        console.log(res.data.data)
-        scenicDetail.value = res.data.data
-    })
+    
     router.push({
         path:'./ScenicDetail',
-    // query:{
-    //   teamId:id
-    // }
+    query:{id:id}
     })
 }
 const linkToTravelDetail=(id:number)=>{

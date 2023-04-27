@@ -20,7 +20,7 @@
                 <div><img src="../../assets/navPicture.png" alt=""></div>
             </a-carousel>
             <div style="position: absolute;margin-top: -60px;background-color: rgba(255, 255, 255, 0.8);width: max-content;padding-left: 60px;padding-right: 60px;line-height: 40px;margin-left: 60px;border-radius: 10px;">
-                <h2 style="height: 40px;font-weight: 400;font-size: larger;color: black;">{{ ScenicName }}</h2>
+                <h2 style="height: 40px;font-weight: 400;font-size: larger;color: black;">{{ scenicDetail.officialName }}</h2>
             </div>
         </div>
         <div>
@@ -72,7 +72,7 @@
                             />
                         </div>
                         <div style="margin-top: 40px;">
-                            <span style="font-size: larger;padding: 10px;background-color: blueviolet;color: white;border-radius: 5px;"   >{{ ScenicName }}</span>
+                            <span style="font-size: larger;padding: 10px;background-color: blueviolet;color: white;border-radius: 5px;"   >{{ scenicDetail.officialName }}</span>
 
                         </div>
                         <div>
@@ -274,10 +274,10 @@
 <script setup lang="ts">
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue';
 import { LikeOutlined } from '@ant-design/icons-vue';
-import {computed,onBeforeUnmount,onMounted,ref, watch} from 'vue'
+import {computed,onBeforeMount,onBeforeUnmount,onMounted,ref, watch} from 'vue'
 import { reactive } from 'vue';
 import md from 'markdown-it'
-import {useRouter} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import { useCounterStore } from '../../pinia';
 import { storeToRefs } from 'pinia';
 import { EmojiPicker } from 'vue3-twemoji-picker-final'
@@ -288,7 +288,8 @@ import {officialGetReviewListData,officialGetReviewList,officialReviewAddData,of
 import { message } from 'ant-design-vue';
 import { officialGetNoticeById, officialGetNoticeByIdData, officialGetNoticeList, officialGetNoticeListData } from '../../api/official/officialNotification';
 const load = useCounterStore();
-const {scenicDetail,spotDetail,notificationDetail} = storeToRefs(load);
+const {spotDetail,notificationDetail} = storeToRefs(load);
+const scenicDetail = ref()
 const spotsDeatil = ref()
 const noticeList = ref()
 let oldScrollTop: number = 0; // 记录上一次滚动结束后的滚动距离
@@ -297,6 +298,7 @@ const scrollFixedStatus = ref<boolean>(true);
 const review = ref()
 const emoji = ref()
 const commentContent = ref()
+const url=ref('sdsd.com')
 const showDialog = ()=>{
     if(document.getElementById("emojis")?.style.display === "none"){
         document.getElementById("emojis")!.style.display = ""
@@ -334,7 +336,18 @@ const sendComment=()=>{
     })
 }
 const recommendTravel = ref()
-onMounted(() => {
+const {query} = useRoute()
+
+onBeforeMount(() => {
+    let msg3:officialGetIntroByIdData={
+        detailId: 1,
+        offId: parseInt(query.id)
+    }
+    officialGetIntroById(msg3).then((res)=>{
+        console.log(res.data.data)
+        scenicDetail.value = res.data.data
+        url.value = scenicDetail.value?.videoUrl
+    })
   let msg:officialGetCommendData={
     current: 0,
     pageSize: 4,
@@ -346,7 +359,7 @@ onMounted(() => {
     recommendTravel.value = res.data.data
   })
   let msg2:officialGetReviewListData={
-    reviewObjId: scenicDetail.value.id,
+    reviewObjId: scenicDetail.value?.id,
     sortField: ''
 }
 officialGetReviewList(msg2).then((res)=>{
@@ -355,15 +368,13 @@ officialGetReviewList(msg2).then((res)=>{
 })
   handleScroll();
 })
-const ScenicName = scenicDetail.value.officialName
 const values = ref('scenicIntroduction')
 const options = reactive({
     width: "100%", //播放器高度
     height: "60%", //播放器高度
     color: "#409eff", //主题色
     title: "", //视频名称
-    
-    src: scenicDetail.value.videoUrl, //视频源
+    src: url, //视频源
     muted: false, //静音
     webFullScreen: false,
     speedRate: ["0.75", "1.0", "1.25", "1.5", "2.0"], //播放倍速
@@ -385,43 +396,9 @@ const options = reactive({
     ], //显示所有按钮,
   });
 const recommend = ref('recommendWrite')
-const markdown =scenicDetail.value.detail
+const markdown =scenicDetail.value?.detail
 const mds = new md()
 let markdowns = computed(()=>(mds.render(markdown)))
-// 这里是咨询通知部分
-const notices = [
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:10,
-    commentCount:200,
-    browserCount:1000,
-    id:'10101',
-    islike:true},
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:12,
-    commentCount:200,
-    browserCount:1000,
-    id:'10102',
-    islike:false},
-    
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:13,
-    browserCount:1000,
-    commentCount:200,
-    id:'10103',
-    islike:false},
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:13,
-    commentCount:200,
-    browserCount:1000,
-    id:'10103',
-    islike:false},
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:13,
-    commentCount:200,
-    browserCount:1000,
-    id:'10103',
-    islike:false},
-]
 // 周边
 const groups = ref<any>()
 const purchase = ref<string>('purchase')
@@ -470,7 +447,8 @@ const spotIntro=()=>{
     let msg:officialGetResourceListData={
         intro: '',
         sortField: '',
-        title: ''
+        title: '',
+        officialId:scenicDetail.value?.id
     }
     officialGetResourceList(msg).then((res)=>{
         spotsDeatil.value = res.data.data.records

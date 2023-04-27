@@ -70,30 +70,33 @@
                 <div v-for="item in comments">
                     <a-comment>
                         <template #actions>
-                            <span key="comment-nested-reply-to" @click="replyto(item.askername,item.askcontent)">回复</span>
+                            <span key="comment-nested-reply-to" @click="replyto(item.topCommentVO.id,item.topCommentVO.userName,item.topCommentVO.userId)">回复</span>
                             <span @click="unfold">展开</span>
                         </template>
                         <template #author>
-                            <a>{{ item.askername }}</a>
+                            <a>{{ item.topCommentVO.userName }}</a>
+                            
                         </template>
                         <template #avatar>
-                            <a-avatar :src="item.askerheader" alt="Han Solo" />
+                            <a-avatar :src="item.topCommentVO.userAvatarUrl" />
                         </template>
                         <template #content>
-                            <p>{{ item.askcontent }}</p>
+                            <p>{{ item.topCommentVO.content }}</p>
                         </template>
-                    <a-comment v-for="i in item.answer">
+                    <a-comment v-for="i in item.commentVOS">
                         <template #actions>
-                            <span>回复</span>
+                            <span  @click="replyto(item.topCommentVO.id,i.userName,i.userId)">回复</span>
                         </template>
                         <template #author>
-                            <a>{{ i.answername }}</a>
+                            <a>{{ i.userName }}</a>
+                            <span>  回复</span>
+                            <a>{{ i.parentUserName }}</a>
                         </template>
                         <template #avatar>
-                            <a-avatar :src="i.answerheader" alt="Han Solo" />
+                            <a-avatar :src="i.userAvatarUrl" alt="Han Solo" />
                         </template>
                         <template #content>
-                            <p>{{ i.answercontent }}</p>
+                            <p>{{ i.content }}</p>
                         </template>
                         <span>___________________________________________________________________________________________</span>
                     </a-comment>
@@ -102,11 +105,15 @@
                 
             </div>
             </div> 
+            <br>
+            <br>
+            <br>
+            <br>
         </div>
         <div style="position: fixed;bottom: 0;z-index: 99;width: max-content;margin-left: 10.5%;width: 60%;background-color:aliceblue;border-radius: 10px;padding: 10px;">
                 <div style="display: flex;width: 100%;">
                     <a-button type="text" @click="showDialog()" style="height: 60px">😃</a-button>
-                    <a-textarea  id="contents" v-model:placeholder="commentContent"  cols="30" rows="2" style="margin-left: 10px;bottom: 0;height: 60px;overflow-y: auto;width: 100%;" >sdsdadsdsada</a-textarea>
+                    <a-textarea  id="contents" v-model:placeholder="commentContent"  cols="30" rows="2" style="margin-left: 10px;bottom: 0;height: 60px;overflow-y: auto;width: 100%;" v-model:value="text"></a-textarea>
                     
                     <div style="margin-left: -0.75%;background-color: aliceblue;position: fixed;bottom: 70px;">  
                         <EmojiPicker id="emojis" v-model="emoji" @select="selectEmoji($event)" :pickerPlacement='top' :searchEmojisFeat="false" style="display: none;overflow-y: auto;height: 300px;width: 360px ;;"/>
@@ -114,7 +121,7 @@
                     
                     <div style="margin: auto;">
                         <a-button v-if="commentContent" style="margin-left: 10px;" @click="cancelReply">取消回复</a-button>
-                        <a-button type="primary" style="margin-left: 10px;width:85px;">发送</a-button>
+                        <a-button type="primary" style="margin-left: 10px;width:85px;" @click="sendMessage">发送</a-button>
                     </div>
                     
                 </div>
@@ -123,19 +130,21 @@
 </template>
 
 <script setup lang="ts">
-import {computed,getCurrentInstance,inject,ref} from 'vue'
+import {computed,getCurrentInstance,inject,ref, watch} from 'vue'
 import { onMounted,defineComponent } from 'vue';
 import md from 'markdown-it'
 import { LikeOutlined,LikeFilled, DislikeFilled, DislikeOutlined } from '@ant-design/icons-vue';
-import _default from 'ant-design-vue';
+import _default, { message } from 'ant-design-vue';
 import { EmojiPicker } from 'vue3-twemoji-picker-final'
 import { searchTravelById } from '../../api/atricle/travel';
 import { useCounterStore } from '../../pinia';
 import {TravelRecommendListData,TravelRecommendList} from '../../api/DataService/DataUpload'
 import { storeToRefs } from 'pinia';
 import { useRoute, useRouter } from 'vue-router';
+import { commentAddRequest, commentAddRequestData, commentQueryRequest, commentQueryRequestData } from '../../api/atricle/comment';
 const load = useCounterStore();
-const {travelDetailId} = storeToRefs(load);
+const comments = ref()
+const text = ref()
 const travelDetail = ref()
 const travelRecommendList = ref()
 const { query } = useRoute();
@@ -159,16 +168,68 @@ onMounted(()=>{
         travelRecommendList.value = res.data.data.dataPage.records
         console.log(res.data.data.dataPage.records)
     })
+    
+    let msg2:commentQueryRequestData={
+        commentObjId: query.id,
+        commentObjType: 1
+    }
+    commentQueryRequest(msg2).then((res)=>{
+        console.log(res.data.data.records)
+        comments.value = res.data.data.records
+    })
 })
 // 评论回复
-const replyto=(aksname:string,askcontent:string)=>{
+const topId = ref(0)
+const userId = ref(0)
+const replyto=(Id:number,askname:string,uId:number)=>{
     // 这里发送请求
-    commentContent.value = "回复 " + aksname+":"
-    console.log(commentContent.value)
+    commentContent.value = "回复 " + askname+":"
+    topId.value = Id
+    
 }
+const sendMessage=()=>{
+    if(text.value === ""){
+        message.error("请填写内容！")
+    }
+    else{
+        console.log(commentContent.value)
+        let msg:commentAddRequestData={
+            commentObjId: travelDetail.value?.id,
+            commentObjType: 1,
+            content: text.value,
+            parentUserId: travelDetail.value.userId,
+            topId: topId.value
+        }
+        commentAddRequest(msg).then((res)=>{
+            console.log(res)
+            
+            text.value = ""
+            alert("发送成功！")
+            let msg2:commentQueryRequestData={
+        commentObjId: travelDetail.value?.id,
+        commentObjType: 1
+    }
+    commentQueryRequest(msg2).then((res)=>{
+        console.log(res.data.data.records)
+        comments.value = res.data.data.records
+    })
+        })
+    }
+}
+watch(text.value,(newValue,oldValue)=>{
+    let msg2:commentQueryRequestData={
+        commentObjId: travelDetail.value?.id,
+        commentObjType: 1
+    }
+    commentQueryRequest(msg2).then((res)=>{
+        console.log(res.data.data.records)
+        comments.value = res.data.data.records
+    })
+})
 // 取消回复
 const cancelReply = ()=>{
     commentContent.value = ""
+    topId.value = 0
 }
 const commentContent = ref<string>()
 const internalInstance = getCurrentInstance()
@@ -185,50 +246,6 @@ const selectEmoji=(e:any)=>{
     document.getElementById("contents")!.value=document.getElementById("contents")!.value +  e.i
     console.log(e.i)
 }
-const comments = [
-    {
-        askername:'hhz',
-        askerheader:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-        askcontent:'首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务',
-        answer:[
-            {
-                answerheader:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-                answercontent:'首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务',
-                answername:'撒大大',
-            }
-        ]
-        
-        
-    },
-    {
-        askername:'hhz',
-        askerheader:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-        askcontent:'首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务',
-        answer:[
-            {
-                answerheader:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-                answercontent:'首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务',
-                answername:'撒大大',
-            }
-        ]
-        
-        
-    },
-    {
-        askername:'hhz',
-        askerheader:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-        askcontent:'首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务',
-        answer:[
-            {
-                answerheader:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-                answercontent:'首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务',
-                answername:'撒大大',
-            }
-        ]
-        
-        
-    }
-]
 const writer =ref({
     header:"https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,webp/quality,q_100",
     name:'骆驼驼Mango',
@@ -248,78 +265,8 @@ const unfold=(e:any)=>{
     // clickDom.parentElement.parentElement.parentElement.parentElement.nextElementSibling.style.display="none"
     // console.log(clickDom.parentElement.parentElement.parentElement.parentElement.nextElementSibling)
 }
-const likes = ref<number>(0);
-    const dislikes = ref<number>(0);
-    const action = ref<string>();
-        const like = () => {
-      likes.value = 1;
-      dislikes.value = 0;
-      action.value = 'liked';
-    };
 
-    const dislike = () => {
-      likes.value = 0;
-      dislikes.value = 1;
-      action.value = 'disliked';
-    };
-
-const values = ref('scenicIntroduction')
-// 景点展示部分
-const recommends = [
-    {
-        noteName:'哈夫曼树生成树XXXuys ',
-        imgsrc:'https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg',
-        cover:'是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。',
-        title:'什么什么巴厘岛忘记了',
-        link:'http://localhost:5173/NotesDetail',
-        likecount:10,
-        commentCount:321,
-        browserCount:3123,
-        id:'10101',
-        islike:true,
-        writer:{
-            header:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-            name:'用户昵称'
-        }
-    },
-    {
-        noteName:'哈夫曼树生成树XXXuys ',
-        imgsrc:'https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg',
-        cover:'是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。',
-        title:'什么什么巴厘岛忘记了',
-        link:'http://localhost:5173/NotesDetail',
-        likecount:10,
-        commentCount:321,
-        browserCount:3123,
-        id:'10101',
-        islike:true,
-        writer:{
-            header:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-            name:'用户昵称'
-        }
-    },
-    {
-        noteName:'哈夫曼树生成树XXXuys ',
-        imgsrc:'https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg',
-        cover:'是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。',
-        title:'什么什么巴厘岛忘记了',
-        link:'http://localhost:5173/NotesDetail',
-        likecount:10,
-        commentCount:321,
-        browserCount:3123,
-        id:'10101',
-        islike:true,
-        writer:{
-            header:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-            name:'用户昵称'
-        }
-    }
-]
-const recommend = ref('recommendWrite')
-const markdown = travelDetail?.value?.title
 const mds = new md()
-const NotesName = '我未曾真的去过泉州'
-
 const getLikes =(e:any)=>{
     console.log(e.target.innerText)
     if(e.target.innerText === '0'){
