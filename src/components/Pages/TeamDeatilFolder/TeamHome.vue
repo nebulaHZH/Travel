@@ -2,9 +2,9 @@
     <div class="TeamIntroduction">
             <div class="TeamIntroductionLeft">
                 <br>
-                <span style="font-weight: 600;">团队创始人</span>
+                <span style="font-weight: 600;">{{ teamDetails.user.userName }}</span>
                 <br>
-                <img class="TeamCreaterIcon" src="https://p1-q.mafengwo.net/s19/M00/A0/80/CoNIZWP-3z17nUkHAAJI1k3Y_Xs.jpeg?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90" alt="">
+                <img class="TeamCreaterIcon" :src=teamDetails.user.userAvatar alt="">
                 <br>
                 <a-button style="margin-top: 10px;" type="primary">显示更多成员</a-button>
             </div>
@@ -13,19 +13,20 @@
                 <span style="font-weight: 600;">团队简介：</span>
                 <br>
                 <br>
-                <pre class="TeamContent">{{ TeamContent }}</pre>
+                <pre class="TeamContent">{{ teamDetails.intro }}</pre>
             </div>
         </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
-const TeamContent = ref( "###### 系统分析：" +
-            "   1.首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务" +
-            "   2.在课堂上完成任务（做的快的可以直接验收）" +
-            "   3.再上课时验收(根据任务大小看共三次课还是两次课)===>提交审核报告，会议纪要" +
-            "      在老师审核报告期间指出问题后最后还是存在问题，则会扣分" +
-            "###### *****审核报告：（无统一模板，在需求分析遇到的问题，如何发现的和如何解决的）===》只要最后报告完善就没问题\n")
+import { onMounted } from 'vue';
+import { useCounterStore } from '../../../pinia';
+import { storeToRefs } from 'pinia';
+const load = useCounterStore()
+const {teamDetails} = storeToRefs(load)
+onMounted(() => {
+    console.log(teamDetails.value)
+})
 </script>
 
 <style scoped lang="scss">

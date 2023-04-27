@@ -1,5 +1,6 @@
 import service from ".."
 
+const baseurl = '/api/team'
 interface teamIdData{
   id:BigInteger
 }
@@ -11,7 +12,7 @@ interface teamChangeData{
   }
 export function teamChange(data:teamChangeData){
 return service({
-    url:"/team/change",
+    url:`${baseurl}/change`,
     method:"POST",
     data
 })
@@ -20,23 +21,21 @@ return service({
 
 
 // -------------团队更换---------------
-interface teamAddDate{
-    capacity: BigInteger,
+export interface teamAddData{
+  capacity: number,
   coverUrl: string,
   iconUrl: string,
-  id: BigInteger,
   intro: string,
-  isAudit: BigInteger,
-  teamName: string,
-  userId: BigInteger
+  isAudit: number,
+  teamName: string
 }
 
 
-export function teamAdd(data:teamAddDate){
+export function teamAdd(data:teamAddData){
     return service({
-        url:"/team/add",
+        url:`${baseurl}/add`,
         method:"post",
-        data
+        data:data
     })
 }   
 // -------------团队解散----------------
@@ -50,97 +49,99 @@ export function teamDelete(data:teamIdData){
 }
 
 // -------------根据 id 获取团队介绍详情----------------
-export function getVo(data:teamIdData){
+export function getVo(data:number){
     return service({
-      url:"/team/get/vo",
+      url:`${baseurl}/get/vo`,
       method:"GET",
-      data
+      params:{
+        id:data
+      }
 })
 }
 
 // -------------获取指定用户加入的团队列表----------------
-interface teamQueryPersonalData{
-  current: BigInteger,
-  id: BigInteger,
-  intro: string,
-  isAudit: BigInteger,
-  pageSize: BigInteger,
-  searchText: string,
-  sortField: string,
-  sortOrder: string,
-  teamName: string,
-  teamState: BigInteger,
-  userId: BigInteger
+export interface teamQueryPersonalData{
+//   current: BigInteger,
+//   id: BigInteger,
+//   intro: string,
+//   isAudit: BigInteger,
+//   pageSize: BigInteger,
+//   searchText: string,
+//   sortField: string,
+//   sortOrder: string,
+//   teamName: string,
+//   teamState: BigInteger,
+//   userId: BigInteger
 }
 export function teamQueryPersonal(data:teamQueryPersonalData){
     return service({
-      url:"/team/join/list",
+      url:`${baseurl}/join/list`,
       method:"post",
-      data
+      data:data
 })
 }
 
 // -------------分页获取团队列表----------------
-interface teamQueryRequestData{
-  current: BigInteger,
-  id: BigInteger,
-  intro: string,
-  isAudit: BigInteger,
-  pageSize: BigInteger,
-  searchText: string,
-  sortField: string,
-  sortOrder: string,
-  teamName: string,
-  teamState: BigInteger,
-  userId: BigInteger
+export interface teamQueryRequestData{
+  current: number,
+  // id: BigInteger,
+  // intro: string,
+  // isAudit: BigInteger,
+  pageSize: number,
+  // searchText: string,
+  // sortField: string,
+  // sortOrder: string,
+  // teamName: string,
+  // teamState: BigInteger,
+  // userId: BigInteger
 }
 export function teamQueryRequest(data:teamQueryRequestData){
     return service({
-      url:"/team/list/page/vo",
+      url:`${baseurl}/list/page/vo`,
       method:"post",
       data
 })
 }
 
 // -------------分页获取当前用户创建的资源列表----------------
-interface teamPersonalCreateData{
-  current: BigInteger,
-  id: BigInteger,
-  intro: string,
-  isAudit: BigInteger,
-  pageSize: BigInteger,
-  searchText: string,
-  sortField: string,
-  sortOrder: string,
-  teamName: string,
-  teamState: BigInteger,
-  userId: BigInteger
+export interface teamPersonalCreateData{
+  // current: BigInteger,
+  // id: BigInteger,
+  // intro: string,
+  // isAudit: BigInteger,
+  // pageSize: BigInteger,
+  // searchText: string,
+  // sortField: string,
+  // sortOrder: string,
+  // teamName: string,
+  // teamState: BigInteger,
+  // userId: BigInteger
 }
 export function teamPersonalCreate(data:teamPersonalCreateData){
   return service({
-    url:"/team/my/list/page/vo",
+    url:`${baseurl}/my/list/page/vo`,
     method:"post",
-    data
+    data:data
 })
 }
 
 // -------------获取推荐团队（大众化推荐）----------------
-interface teamCommendData{
-  current: BigInteger,
-  id: BigInteger,
-  intro: string,
-  isAudit: BigInteger,
-  pageSize: BigInteger,
-  searchText: string,
-  sortField: string,
-  sortOrder: string,
-  teamName: string,
-  teamState: BigInteger,
-  userId: BigInteger
+export interface teamCommendData{
+  current: number,
+  // id: BigInteger,
+  // intro: string,
+  // isAudit: BigInteger,
+  pageSize: number,
+  // searchText: string,
+  // sortField: string,
+  // sortOrder: string,
+  // teamName: string,
+  // teamState: BigInteger,
+  // userId: BigInteger
 }
 export function teamCommend(data:teamCommendData){
   return service({
-    url:"/team/rcmd",
+    url:`${baseurl}/rcmd`,
     method:"post",
     data
 })
@@ -169,10 +170,10 @@ export function teamUpdata(data:teamUpdataData){
 
 
 // -------------查询团队所有成员----------------
-export function teamQueryNumbers(data:BigInteger){
+export function teamQueryNumbers(data:number){
   return service({
-    url:"/team/member/{"+data+"}",
-    method:"GET",
+    url:`${baseurl}/member/`+data,
+    method:"GET"
 })
 }
 

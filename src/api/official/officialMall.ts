@@ -1,69 +1,69 @@
 import service from ".."
-
+const baseurl = "/api/official"
 // -------------添加周边----------------
-interface officialDerivativeAddData{
+export interface officialDerivativeAddData{
     coverUrl: string,
     derivativeName: string,
-    id: bigint,
+    //id: bigint,
     intro: string,
-    obtainMethod: bigint,
-    officialId: bigint,
-    price: bigint,
-    totalCount: bigint,
-    typeId: bigint,
-    userId: bigint
+    obtainMethod: number,
+    //officialId: bigint,
+    price: number,
+    //totalCount: bigint,
+    typeId: number,
+    //userId: bigint
   }
   export function officialDerivativeAdd(data:officialDerivativeAddData){
       return service({
-          url:"/official/derivative/add",
+          url:`${baseurl}/derivative/add`,
           method:"POST",
           data
       })
   }
-// -------------添加周边----------------
-interface officialDerivativeDelData{
-    id: bigint
+// -------------删除周边----------------
+export interface officialDerivativeDelData{
+    id: number
   }
   export function officialDerivativeDel(data:officialDerivativeDelData){
       return service({
-          url:"/official/derivative/delete",
+          url:`${baseurl}/derivative/delete`,
           method:"POST",
           data
       })
   }
-// -------------添加周边----------------
-interface officialGetDerivativeByIdData{
-    id: bigint
+// -------------通过id获取周边----------------
+export interface officialGetDerivativeByIdData{
+    id: number
   }
   export function officialGetDerivativeById(data:officialGetDerivativeByIdData){
       return service({
-          url:"/official/derivative/get/vo",
+          url:`${baseurl}/derivative/get/vo`,
           method:"GET",
           data
       })
   }
 
 // -------------分页获取列表（封装类）----------------
-interface officialGetDerivativeListData{
-    current: bigint,
-    derivativeName: string,
-    derivativeState: bigint,
-    id: bigint,
-    intro: string,
-    obtainMethod: bigint,
-    officialId: bigint,
-    pageSize: bigint,
-    price: bigint,
-    searchText: string,
-    sortField: string,
-    sortOrder: string,
-    totalCount: bigint,
-    typeId: bigint,
-    userId: bigint
+export interface officialGetDerivativeListData{
+    current: number,
+    // derivativeName: string,
+    // derivativeState: bigint,
+    // id: bigint,
+    // intro: string,
+    // obtainMethod: bigint,
+    // officialId: bigint,
+    pageSize: number,
+    // price: bigint,
+    // searchText: string,
+    // sortField: string,
+    // sortOrder: string,
+    // totalCount: bigint,
+    // typeId: bigint,
+    // userId: bigint
   }
   export function officialGetDerivativeList(data:officialGetDerivativeListData){
       return service({
-          url:"/official/derivative/list/page/vo",
+          url:`${baseurl}/derivative/list/page/vo`,
           method:"POST",
           data
       })
@@ -74,7 +74,7 @@ interface officialDerivativeObtainData{
   }
   export function officialDerivativeObtain(data:officialDerivativeObtainData){
       return service({
-          url:"/official/derivative/obtain",
+          url:`${baseurl}/derivative/obtain`,
           method:"POST",
           data
       })
@@ -99,7 +99,7 @@ interface officialDerivativeCommendData{
   }
   export function officialDerivativeCommend(data:officialDerivativeCommendData){
       return service({
-          url:"/official/derivative/rcmd",
+          url:`${baseurl}/derivative/rcmd`,
           method:"POST",
           data
       })
@@ -120,7 +120,7 @@ interface officialDerivativeUpdateData{
   }
   export function officialDerivativeUpdate(data:officialDerivativeUpdateData){
       return service({
-          url:"/official/derivative/update",
+          url:`${baseurl}/derivative/update`,
           method:"POST",
           data
       })

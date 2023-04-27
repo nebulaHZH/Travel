@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 const current = ref(1)
 const items = [
     {name:'aaaaaaaaaaaaaaaa',
@@ -73,6 +73,9 @@ const items = [
     id:'10103',
     islike:false},
 ]
+onMounted(() => {
+    
+})
 </script>
 
 <style scoped>

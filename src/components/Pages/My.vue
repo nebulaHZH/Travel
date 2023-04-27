@@ -2,8 +2,25 @@
     <div style="background-color:bisque ;height: max-content;padding: 0;">
         <div style="width: 100%;height:200px">
             <div class="top">
-                <div style="width: max-content;position: relative;">
-                    <img class="head" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,webp/quality,q_100" alt="" >
+                <div style="width: max-content;">
+                    <a-upload-dragger
+                        v-model:fileList="fileList"
+                        name="file"
+                        :multiple="false"
+                        :headers="header"
+                        class="avatar-uploader"
+                        list-type="picture-card"
+                        :show-upload-list="false"
+                        style="width: 130px;border-radius: 50%;margin-left: 100px;padding: 0;min-height: 100px;background: transparent;"
+                        action="/api/data/file/upload"
+                        max-count="1"
+                        @change="handleChange"
+                        :data="{'biz':'user_avatar'}"
+                        :before-upload="beforeUpload2"
+                    >
+                    <img  style="width: 100px;height: 100px;border-radius: 50%" class="head" :src=avatar alt="" >
+                    </a-upload-dragger>
+                    
                     <span class="myName" style="">骆驼驼Mango</span>
                     <a-button class="apply">申请官方</a-button>
                     <a-input class="motor"  placeholder='没有消息就是好消息~~'/>
@@ -447,6 +464,7 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import { LikeFilled,LikeOutlined } from '@ant-design/icons-vue';
+import { UploadChangeParam, UploadProps, message } from 'ant-design-vue';
 const likes = ref<string>('关注')
 const chageLikeState=()=>{
     console.log(likes.value)
@@ -460,9 +478,40 @@ const chageLikeState=()=>{
     }
     return likes.value
 }
+// 上传头像：
+const fileList = ref([])
+const avatar = ref("https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,webp/quality,q_100")
+const header = {
+  authentication:'2b5d7640af954456b07e0604d90dbb83'
+}
+const handleChange = (info: UploadChangeParam) => {
+      const status = info.file.status;
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (status === 'done') {
+        message.success(`${info.file.name} 图片上传成功.`);
+        avatar.value = info.file.response.data
+      } else if (status === 'error') {
+        message.error(`${info.file.name} 图片上传失败.`);
+      }
+    };
+//上传时判断类型
+const beforeUpload2 = (file: UploadProps['fileList'][number]) => {
+  const isVideo = file.type === 'image/png' || file.type === 'image/jpg';
+  if (!isVideo) {
+    message.error('只支持上传图片');
+  }
+  const isLt10GB = file.size / 1024 / 1024 < 10;
+  if (!isLt10GB) {
+    message.error('视频大小必须小于10MB');
+  }
+  return isVideo && isLt10GB;
+}
 const likeCount = ref(20)
 const browserCount = ref(20000)
 const values=ref('news')
+
 // 这个是单选框更换部分
 
 // 这里是我的收藏部分
@@ -705,48 +754,42 @@ const itemHistroy = [
 </script>
 
 <style scoped lang="scss">
-.head{
-    width: 100px;
-    margin-top: 100px;
-    margin-left: 100px;
-    height:100px;
-    border: solid;
-    border-radius: 50%;
-    margin-bottom: 30px;
-    padding: 0;
-    overflow: hidden;
+.head:hover{
+    opacity: 90%;
+    background: url("https://s1.chu0.com/src/img/png/22/22a8a8b8a0c040c4a02a7b86c7a3b588.png?e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:SuMbz7d1U5QE3PkEsVfheTmIfNE=");
 }
 .myName{
-    margin-left:30px;
+    margin-left:120px;
     font-weight: 600;
-    margin-top: 120px;
+    margin-top: -80px;
     position: absolute;
     width: max-content;
 }
 .apply{
-    margin-left:400px;
+    margin-left:280px;
     font-weight: 600;
-    margin-top: 115px;
+    margin-top: -85px;
     position: absolute;
     width: max-content;
     
 }
 .top{
     background-image: url('https://img.zcool.cn/tubelocation/844564131f7d000e991000e46abc.jpg?x-oss-process=image/format,webp/quality,q_100');
-    height: max-content;
-    padding: 0;
+    height: 200px;
+    padding: 20px;
+    padding-top: 50px;
 }
 .motor{
-    margin-left:30px;
-    margin-top: 160px;
+    margin-left:100px;
     position: absolute;
     width: max-content;
+    margin-top: -40px;
     width: 500px;
     border-radius: 10px;
 }
 .edit{
-    margin-left:540px;
-    margin-top: 160px;
+    margin-left:620px;
+    margin-top: -40px;
     position: absolute;
     border: transparent;
     padding: 0;

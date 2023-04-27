@@ -75,7 +75,7 @@
                     <a-menu-item key="my" class="titleRight" >
                         
                         <a-dropdown :getPopupContainer="(trigger:any) => trigger.parentNode">
-                            <router-link to="./My">
+                            <router-link to="/My">
                                 <a-avatar class="ant-dropdown-link" >
                                     <template #icon>
                                     <user-outlined />
@@ -90,7 +90,7 @@
                                         <template #icon>
                                             <user-outlined /> 
                                         </template>
-                                    <router-link to="./My">个人中心</router-link>
+                                    <router-link to="/My">个人中心</router-link>
                                     </a-menu-item>
                                     <a-menu-item>
                                         <template #icon>
@@ -227,7 +227,7 @@
 <!-- 收藏 -->
                     <a-menu-item key="collection"  class="titleRight" >
                         <a-dropdown v-model="vise"  :getPopupContainer="(trigger:any) => trigger.parentNode"  style="margin-top:12px;" :visible="vise">
-                            <router-link class="titleIcon"   @mouseover="change" to="./My">收藏</router-link>
+                            <router-link class="titleIcon"   @mouseover="change" to="/My">收藏</router-link>
                             <!-- <template #overlay>
                             <div
                             @mouseleave="change"

@@ -1,8 +1,5 @@
 <template>
     <div class="foot">
-        <div class="footIn">
-            designed by hhz 2022.3.6
-        </div>
     </div>
     
 </template>
@@ -14,7 +11,6 @@
 <style scoped>
     .foot{
         width: 100%;
-        height: 50px;
         margin: 0;
         padding: 0;
     }

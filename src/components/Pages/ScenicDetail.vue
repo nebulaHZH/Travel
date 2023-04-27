@@ -27,24 +27,23 @@
             <div style="margin-top: 100px;margin-left: 5%;width: max-content;margin-bottom: 40px;" >
                 <a-radio-group v-model:value="values"  size="large" style="width:max-content;">
                     <a-radio-button class="searchButton" style="width: 120px;" value="scenicIntroduction">景区介绍</a-radio-button>
-                    <a-radio-button class="searchButton" style="width: 120px;" value="spotIntrouduction">景点展示</a-radio-button>
-                    <a-radio-button class="searchButton" style="width: 120px;" value="notices">咨询通知</a-radio-button>
+                    <a-radio-button class="searchButton" style="width: 120px;" value="spotIntrouduction" @click="spotIntro">景点展示</a-radio-button>
+                    <a-radio-button class="searchButton" style="width: 120px;" value="notices" @click="noticeIntro">咨询通知</a-radio-button>
                     <a-radio-button class="searchButton" style="width: 120px;" value="items">周边商城</a-radio-button>
                 </a-radio-group>
             </div>
-            <div v-if="values=== 'spotIntrouduction'" style="border-radius: 10px;background-color: white;width: 80%;border: solid 0.01cm;margin-left: 10%;;margin-right: 10%;">
-                <div style="width: 100%;background-color: white;width: 88%%;margin-left: 6%;border-radius:10px">
-                    <a-row v-for="item in items">
-                    <div @click="toSpotContent" class="spots" style="text-align: left;width: 96%;border-radius: 10px;height: max-content;margin-top: 30px;" :id="item.id">
-                        <img src="https://note.mafengwo.net/img/ef/92/80c4ba85dd95f9ce82ef761f4f5d8621.jpeg?imageMogr2%2Fthumbnail%2F%21345x213r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21345x213%2Fquality%2F90" style="border-radius: 10px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
-                        <div style="margin-left: 400px;width: max-content;margin-top: 10px;width: 100%;">
-                            <span style="font-size: 20px;">{{ item.name }}</span>
-                            <span style="margin-top: 20px;margin-left:40%;width: 200px;background-color: blueviolet;color: white;" > **价 格：{{ item.price }}**</span>
+            <div v-if="values=== 'spotIntrouduction'" style="border-radius: 10px;padding: 20px;background-color: white;width: 80%;border: solid 0.01cm;margin-left: 10%;;margin-right: 10%;">
+                <div style="width: 100%;background-color: white;width: 88%%;border-radius:10px">
+                    <a-row v-for="item in spotsDeatil" @click="toSpotContent(item.id,item.resourceDetailId)" class="spots" style="border-radius: 10px;margin-top: 30px;">
+                    <div style="text-align: left;width: 96%;border-radius: 10px;height: max-content;" >
+                        <img :src="item.coverUrl" style="border-radius: 10px;width: 200px;height:150px;overflow: hidden;float: left;"/>
+                        <div style="margin-left: 240px;width: max-content;margin-top: 10px;width: 100%;">
+                            <span style="font-size: 20px;">{{ item.title }}</span>
                             
                             <div style="margin-top: 40px;min-width: 400px;">
-                                <pre style="width:400px;white-space: pre-wrap;word-wrap: break-word;text-align: left;">是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。</pre>
+                                <pre style="width:400px;white-space: pre-wrap;word-wrap: break-word;text-align: left;">{{ item.intro }}</pre>
                             </div>
-                            <div style="position: absolute;margin-left: 35%;margin-top:5%">
+                            <div style="margin-left: 35%;margin-top:-0%">
                                 <span  key="comment-basic-like">
                                     <LikeOutlined/>
                                     <span style="padding-left: 8px; cursor: auto">
@@ -53,7 +52,7 @@
                                 </span> 
                                 <span>
                                     <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
-                                    <span style="margin-left: 10px;">{{ item.browserCount }}</span>
+                                    <span style="margin-left: 10px;">{{ item.reviewCount }}</span>
                                 </span>
                             </div>
                         </div>
@@ -70,7 +69,6 @@
                             <vue3VideoPlay
                                 
                                 v-bind="options"
-                                poster="https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/ironMan.jpg"
                             />
                         </div>
                         <div style="margin-top: 40px;">
@@ -84,30 +82,30 @@
                     <div style="margin-left: 1%;;border: solid 0.01cm;padding: 20px;text-align: left;">
                         <!-- 推荐标签 -->
                         <a-radio-group v-model:value="recommend"  size="large" style="width:max-content;">
-                            <a-radio-button style=";text-align:center;width: 120px;" class="searchButton"  value="recommendWrite">推荐游记</a-radio-button>
-                            <a-radio-button style="text-align:center;width: 120px;"  class="searchButton"  value="recommendHotel">推荐酒店</a-radio-button>
-                            <a-radio-button style=";text-align:center;width: 120px;" class="searchButton"  value="recommendFood"> 推荐美食</a-radio-button>
+                            <a-radio-button style=";text-align:center;width: 140px;" class="searchButton"  value="recommendWrite">推荐景区</a-radio-button>
+                            <!-- <a-radio-button style="text-align:center;width: 120px;"  class="searchButton"  value="recommendHotel">推荐酒店</a-radio-button>
+                            <a-radio-button style=";text-align:center;width: 120px;" class="searchButton"  value="recommendFood"> 推荐美食</a-radio-button> -->
                         </a-radio-group>
                         <!-- 相关推荐 -->
-                        <div v-if="recommend==='recommendWrite'" style="margin-top: 20px;width: max-content;">
+                        <div v-if="recommend==='recommendWrite'" style="margin-top: 20px;width: 100%;">
                             <div style="width: 100%;background-color: white;width: 88%%;border-radius:10px">
-                            <a-row v-for="item in recommends">
-                            <div style="text-align: left;background-color: transparent;; height: max-content;margin-top: 30px;width:400px;" :id="item.id">
+                            <a-row v-for="item in recommendTravel" class="recommend" style="width:100%;padding-bottom: 20px;padding-left: 20px;" @click="toTravelDeatil(item.id)">
+                            <div  style="text-align: left;; height: max-content;margin-top: 30px;width:100%;" :id="item.id">
                                 
-                                <img src="https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg" style="border-radius: 10px;width: 150px;height:100px;overflow: hidden;float: left;">
-                                <div style=";margin-left:200px;width: max-content;;">
-                                    <span style="font-size: 16px;">巴厘岛 | 总有一个假日，要属于bali</span>
+                                <img :src=item.coverUrl style="border-radius: 10px;width: 150px;height:100px;overflow: hidden;float: left;">
+                                <div style=";margin-left:200px;width:100%;;">
+                                    <span style="font-size: 16px;">{{ item.intro }}</span>
                                     <div style="width: 100%;height:max-content">
                                         <div style="text-align: left;position: relative;display: flex;">
                                             <a-avatar class="ant-dropdown-link" @click.prevent style="margin-top:10px;width: 20px;height: 20px;">
                                                 <template #icon>
-                                                <img src="https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg" alt="">
+                                                <img :src=item.user.userAvatar alt="">
                                                 </template>
                                             </a-avatar>
-                                            <span style="margin-left:10px;margin-top: 8px;">用户名</span>
+                                            <span style="margin-left:10px;margin-top: 8px;">{{ item.user.userName }}</span>
                                         </div>
                                     </div>
-                                    <div style="margin-left: 100%;margin-top: 20px;width: 400px;">
+                                    <div style="margin-left: 50%;margin-top: 20px;width:100%">
                                         <span  key="comment-basic-like">
                                             <LikeOutlined />
                                             <span style="padding-left: 8px; cursor: auto">
@@ -116,11 +114,11 @@
                                         </span>
                                         <span>
                                             <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.aigei.com/src/img/png/c8/c8c2eeb58230418b9868bdd246b1716b.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:XGdsndtyiYMYv9kO9SAP7V8WSmU=" alt="">
-                                            <span style="margin-left: 10px;">{{ item.commentCount }}</span>
+                                            <span style="margin-left: 10px;">{{ item.likeCount }}</span>
                                         </span>
                                         <span>
                                             <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
-                                            <span style="margin-left: 10px;">{{ item.browserCount }}</span>
+                                            <span style="margin-left: 10px;">{{ item.reviewCount}}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -131,9 +129,9 @@
                     </div>
             
             <div style="border:solid 0.01cm;margin-left: 1%;text-align: left;padding: 10px;">
-                <div v-for="item in 3">
+                <div v-for="item in review">
                     <a-comment>
-                    <template #actions>
+                    <!-- <template #actions>
                         <span key="comment-basic-like">
                             <a-tooltip title="Like">
                             <template v-if="action === 'liked'">
@@ -144,117 +142,76 @@
                             </template>
                             </a-tooltip>
                             <span style="padding-left: 8px; cursor: auto">
-                            {{ likes }}
+                            {{ item.likeCount }}
                             </span>
                         </span>
-                        <span key="comment-basic-dislike">
-                            <a-tooltip title="Dislike">
-                            <template v-if="action === 'disliked'">
-                                <DislikeFilled @click="dislike" />
-                            </template>
-                            <template v-else>
-                                <DislikeOutlined @click="dislike" />
-                            </template>
-                            </a-tooltip>
-                            <span style="padding-left: 8px; cursor: auto">
-                            {{ dislikes }}
-                            </span>
-                        </span>
+                       
                         
-                    
-                    <span key="comment-nested-reply-to">回复</span>
-                    </template>
+                    </template> -->
                     <template #author>
-                    <a>发明吗</a>
+                    <a>{{ item.user.userName }}</a>
                     </template>
                     <template #avatar>
-                    <a-avatar src="https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg" alt="Han Solo" />
+                    <a-avatar :src=item.user.userAvatar />
                     </template>
                     <template #content>
                     <p>
-                        首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务
+                        {{ item.content }}
                     </p>
                     </template>
-                    <a-comment>
-                    <template #actions>
-                        <span key="comment-basic-like">
-                            <a-tooltip title="Like">
-                            <template v-if="action === 'liked'">
-                                <LikeFilled @click="like" />
-                            </template>
-                            <template v-else>
-                                <LikeOutlined @click="like" />
-                            </template>
-                            </a-tooltip>
-                            <span style="padding-left: 8px; cursor: auto">
-                            {{ likes }}
-                            </span>
-                        </span>
-                        <span key="comment-basic-dislike">
-                            <a-tooltip title="Dislike">
-                            <template v-if="action === 'disliked'">
-                                <DislikeFilled @click="dislike" />
-                            </template>
-                            <template v-else>
-                                <DislikeOutlined @click="dislike" />
-                            </template>
-                            </a-tooltip>
-                            <span style="padding-left: 8px; cursor: auto">
-                            {{ dislikes }}
-                            </span>
-                        </span>
-                        <span>回复</span>
-                    </template>
-                    <template #author>
-                        <a>撒大大</a>
-                    </template>
-                    <template #avatar>
-                        <a-avatar src="https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg" alt="Han Solo" />
-                    </template>
-                    <template #content>
-                        <p>
-                            首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务
-                        </p>
-                    </template>
+                    <span>_________________________________________________________________________________________________________________________________________________________________________________________________</span>
                     
-    
-                    <span>___________________________________________________________________________________________</span>
-                    
-                    </a-comment>
                 </a-comment>
                 </div>
-                
+                <br>
+                <br>
+                <br>
             </div>
-        
+            <div v-if="scrollTop>1000" style="position: fixed;bottom: 0;z-index: 99;width: max-content;margin-left: 10.5%;width: 60%;background-color:aliceblue;border-radius: 10px;padding: 10px;">
+                <div style="display: flex;width: 100%;">
+                    <a-button type="text" @click="showDialog()" style="height: 60px">😃</a-button>
+                    <a-textarea  id="contents" v-model:value="commentContent"  cols="30" rows="2" style="margin-left: 10px;bottom: 0;height: 60px;overflow-y: auto;width: 100%;" ></a-textarea>
+                    
+                    <div style="margin-left: -0.75%;background-color: aliceblue;position: fixed;bottom: 70px;">  
+                        <EmojiPicker id="emojis" v-model="emoji" @select="selectEmoji($event)" :pickerPlacement='top' :searchEmojisFeat="false" style="display: none;overflow-y: auto;height: 300px;width: 360px;"/>
+                    </div>
+                    
+                    <div style="margin: auto;">
+                        <a-button type="primary" style="margin-left: 10px;width:85px;" @click="sendComment">发送</a-button>
+                    </div>
+                    
+                </div>
+            </div>
+            
             </div>
             <div v-if="values=== 'notices'" style=";min-height: 700px;background-color: white;width: 90%;margin-left: 10%;width: 80%;;text-align:center">
                 <div style="text-align:left;border: solid 0.01cm;margin-top: 30px;margin-right: 10%;border-radius: 10px;">
                 <div style="width: 100%;background-color: white;width: 88%%;margin-left: 0%;border-radius:10px">
-                <a-row v-for="item in notices">
-                <div style="text-align: left;background-color: transparent;; height: max-content;margin-top: 30px;" :id="item.id">
-                    <img src="https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg" style="border-radius: 10px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
+                <a-row v-for="item in noticeList" @click="toNoticeDetail(item.id)" class="spots">
+                <div style="text-align: left;background-color: transparent;; height: max-content;margin-top: 30px;">
+                    <img :src=item.coverUrl style="border-radius: 10px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
                     <div style="margin-left: 30%;margin-top: -200px;width: max-content;float: left;">
-                        <span style="font-size: 20px;">巴厘岛 | 总有一个假日，要属于bali</span>
+                        <span style="font-size: 20px;">{{ item.title }}</span>
                         <div style="width: 100%;height:max-content">
                             <div style="text-align: left;display: flex;">
-                                <a-avatar class="ant-dropdown-link" @click.prevent style="margin-top:10px;width: 20px;height: 20px;">
+                                <a-avatar class="ant-dropdown-link"  style="margin-top:10px;width: 20px;height: 20px;">
                                     <template #icon>
-                                    <img src="https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg" alt="">
+                                    <img :src="item.user.userAvatar" alt="">
                                     </template>
                                 </a-avatar>
-                                <span style="margin-left:10px;margin-top: 8px;">用户名</span>
+                                <span style="margin-left:10px;margin-top: 8px;">{{ item.user.userName }}</span>
                             </div>
                         </div>
                         
                         <div style="margin-top: 5px;min-width: 800px;">
-                            <pre style="width:800px;white-space: pre-wrap;word-wrap: break-word;text-align: left;">是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。</pre>
+                            <pre style="width:800px;white-space: pre-wrap;word-wrap: break-word;text-align: left;">{{ item.intro }}</pre>
                         </div>
                         <div style="float: right;margin-right: 10%;margin-top: -20px;">
                             
                            
                             <span>
                                 <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
-                                <span style="margin-left: 10px;">{{ item.browserCount }}</span>
+                                <span style="margin-left: 10px;">{{ item.viewCount }}</span>
                             </span>
                         </div>
                     </div>
@@ -317,108 +274,96 @@
 <script setup lang="ts">
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue';
 import { LikeOutlined } from '@ant-design/icons-vue';
-import {computed,ref} from 'vue'
+import {computed,onBeforeUnmount,onMounted,ref, watch} from 'vue'
 import { reactive } from 'vue';
 import md from 'markdown-it'
-import {useRoute,useRouter} from 'vue-router'
-import { LikeFilled, DislikeFilled, DislikeOutlined } from '@ant-design/icons-vue';
-import { defineComponent} from 'vue';
-//评论
-let s =  defineComponent({
-  components: {
-    LikeFilled,
-    LikeOutlined,
-    DislikeFilled,
-    DislikeOutlined,
-  }
+import {useRouter} from 'vue-router'
+import { useCounterStore } from '../../pinia';
+import { storeToRefs } from 'pinia';
+import { EmojiPicker } from 'vue3-twemoji-picker-final'
+import {officialGetCommend,officialGetCommendData } from '../../api/official/official';
+import { officialGetIntroByIdData,officialGetIntroById } from '../../api/official/official';
+import { officialGetResourceList,officialGetResourceListData,officialGetResourceDetailByIdData,officialGetResourceDetailById } from '../../api/official/officialResource';
+import {officialGetReviewListData,officialGetReviewList,officialReviewAddData,officialReviewAdd} from '../../api/official/officialReview'
+import { message } from 'ant-design-vue';
+import { officialGetNoticeById, officialGetNoticeByIdData, officialGetNoticeList, officialGetNoticeListData } from '../../api/official/officialNotification';
+const load = useCounterStore();
+const {scenicDetail,spotDetail,notificationDetail} = storeToRefs(load);
+const spotsDeatil = ref()
+const noticeList = ref()
+let oldScrollTop: number = 0; // 记录上一次滚动结束后的滚动距离
+const scrollTop = ref<number>(0); // 记录当前的滚动距离
+const scrollFixedStatus = ref<boolean>(true);
+const review = ref()
+const emoji = ref()
+const commentContent = ref()
+const showDialog = ()=>{
+    if(document.getElementById("emojis")?.style.display === "none"){
+        document.getElementById("emojis")!.style.display = ""
+    }else{
+        console.log('aaaa')
+        document.getElementById("emojis")!.style.display = "none"
+    }     
+}
+const top=ref("top")
+const selectEmoji=(e:any)=>{
+    document.getElementById("contents")!.value=document.getElementById("contents")!.value +  e.i
+    console.log(e.i)
+}
+const sendComment=()=>{
+    let msg:officialReviewAddData={
+        content: commentContent.value,
+        reviewObjId: scenicDetail.value.id,
+        reviewObjType: 1//官方类型
+    }
+    officialReviewAdd(msg).then((res)=>{
+        console.log(res.data.data)
+        console.log(commentContent.value)
+        if(res.data.code===0){
+            message.success('点评成功！')
+            commentContent.value = ''
+            let msg2:officialGetReviewListData={
+                reviewObjId: scenicDetail.value.id,
+                sortField: ''
+            }
+            officialGetReviewList(msg2).then((res)=>{
+                review.value = res.data.data.records
+                console.log(review.value)
+            })
+        }
+    })
+}
+const recommendTravel = ref()
+onMounted(() => {
+  let msg:officialGetCommendData={
+    current: 0,
+    pageSize: 4,
+    sortField: '',
+    typeId: 1//官方类型，1为景点
+    }
+  officialGetCommend(msg).then((res)=>{
+    console.log(res.data.data)
+    recommendTravel.value = res.data.data
+  })
+  let msg2:officialGetReviewListData={
+    reviewObjId: scenicDetail.value.id,
+    sortField: ''
+}
+officialGetReviewList(msg2).then((res)=>{
+    review.value = res.data.data.records
+    console.log(review.value)
 })
-const likes = ref<number>(0);
-    const dislikes = ref<number>(0);
-    const action = ref<string>();
-        const like = () => {
-      likes.value = 1;
-      dislikes.value = 0;
-      action.value = 'liked';
-    };
-
-    const dislike = () => {
-      likes.value = 0;
-      dislikes.value = 1;
-      action.value = 'disliked';
-    };
-
-const ScenicName = ref('武当山')
+  handleScroll();
+})
+const ScenicName = scenicDetail.value.officialName
 const values = ref('scenicIntroduction')
-// 景点展示部分
-const items = [
-    {name:'陈道长',
-    likeCount:10,
-    commentCount:200,
-    browserCount:1000,
-    price:2000,
-    id:'10101',
-    islike:true},
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:12,
-    commentCount:200,
-    price:2000,
-    browserCount:1000,
-    id:'10102',
-    islike:false},
-    
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:13,
-    browserCount:1000,
-    price:2000,
-    commentCount:200,
-    id:'10103',
-    islike:false},
-    {name:'aaaaaaaaaaaaaaaa',
-    price:2000,
-    likeCount:13,
-    commentCount:200,
-    browserCount:1000,
-    id:'10103',
-    islike:false},
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:13,
-    price:2000,
-    commentCount:200,
-    browserCount:1000,
-    id:'10103',
-    islike:false},
-]
-const recommends = [
-    {name:'陈道长',
-    likeCount:10,
-    commentCount:200,
-    browserCount:1000,
-    price:2000,
-    id:'10101',
-    islike:true},
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:12,
-    commentCount:200,
-    price:2000,
-    browserCount:1000,
-    id:'10102',
-    islike:false},
-    
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:13,
-    browserCount:1000,
-    price:2000,
-    commentCount:200,
-    id:'10103',
-    islike:false},
-]
 const options = reactive({
     width: "100%", //播放器高度
     height: "60%", //播放器高度
     color: "#409eff", //主题色
     title: "", //视频名称
     
-    src: "http://127.0.0.1:8080/kk.mp4", //视频源
+    src: scenicDetail.value.videoUrl, //视频源
     muted: false, //静音
     webFullScreen: false,
     speedRate: ["0.75", "1.0", "1.25", "1.5", "2.0"], //播放倍速
@@ -440,46 +385,7 @@ const options = reactive({
     ], //显示所有按钮,
   });
 const recommend = ref('recommendWrite')
-const markdown = "# Vue 3 + TypeScript + Vite\n" +
-            "\n" +
-            "This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.\n" +
-            "\n" +
-            "## Recommended IDE Setup\n" +
-            "\n" +
-            "- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).\n" +
-            "\n" +
-            "## Type Support For `.vue` Imports in TS\n" +
-            "\n" +
-            "TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.\n" +
-            "\n" +
-            "If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:\n" +
-            "\n" +
-            "1. Disable the built-in TypeScript Extension\n" +
-            "   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette\n" +
-            "   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`\n" +
-            "2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.\n" +
-            "\n" +
-            "\n" +
-            "### 模式：\n" +
-            "   第一节课：讲课\n" +
-            "   第二节课：做实验\n" +
-            "   第三节课：验收\n" +
-            "#### 软件协同\n" +
-            "   计划阶段暂停了\n" +
-            "\n" +
-            "##### 开发阶段：\n" +
-            "   系统分析，系统实施，\n" +
-            "\n" +
-            "###### 系统分析：\n" +
-            "   1.首先介绍系统分析概念和任务，交代任务，老师提出任务，完成任务\n" +
-            "   2.在课堂上完成任务（做的快的可以直接验收）\n" +
-            "   3.再上课时验收(根据任务大小看共三次课还是两次课)===>提交审核报告，会议纪要\n" +
-            "      在老师审核报告期间指出问题后最后还是存在问题，则会扣分\n" +
-            "###### *****审核报告：（无统一模板，在需求分析遇到的问题，如何发现的和如何解决的）===》只要最后报告完善就没问题\n" +
-            "   1.用户类型有误\n" +
-            "      写如何解决有误的方法\n" +
-            "   2.**************\n\n" +
-            "![](https://note.mafengwo.net/img/d8/42/15ee1878d06b351714e4a06e24beae28.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90)\n"
+const markdown =scenicDetail.value.detail
 const mds = new md()
 let markdowns = computed(()=>(mds.render(markdown)))
 // 这里是咨询通知部分
@@ -518,7 +424,6 @@ const notices = [
 ]
 // 周边
 const groups = ref<any>()
-const exchange = ref<string>('exchange')
 const purchase = ref<string>('purchase')
 const exchanges = ref<any>()
 const purchases = ref<any>()
@@ -534,16 +439,89 @@ const selections=[
             {name:"周边商城"},
         ]
 const current=ref(1)
-const route = useRoute()
-console.log(route.query)
 const router = useRouter()
-const toSpotContent = ()=>{
-    router.push({
-    path:'./ScenicContent',
-    query:{
-      msg:'这里要传的参数'
+const toSpotContent = (id:number,resourceDetailId:number)=>{
+    let msg:officialGetResourceDetailByIdData={
+        offResId: id,
+        detailId: resourceDetailId
     }
+    officialGetResourceDetailById(msg).then((res)=>{
+        console.log(res.data.data)
+        spotDetail.value = res.data.data
+    })
+    router.push({
+    path:'./ScenicContent'
   })
+
+}
+const toTravelDeatil=(id:number)=>{
+    let msg:officialGetIntroByIdData={
+    detailId: 1, //这里是登录的用户的id
+    offId: id//官方的id
+  }
+  officialGetIntroById(msg).then((res)=>{
+    console.log(res.data.data)
+    scenicDetail.value = res.data.data
+  })
+  console.log(scenicDetail.value)
+  window.open('./ScenicDetail')
+}
+const spotIntro=()=>{
+    let msg:officialGetResourceListData={
+        intro: '',
+        sortField: '',
+        title: ''
+    }
+    officialGetResourceList(msg).then((res)=>{
+        spotsDeatil.value = res.data.data.records
+        console.log(spotsDeatil.value)
+        console.log(spotsDeatil.value[0].coverUrl)
+    })
+}
+//滚动
+const handleScroll=()=>{
+    window.addEventListener('scroll', () => {
+                scrollTop.value = window.scrollY;
+            });
+}
+onBeforeUnmount(() => {
+            window.removeEventListener('scroll', () => {}); // 离开当前组件别忘记移除事件监听
+        });
+watch(() => scrollTop.value,(newValue,oldValue)=>{
+        setTimeout(() => {
+                        if (newValue === window.scrollY) {
+                            // 延时执行后当newValue等于window.scrollY，代表滚动结束
+                            // console.log('滚动结束');
+                            oldScrollTop = newValue; // 每次滚动结束后都要给oldScrollTop赋值
+                            // scrollFixedStatus.value = true;
+                        }
+                    }, 20); // 必须使用延时器，否则每次newValue和window.scrollY都相等，无法判断，20ms刚好大于watch的侦听周期，故延时20ms
+                    if (oldScrollTop === oldValue) {
+                        scrollFixedStatus.value = false;
+                        // 每次滚动开始时oldScrollTop与oldValue相等
+                        // console.log('滚动开始');
+                    }
+            }
+)
+const noticeIntro=()=>{
+    let msg:officialGetNoticeListData={
+    }
+    officialGetNoticeList(msg).then((res)=>{
+        noticeList.value = res.data.data.records
+        console.log(noticeList.value)
+    })
+}
+const toNoticeDetail=(id:number)=>{
+    let msg:officialGetNoticeByIdData={
+        id: id
+    }
+    officialGetNoticeById(msg).then((res)=>{
+        spotDetail.value = res.data.data
+        console.log(spotDetail.value)
+    })
+    router.push({
+        path:'./ScenicContent'
+    })
 }
 </script>
 
@@ -551,15 +529,15 @@ const toSpotContent = ()=>{
 /* 这里是轮播图对应的css样式 */
 .ant-carousel :deep(.slick-slide) {
   text-align: center;
-  height: 300px;
+  height: 400px;
   line-height: 160px;
 
   overflow: hidden;
 }
 
 .ant-carousel :deep(.slick-arrow.custom-slick-arrow) {
-  width: 25px;
-  height: 25px;
+  width: 50px;
+  height: 50px;
   font-size: 25px;
   color: #fff;
   background-color: rgba(31, 45, 61, 0.11);
@@ -578,7 +556,19 @@ const toSpotContent = ()=>{
     color: aliceblue;
 }
 .spots:hover{
-    background-color: rgb(188, 188, 188);
     cursor: pointer;
+    background-color: rgb(133, 197, 237);
+    animation:fadenums 1s 1;
+    border-radius: 20px;
+}
+.recommend:hover{
+    cursor: pointer;
+    background-color: rgb(133, 197, 237);
+    animation:fadenums 1s 1;
+    border-radius: 20px;
+}
+@keyframes fadenums{
+    0%{background: white};
+    100%{opacity: rgb(152, 186, 224);}
 }
 </style>

@@ -1,16 +1,16 @@
 import service from ".."
-
+const baseurl = '/api/team' 
 // -------------发布团队动态----------------
-interface teamNewsPublishData{
+export interface teamNewsPublishData{
     content: string,
-    id: BigInteger,
+    // id: BigInteger,
     imageUrl: string,
-    teamId: BigInteger,
-    userId: BigInteger
+    teamId: number,
+    // userId: BigInteger
   }
 export function teamNewsPublish(data:teamNewsPublishData){
 return service({
-    url:"/team/news/add",
+    url:`${baseurl}/news/add`,
     method:"post",
     data
 })
@@ -40,21 +40,21 @@ export function teamNewsGetById(data:BigInteger){
 }
 
 // -------------分页获取列表（封装类）----------------
-interface teamNewsListData{
-    content: string,
-    current: BigInteger,
-    id: BigInteger,
-    imageUrl: string,
-    pageSize: BigInteger,
-    searchText: string,
+export interface teamNewsListData{
+    // content: string,
+    current: number,
+    // id: BigInteger,
+    // imageUrl: string,
+    pageSize: number,
+    // searchText: string,
     sortField: string,
-    sortOrder: string,
-    teamId: BigInteger,
-    userId: BigInteger
+    // sortOrder: string,
+    teamId: number,
+    // userId: BigInteger
   }
 export function teamNewsList(data:teamNewsListData){
     return service({
-        url:"/team/news/list/page/vo",
+        url:`${baseurl}/news/list/page/vo`,
         method:"POST",
         data
     })

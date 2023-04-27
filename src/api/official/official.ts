@@ -1,41 +1,40 @@
 import service from ".."
-
+const baseurl="/api/official"
 // -------------添加官方介绍----------------
-interface officialAddIntroData{
-    city: string,
-    contact: string,
+export interface officialAddIntroData{
+    //city: string,
+    //contact: string,
     coverUrl: string,
     detail: string,
-    id: bigint,
+    id: number,
     intro: string,
-    latAndLong: string,
-    location: string,
-    officialDetailId: bigint,
+    //latAndLong: string,
+    //location: string,
+    //officialDetailId: bigint,
     officialName: string,
-    province: string,
+    //province: string,
     tag: string,
-    typeId: bigint,
-    serId: bigint,
+    //typeId: number,
+    //userId: bigint,
     videoUrl: string
   }
 export function officialAddIntro(data:officialAddIntroData){
     return service({
-        url:"/official/add",
+        url:`${baseurl}/add`,
         method:"POST",
         data
     })
 }
 // -------------根据 Id 获取官方详情----------------
-interface officialGetIntroByIdData{
-	code: bigint,
-	data: bigint,
-	message: string
+export interface officialGetIntroByIdData{
+	detailId: number, //这里是登录的用户的id
+	offId: number//官方的id
 }
 export function officialGetIntroById(data:officialGetIntroByIdData){
     return service({
-        url:"/official/detail",
+        url:`${baseurl}/detail`,
         method:"GET",
-        data
+        params:data
     })
 }
 
@@ -54,56 +53,40 @@ export function officialLike(data:officialLikeData){
 }
 
 // -------------获取推荐官方（大众化推荐）----------------
-interface officialGetCommendData{
-    city: string,
-    contact: string,
-    coverUrl: string,
-    current: bigint,
-    detail: string,
-    id: bigint,
-    intro: string,
-    latAndLong: string,
-    location: string,
-    officialDetailId: bigint,
-    officialName: string,
-    pageSize: bigint,
-    province: string,
-    searchText: string,
+export interface officialGetCommendData{
+    current: number,
+    pageSize: number,
     sortField: string,
-    sortOrder: string,
-    tag: string,
-    typeId: bigint,
-    userId: bigint,
-    videoUrl: string,
+    typeId: number
   }
 export function officialGetCommend(data:officialGetCommendData){
     return service({
-        url:"/official/rcmd",
+        url:`${baseurl}/rcmd`,
         method:"POST",
         data
     })
 }
 // -------------更新官方介绍----------------
-interface officialUpdateIntroData{
-    city: string,
-    contact: string,
+export interface officialUpdateIntroData{
+    //city: string,
+    //contact: string,
     coverUrl: string,
     detail: string,
-    id: bigint,
+    id: number,
     intro: string,
-    latAndLong: string,
-    location: string,
-    officialDetailId: bigint,
+    //latAndLong: string,
+    //location: string,
+    officialDetailId: number,//官方详情id
     officialName: string,
-    province: string,
-    tag: string,
-    typeId: bigint,
-    userId: bigint,
+    //province: string,
+    //tag: string,
+    //typeId: bigint,
+    //userId: bigint,
     videoUrl: string,
   }
 export function officialUpdateIntro(data:officialUpdateIntroData){
     return service({
-        url:"/official/update",
+        url:`${baseurl}/update`,
         method:"POST",
         data
     })
@@ -120,31 +103,31 @@ export function officialViewById(data:bigint){
 }
 
 // -------------分页获取列表（封装类）----------------
-interface officialViewPageListData{
-  city: string,
-  contact: string,
-  coverUrl: string,
-  current: bigint,
-  detail: string,
-  id: bigint,
-  intro: string,
-  latAndLong: string,
-  location: string,
-  officialDetailId: bigint,
-  officialName: string,
-  pageSize: bigint,
-  province: string,
-  searchText: string,
-  sortField: string,
-  sortOrder: string,
-  tag: string,
-  typeId: bigint,
-  userId: bigint,
-  videoUrl: string,
+export interface officialViewPageListData{
+//   city: string,
+//   contact: string,
+//   coverUrl: string,
+current: number,
+//   detail: string,
+//   id: bigint,
+//   intro: string,
+//   latAndLong: string,
+//   location: string,
+//   officialDetailId: bigint,
+//   officialName: string,
+pageSize: number,
+//   province: string,
+//   searchText: string,
+//   sortField: string,
+//   sortOrder: string,
+//   tag: string,
+//   typeId: bigint,
+//   userId: bigint,
+//   videoUrl: string,
 }
 export function officialViewPageList(data:officialViewPageListData){
     return service({
-        url:"/official/vo/page/list",
+        url:`${baseurl}/vo/page/list`,
         method:"POST",
         data
     })

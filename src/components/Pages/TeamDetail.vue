@@ -2,21 +2,21 @@
     <div>
         <div class="TeamBackground">
             <img class="TeamIcon" src="https://p1-q.mafengwo.net/s11/M00/DA/01/wKgBEFpkXbWAVcW3ABsoxkLFtX482.jpeg?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90" alt="">
-            <h1 class="TeamName">{{ TeamName }}</h1>
+            <h1 class="TeamName">{{ teamDetails.teamName }}</h1>
         </div>
         <div style="margin-top: 20px;">
-            <a href="/TeamDeatil/TeamHome" >
+            <router-link to="/TeamDetail/TeamHome">
                 <a-button class="select">团队主页</a-button>
-            </a>
-            <a href="/TeamDeatil/TeamNews" style="margin-left: 20px;">
+            </router-link>
+            <router-link to="/TeamDetail/TeamNews">
                 <a-button class="select">团队动态</a-button>
-            </a>
-            <a href="/TeamDeatil/TeamNotes" style="margin-left: 20px;">
-                <a-button class="select">团队游记</a-button>    
-            </a>    
-            <a href="/TeamDeatil/TeamWall" style="margin-left: 20px;">
-                <a-button class="select">团队弹幕</a-button>    
-            </a>  
+            </router-link>
+            <router-link to="/TeamDetail/TeamNotes">
+                <a-button class="select">团队游记</a-button>
+            </router-link>
+            <router-link to="/TeamDetail/TeamWall">
+                <a-button class="select">团队弹幕</a-button>
+            </router-link>
         </div>
         <div class="TeamNotes">
             <router-view></router-view>
@@ -27,7 +27,11 @@
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router'; 
-const TeamName = '我的团队'
+import { useCounterStore } from '../../pinia';
+import { storeToRefs } from 'pinia';
+const load = useCounterStore()
+const {teamDetails} = storeToRefs(load)
+console.log(teamDetails.value)
 </script>
 
 <style lang="scss" scoped >

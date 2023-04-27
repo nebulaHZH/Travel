@@ -57,7 +57,8 @@
 
 <script setup lang="ts">
 import { LikeOutlined} from '@ant-design/icons-vue';
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
+import { articleQueryRequest, articleQueryRequestData } from '../../../api/atricle/travel';
 const current = ref(1)
 const items = [
     {name:'aaaaaaaaaaaaaaaa',
@@ -92,6 +93,18 @@ const items = [
     id:'10103',
     islike:false},
 ]
+const article = ref()
+onMounted(() => {
+    let a:articleQueryRequestData={
+        current: 0,
+        pageSize: 5,
+        sortField: 'create_time'
+    }
+    articleQueryRequest(a).then((res)=>{
+        article.value = res.data.data.records
+        console.log(article.value)
+    })
+})
 </script>
 
 <style scoped>

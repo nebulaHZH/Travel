@@ -23,31 +23,31 @@
                 <a-space size="large">
                     <a-button class="btn" size="large" @click="getMessae('hot')">热门推荐</a-button>
                     <a-button class="btn" size="large" @click="getMessae('notes')">官方游记</a-button>
-                    <a-button class="btn" size="large" @click="getMessae('record')">旅游记录</a-button>
+                    <a-button class="btn" size="large" @click="getMessae('record')">最新发布</a-button>
                     <a-button class="btn" size="large" @click="getMessae('expirence')">景点攻略</a-button>
                     <a-button class="btn" size="large" @click="getMessae('like')">猜你喜欢</a-button>
                 </a-space>
             </a-col>
             <div id="notes">
-            <a-row v-for="item in items" v-model="items" >
-                <div class="selection" @click="linkDetail(item.link)" style="text-align: left;border: solid rgb(0,0,0,0.01);height: max-content;" :id="item.id">
-                    <img :src="item.imgsrc" style="border-radius: 35px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
+            <a-row v-for="item in travel" v-model="items" >
+                <div class="selection" @click="linkDetail(item.id)" style="text-align: left;border: solid rgb(0,0,0,0.01);height: max-content;" >
+                    <img :src="item.coverUrl" style="border-radius: 35px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
                     <div style="margin-left: 50px;margin-top: 10px;width: max-content;float: left;">
                         <span style="font-size: 20px;">{{ item.title }}</span>
                         <div style="width: 100%;height:max-content">
                             <div style="text-align: left;position: relative;display: flex;">
                                 <a-avatar class="ant-dropdown-link" @click.prevent style="margin-top:10px;width: 20px;height: 20px;">
                                     <template #icon>
-                                    <img :src="item.writer.header">
+                                    <img :src="item.userAvatar">
                                     </template>
                                 </a-avatar>
-                                <span style="margin-left:10px;margin-top: 8px;">{{item.writer.name}}</span>
+                                <span style="margin-left:10px;margin-top: 8px;">{{item.userName}}</span>
                             </div>
                         </div>
                         
                         <div style="margin-top: 5px;min-width: 800px;">
                             <a-textarea 
-                            :defaultValue="item.cover"
+                            :defaultValue="item.intro"
                             style="resize:none;;color: gray;margin-left: -10px;"
                             :bordered="false"
                             placeholder="Borderless" />
@@ -63,7 +63,7 @@
                                 </template>
                                 </a-tooltip>
                                 <span style="padding-left: 8px;">
-                                {{ item.likecount }}
+                                {{ item.likeCount }}
                                 </span>
                             </span>
                             <span>
@@ -72,13 +72,13 @@
                             </span>
                             <span>
                                 <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
-                                <span style="margin-left: 10px;">{{ item.browserCount }}</span>
+                                <span style="margin-left: 10px;">{{ item.viewCount }}</span>
                             </span>
                         </div>
                     </div>
                 </div>
             </a-row>
-            <a-pagination style="margin-top:20px;padding-bottom: 20px;" v-model:current="current" :total="50" show-less-items />
+            <!-- <a-pagination style="margin-top:20px;padding-bottom: 20px;" v-model:current="current" :total="50" show-less-items /> -->
         </div>
         </div>
         
@@ -89,117 +89,85 @@
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue';
 import { LikeFilled,LikeOutlined } from '@ant-design/icons-vue';
 import location from '../common/location'
-import {getCurrentInstance, ref} from 'vue'
+import {getCurrentInstance, onMounted, ref} from 'vue'
+import { articleQueryRequest, articleQueryRequest2, articleQueryRequestData, articleQueryRequestData2,searchTravelById } from '../../api/atricle/travel';
+import {PersonalRecommendListData,PersonalRecommendList} from '../../api/DataService/DataUpload'
+import { useCounterStore } from '../../pinia';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+const load = useCounterStore();
+const {travelDetailId} = storeToRefs(load);
 const internalInstance = getCurrentInstance()
+const travel =ref()
 console.log(location)
-// 这里是点赞收藏评论数：
-
-const like = (id: string) => {
-    //先异步发送
-    items.forEach(function (item,index){
-        if(item.id===id){
-            item.islike = !item.islike
-            return 1
-        }
-    })
-};
-
-
-const items = [//这个数据接口写好要改
-    {
-        noteName:'哈夫曼树即最下生成树',
-        imgsrc:'https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg',
-        cover:'是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。',
-        title:'什么什么巴厘岛忘记了',
-        link:'http://localhost:5173/NotesDetail',
-        likecount:10,
-        commentCount:321,
-        browserCount:3123,
-        id:'10101',
-        islike:true,
-        writer:{
-            header:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-            name:'用户昵称'
-        }
-    },
-    {
-        noteName:'哈夫曼树即最下生成树',
-        imgsrc:'https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg',
-        cover:'是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。',
-        title:'什么什么巴厘岛忘记了',
-        link:'http://localhost:5173/NotesDetail',
-        likecount:10,
-        commentCount:321,
-        browserCount:3123,
-        id:'10101',
-        islike:true,
-        writer:{
-            header:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-            name:'用户昵称'
-        }
-    },
-    {
-        noteName:'哈夫曼树即最下生成树',
-        imgsrc:'https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg',
-        cover:'是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。',
-        title:'什么什么巴厘岛忘记了',
-        link:'http://localhost:5173/NotesDetail',
-        likecount:10,
-        commentCount:321,
-        browserCount:3123,
-        id:'10101',
-        islike:true,
-        writer:{
-            header:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-            name:'用户昵称'
-        }
-    },
-    {
-        noteName:'哈夫曼树即最下生成树',
-        imgsrc:'https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg',
-        cover:'是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。',
-        title:'什么什么巴厘岛忘记了',
-        link:'http://localhost:5173/NotesDetail',
-        likecount:10,
-        commentCount:321,
-        browserCount:3123,
-        id:'10101',
-        islike:true,
-        writer:{
-            header:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-            name:'用户昵称'
-        }
-    },
-    {
-        noteName:'哈夫曼树即最下生成树',
-        imgsrc:'https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg',
-        cover:'是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。',
-        title:'什么什么巴厘岛忘记了',
-        link:'http://localhost:5173/NotesDetail',
-        likecount:10,
-        commentCount:321,
-        browserCount:3123,
-        id:'10101',
-        islike:true,
-        writer:{
-            header:'https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg',
-            name:'用户昵称'
-        }
+// 封装一个请求参数函数：
+const  query=(orderType:number)=>{
+    let msg:articleQueryRequestData={
+    //current: 0,
+    //pageSize: 0,
+    sortField: '',
+    orderType: orderType,
     }
-]
+    articleQueryRequest(msg).then((res)=>{
+        console.log(res.data.data.records)
+        travel.value = res.data.data.records
+    })
+}
+// 封装一个请求参数函数2：
+const  query2=(queryType:number)=>{
+    let msg:articleQueryRequestData2={
+    //current: 0,
+    //pageSize: 0,
+    sortField: '',
+    queryType: queryType,
+    }
+    articleQueryRequest2(msg).then((res)=>{
+        console.log(res.data.data.records)
+        travel.value = res.data.data.records
+    })
+}
+// 这里是点赞收藏评论数：
+onMounted(()=>{
+    query(0)
+})
+
 const current=ref(1)
 const getMessae=(flag:string)=>{
     // 这里点击按钮时发送请求传递参数flag
     if(internalInstance!==null){
         internalInstance.update()//每次操作数据后实时更新
     }
-    
-    console.log(items)
-    console.log(flag)
+    if(flag === 'notes'){
+        query2(1)
+    }else if(flag === 'hot'){
+        query(0)
+    }else if(flag === 'expirence'){
+        query2(2)
+    }else if(flag === 'record'){
+        query(1)
+    }else if(flag === 'like'){
+        let msg:PersonalRecommendListData={
+        current: 0,
+        pageSize: 6,
+        rcmdType: 1
+        }
+        PersonalRecommendList(msg).then((res)=>{
+            
+            travel.value = res.data.data.dataPage.records
+            console.log(travel.value)
+        })
+    }
 }
-const linkDetail=(link:string)=>{
+const route = useRouter();
+const linkDetail=(id:number)=>{
     // 这里跳转到对应的详细界面
-    window.open(link,'_blank')
+    travelDetailId.value = id
+    route.push({
+        path:'./NotesDetail',
+        query:{
+            id:id
+        }
+    })
 }
 </script>
 

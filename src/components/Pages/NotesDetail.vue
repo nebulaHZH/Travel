@@ -4,18 +4,18 @@
             <div class="top">
                 <div style="width: max-content;position: relative;">
                     <img class="head" :src="writer.header" alt="" >
-                    <span class="myName" style="">{{ writer.name }}</span>
-                    <span class="motor">发表时间：{{ writer.time }}</span>                
+                    <span class="myName" style="">{{ travelDetail?.title }}</span>
+                    <span class="motor">发表时间：{{ travelDetail?.createTime }}</span>                
                 </div>
                 <div style="float: right;margin-top: -100px;margin-right: 10%;">
-                    <a-button @click="getLikes"  style="background-color:blueviolet;border: solid blueviolet;color: aliceblue;">{{ writer.checkLike }}</a-button>
+                    <a-button @click="getLikes"  style="background-color:blueviolet;border: solid blueviolet;color: aliceblue;">{{ travelDetail?.isFollowed }}</a-button>
                 </div>
                 
             </div>
             <div>
                 <div style="margin-left: 10%;width: 80%;margin-top: 20px;text-align: left;border: solid 0.01cm;padding: 20px;">
                         <div style="margin-top: 40px;">
-                            <span style="font-size: larger;padding: 7px;background-color:cornflowerblue ;color: white;" >{{ NotesName }}</span>
+                            <span style="font-size: larger;padding: 7px;background-color:cornflowerblue ;color: white;" >{{ travelDetail?.userName }}</span>
                         </div>
                         <div>
                             <p style="margin-top: 20px;width: 100%;" v-html="markdowns"></p>
@@ -25,29 +25,29 @@
                         <!-- 推荐标签 -->
                         <a-button style=";text-align:center;width: 120px;" class="searchButton"  value="recommendWrite">推荐游记</a-button>
                         <!-- 相关推荐 -->
-                        <div v-if="recommend==='recommendWrite'" style="margin-top: 20px;width: 100%;">
+                        <div style="margin-top: 20px;width: 100%;">
                             <div style="width: 100%;background-color: white;width: 88%%;border-radius:10px">
-                            <a-row v-for="item in recommends" @click="" class="showWriterDetail" style="width: 100%;">
-                            <div @click="notesDetail" style="text-align: left;background-color: transparent;; height: max-content;margin-top: 10px;margin-bottom: 10px;width:90%;" :id="item.id">
+                            <a-row v-for="item in travelRecommendList" @click="" class="showWriterDetail" style="width: 100%;">
+                            <div @click="notesDetail(item.id)" style="text-align: left;background-color: transparent;; height: max-content;margin-top: 10px;margin-bottom: 10px;width:90%;">
                                 
-                                <img :src="item.imgsrc" style="border-radius: 10px;margin-left: 10px;width: 150px;height:100px;overflow: hidden;float: left;">
+                                <img :src="item.coverUrl" style="border-radius: 10px;margin-left: 10px;width: 150px;height:100px;overflow: hidden;float: left;">
                                 <div style=";margin-left:200px;width: 100%;">
-                                    <span style="font-size: 16px;">{{ item.noteName }}</span>
+                                    <span style="font-size: 16px;">{{ item.title }}</span>
                                     <div style="width: 100%;height:max-content">
                                         <div style="text-align: left;position: relative;display: flex;">
                                             <a-avatar class="ant-dropdown-link" @click.prevent style="margin-top:10px;width: 20px;height: 20px;">
                                                 <template #icon>
-                                                <img :src="item.writer.header" alt="">
+                                                <img :src="item.userAvatar" alt="">
                                                 </template>
                                             </a-avatar>
-                                            <span style="margin-left:10px;margin-top: 8px;">{{ item.writer.name }}</span>
+                                            <span style="margin-left:10px;margin-top: 8px;">{{ item.userName }}</span>
                                         </div>
                                     </div>
                                     <div style="margin-left: 40%;margin-top: 20px;width: 400px;">
                                         <span  key="comment-basic-like">
                                             <LikeOutlined />
                                             <span style="padding-left: 8px; cursor: auto">
-                                            {{ item.likecount }}
+                                            {{ item.likeCount }}
                                             </span>
                                         </span>
                                         <span>
@@ -56,7 +56,7 @@
                                         </span>
                                         <span>
                                             <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
-                                            <span style="margin-left: 10px;">{{ item.browserCount }}</span>
+                                            <span style="margin-left: 10px;">{{ item.viewCount }}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -118,17 +118,48 @@
                     </div>
                     
                 </div>
-            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import {computed,getCurrentInstance,ref} from 'vue'
+import {computed,getCurrentInstance,inject,ref} from 'vue'
 import { onMounted,defineComponent } from 'vue';
 import md from 'markdown-it'
 import { LikeOutlined,LikeFilled, DislikeFilled, DislikeOutlined } from '@ant-design/icons-vue';
 import _default from 'ant-design-vue';
 import { EmojiPicker } from 'vue3-twemoji-picker-final'
+import { searchTravelById } from '../../api/atricle/travel';
+import { useCounterStore } from '../../pinia';
+import {TravelRecommendListData,TravelRecommendList} from '../../api/DataService/DataUpload'
+import { storeToRefs } from 'pinia';
+import { useRoute, useRouter } from 'vue-router';
+const load = useCounterStore();
+const {travelDetailId} = storeToRefs(load);
+const travelDetail = ref()
+const travelRecommendList = ref()
+const { query } = useRoute();
+let markdowns = ref()
+onMounted(()=>{
+    console.log('aaaa',query.id)
+    searchTravelById(query.id).then((res)=>{
+        console.log(res.data.data)
+        travelDetail.value = res.data.data
+        console.log(travelDetail.value.tag)
+        markdowns = computed(()=>(mds.render(travelDetail?.value?.detail)))
+    })
+    let msg:TravelRecommendListData={
+        current: 0,
+        pageSize: 4,
+        rcmdType: 1,
+        travelType: 1,
+        tag:travelDetail.value?.tag
+    }
+    TravelRecommendList(msg).then((res)=>{
+        travelRecommendList.value = res.data.data.dataPage.records
+        console.log(res.data.data.dataPage.records)
+    })
+})
 // 评论回复
 const replyto=(aksname:string,askcontent:string)=>{
     // 这里发送请求
@@ -285,29 +316,13 @@ const recommends = [
     }
 ]
 const recommend = ref('recommendWrite')
-const markdown = "# Vue 3 + TypeScript + Vite\n" +
-            "\n" +
-            "This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.\n" +
-            "\n" +
-            
-            "### 模式：\n" +
-            "   第一节课：讲课\n" +
-            "   第二节课：做实验\n" +
-            "   第三节课：验收\n" +
-            "#### 软件协同\n" +
-            "   计划阶段暂停了\n" +
-            "\n" +
-            "##### 开发阶段：\n" +
-            "   系统分析，系统实施，\n" +
-            "\n" +
-            "###### 系统分析：\n" +
-            "![](https://note.mafengwo.net/img/d8/42/15ee1878d06b351714e4a06e24beae28.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90)\n"
+const markdown = travelDetail?.value?.title
 const mds = new md()
 const NotesName = '我未曾真的去过泉州'
-let markdowns = computed(()=>(mds.render(markdown)))
+
 const getLikes =(e:any)=>{
     console.log(e.target.innerText)
-    if(e.target.innerText === '关 注'){
+    if(e.target.innerText === '0'){
         writer.value.checkLike='取消关注'
         // 这里传数据给后端说已经关注了
     }else{
@@ -318,8 +333,15 @@ const getLikes =(e:any)=>{
     console.log(writer)
 }
 // 当前点击的游记进入详情界面
-const notesDetail=(e:any)=>{
-    window.open('./NotesDetail','_blank')
+const router = useRouter()
+const notesDetail=(id:number)=>{
+    const url=router.resolve({
+        path:'./NOtesDetail',
+        query:{
+            id:id
+        }
+    })
+    window.open(url.href)
 }
 </script>
 
@@ -356,10 +378,10 @@ const notesDetail=(e:any)=>{
 .motor{
     
     margin-top: 160px;
-    margin-left: 10px;
+    margin-left: 0px;
     position: absolute;
     width: max-content;
-    width: 200px;
+    width: 500px;
     font-size: 16px;
     border-radius: 10px;
 }

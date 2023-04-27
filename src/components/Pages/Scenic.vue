@@ -1,5 +1,5 @@
 <template>
-    <div class="a">
+    <div class="a" >
         <a-carousel arrows>
             <template #prevArrow>
             <div class="custom-slick-arrow" style="left: 10px; z-index: 1">
@@ -12,37 +12,37 @@
             </div>
             </template>
             <div>
-                <img src="../../assets/navPicture.png" alt="">
+                <img src="https://p1-q.mafengwo.net/s19/M00/49/68/CoNELmQ_f-wKP-JhACuOvvshEqo.png?imageView2%2F2%2Fw%2F1920%2Fq%2F90%2Fformat%2Fjpeg" alt="">
             </div>
-            <div><img src="../../assets/example.jpg" alt=""></div>
-            <div><img src="../../assets/navPicture.png" alt=""></div>
+            <div><img src="https://p1-q.mafengwo.net/s19/M00/B8/C5/CoNBSGRA-e8KwBJPACVzIbW_BFg.png?imageView2%2F2%2Fw%2F1920%2Fq%2F90%2Fformat%2Fjpeg" alt=""></div>
+            <div><img src="https://p1-q.mafengwo.net/s19/M00/49/68/CoNELmQ_f-wKP-JhACuOvvshEqo.png?imageView2%2F2%2Fw%2F1920%2Fq%2F90%2Fformat%2Fjpeg" alt=""></div>
             <div><img src="../../assets/navPicture.png" alt=""></div>
         </a-carousel>
-        <div class="category">
+        <!-- <div class="category">
           <a-cascader v-model:value="value" :options="options" placeholder="请选择城市" />
           <a-button type="purple" style="margin-left: 20px;" size="large">季节推荐</a-button>
           <a-button type="purple" style="margin-left: 20px;" size="large">出现方式</a-button>
           <a-button type="purple" style="margin-left: 20px;" size="large">节假日</a-button>
           <a-button type="purple" style="margin-left: 20px;" size="large">猜你喜欢</a-button>
-        </div>
-        <div v-for="selection in selections" key="selection">
+        </div> -->
+        <div v-for="items in 4" key="selection" style="margin-top: 100px;">
                 <a-row type="flex" justify="space-around" align="middle" v-for="row of 1" key="row" style="margin-bottom: 30px;margin-left: 0;">              
-                  <a-col :span="4" v-for="column of selection" key="column">
-                    <a-card hoverable style="width: 300px" @click="upToScenic">
+                  <a-col :span="4" v-for="column in scenic.slice(items*4-4,items*4)" key="column">
+                    <a-card hoverable style="width: 300px" @click="upToScenic(column.id)">
                         <template #cover>
                         <img
                             alt="example"
-                            :src="column.imgsrc"
+                            :src="column.coverUrl"
                             style="width: 300px;height:220px;overflow: hidden;"
                         />
                         </template>
                     <div>
-                        <span style="float:left;font-weight: 600;">{{ column.name }}</span>
+                        <span style="float:left;font-weight: 600;">{{ column.officialName }}</span>
                     </div>        
                     <br>
                     <div style="text-align: left;">
                         <span>
-                            {{ column.detail }}
+                            {{ column.intro }}
                         </span>
                     </div>
                     </a-card>
@@ -56,147 +56,64 @@
 
 <script setup lang="ts">
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue';
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import type { CascaderProps } from 'ant-design-vue';
 import location from '../common/location'
 import {useRouter} from 'vue-router'
+import { officialViewPageList, officialViewPageListData,officialGetIntroByIdData } from '../../api/official/official';
+import { useCounterStore } from '../../pinia';
+import { storeToRefs } from 'pinia';
+import { officialGetIntroById } from '../../api/official/official';
 console.log(location)
-const value = ref<String[]>([])
 const options: CascaderProps['options'] = location
-const selections=[
-  [
-  {
-    name:'兵马俑',
-    imgsrc:'https://note.mafengwo.net/img/ea/f3/3356660921dc1934bde2bf1b71cd8ac1.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'姑苏',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/49/FF/CoNH1WQ02f4srMNiAA8Eo-Arg3s.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'贵州',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/BB/54/CoNBcWPy-9kNBexkABXLBujIS9I.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90'
-    ,detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'西藏以东',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/19/46/CoNJlGQyjhdD3qA7AArFegvGvlk.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  ],
-  [
-  {
-    name:'南昌·上饶·婺源',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/5E/43/CoNE62QyZi0t_nAMAAtWJWI5tM8.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'阴雨绵绵的三月底来场说走就走的田园山谷之旅'
-
-  },
-  {
-    name:'珠海和澳门',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/9D/B5/CoNBz2QuaDJKLQtlABiCuf9WA88.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'泰国',
-    imgsrc:'https://note.mafengwo.net/img/66/da/a606d4c1e27172c0e69724fa4e8236dc.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'上海',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/60/92/CoNHZmQqxxJUmKXzAAYbxfUccoA.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  ],
-  [
-  {
-    name:'北疆',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/BE/AF/CoNBGWQNbbcHGhgfACd_WhiUduY.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'四姑娘山',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/3F/0C/CoNH1mQqXVUQ0y6SAAygshT8yDI.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'兵马俑',
-    imgsrc:'https://note.mafengwo.net/img/ea/f3/3356660921dc1934bde2bf1b71cd8ac1.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'云南',
-    imgsrc:'https://note.mafengwo.net/img/7b/de/834fe0dade0a25391bcd48a9c700b39e.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  ],
-  [
-  {
-    name:'西安',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/9A/DB/CoNH1WQrqEBIj8IDAAunp35YIYQ.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'香港',
-    imgsrc:'https://note.mafengwo.net/img/9a/46/cf8b0576a880da23448e0c5557cd2039.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'南疆',
-    imgsrc:'https://note.mafengwo.net/img/17/91/591e326a659bedf7b7ad4ff3961d22a2.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  {
-    name:'阿联酋',
-    imgsrc:'https://p1-q.mafengwo.net/s19/M00/B6/1A/CoNH1WQqsWUUoJkdAAaKGJiZyS4.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
-    detail:'/10人团/赠进口早餐/10点半懒人团/亲子游/人工讲解/可独立成团/法国依云水'
-
-  },
-  ],          
-]
+const scenic= ref([])
 const current=ref(1)
 const route = useRouter()
-const upToScenic = () =>{
+const load = useCounterStore();
+const {scenicDetail} = storeToRefs(load);
+const upToScenic = (id:number) =>{
   console.log('aaaa')
-  
+  let msg:officialGetIntroByIdData={
+    detailId: 1, //这里是登录的用户的id
+    offId: id//官方的id
+  }
+  officialGetIntroById(msg).then((res)=>{
+    console.log(res.data.data)
+    scenicDetail.value = res.data.data
+  })
   route.push({
-    path:'./ScenicDetail',
-    query:{
-      msg:'这里要传的参数'
-    }
+    path:'./ScenicDetail'
+    // query:{
+    //   msg:'这里要传的参数'
+    // }
   })
 }
+onMounted(() => {
+  let msg:officialViewPageListData={
+  current: 0,
+  pageSize: 16
+  }
+  officialViewPageList(msg).then((res)=>{
+    console.log(res.data.data.records)
+    scenic.value = res.data.data.records
+  })
+})
 </script>
 
 <style scoped>
 
 .ant-carousel :deep(.slick-slide) {
   text-align: center;
-  height: 300px;
+  height: 450px;
   line-height: 160px;
 
   overflow: hidden;
 }
 
 .ant-carousel :deep(.slick-arrow.custom-slick-arrow) {
-  width: 25px;
-  height: 25px;
-  font-size: 25px;
+  width: 45px;
+  height: 45px;
+  font-size: 45px;
   color: #fff;
   background-color: rgba(31, 45, 61, 0.11);
   opacity: 0.3;

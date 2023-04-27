@@ -1,21 +1,21 @@
 import service from ".."
-
+const baseurl = "/api/official"
 // -------------添加官方资源----------------
-interface officialResourceAddData{
+export interface officialResourceAddData{
     coverUrl: string,
     detail: string,
-    id: bigint,
+    //id: bigint,
     intro: string,
-    officialId: bigint,
-    price: string,
-    resourceDetailId: bigint,
+    //officialId: bigint,
+    //price: string,
+    //resourceDetailId: bigint,
     title: string,
-    typeId: bigint,
-    userId: bigint
+    //typeId: bigint,
+    //userId: bigint
   }
   export function officialResourceAdd(data:officialResourceAddData){
       return service({
-          url:"/official/resource/add",
+          url:`${baseurl}/resource/add`,
           method:"POST",
           data
       })
@@ -26,55 +26,42 @@ interface officialResourceDelData{
   }
 export function officialResourceDel(data:officialResourceDelData){
     return service({
-        url:"/official/resource/delete",
+        url:`${baseurl}/resource/delete`,
         method:"POST",
         data
     })
 }
 
 // -------------根据 Id 获取官方资源详情----------------
-interface officialGetResourceDetailByIdData{
-    id: bigint
+export interface officialGetResourceDetailByIdData{
+    offResId: number,
+    detailId:number
   }
 export function officialGetResourceDetailById(data:officialGetResourceDetailByIdData){
     return service({
-        url:"/official/resource/detail",
-        method:"POST",
-        data
+        url:`${baseurl}/resource/detail`,
+        method:"GET",
+        params:data
     })
 }
 // -------------根据 id 获取官方资源----------------
 export function officialGetResourceById(data:bigint){
     return service({
-        url:"/official/resource/get/vo",
+        url:`${baseurl}/resource/get/vo`,
         method:"GET",
         data
     })
 }
 
 // -------------根据获取官方资源详情----------------
-interface officialGetResourceListData{
-    current: bigint,
-    detail: string,
-    id: bigint,
+export interface officialGetResourceListData{
     intro: string,
-    likeCount: bigint,
-    officialId: bigint,
-    pageSize: bigint,
-    price: string,
-    resourceDetailId: bigint,
-    resourceState: bigint,
-    searchText: string,
     sortField: string,
-    sortOrder: string,
-    title: string,
-    typeId: bigint,
-    userId: bigint,
-    viewCount: bigint
+    title: string
   }
 export function officialGetResourceList(data:officialGetResourceListData){
     return service({
-        url:"/official/resource/list/page/vo",
+        url:`${baseurl}/resource/list/page/vo`,
         method:"POST",
         data
     })

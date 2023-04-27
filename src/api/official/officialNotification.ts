@@ -1,20 +1,20 @@
 import service from ".."
-
+const baseurl = "/api/official"
 // -------------添加资讯通知----------------
-interface officialNoticeAddData{
+export interface officialNoticeAddData{
     coverUrl: string,
     detail: string,
-    id: bigint,
+    // id: bigint,
     intro: string,
-    notificationState: bigint,
-    officialId: bigint,
+    // notificationState: bigint,
+    // officialId: bigint,
     title: string,
-    typeId: bigint,
-    userId: bigint
+    // typeId: bigint,
+    // userId: bigint
   }
 export function officialNoticeAdd(data:officialNoticeAddData){
     return service({
-        url:"/official/notification/add",
+        url:`${baseurl}/notification/add`,
         method:"POST",
         data
     })
@@ -25,44 +25,44 @@ interface officialNoticeDelData{
   }
 export function officialNoticeDel(data:officialNoticeDelData){
     return service({
-        url:"/official/notification/delete",
+        url:`${baseurl}/notification/delete`,
         method:"POST",
         data
     })
 }
 // -------------根据 id 获取资讯通知详情----------------
-interface officialGetNoticeByIdData{
-    id: bigint
+export interface officialGetNoticeByIdData{
+    id: number
   }
 export function officialGetNoticeById(data:officialGetNoticeByIdData){
     return service({
-        url:"/official/notification/get/vo",
-        method:"POST",
-        data
+        url:`${baseurl}/notification/get/vo`,
+        method:"GET",
+        params:data
     })
 }
 // -------------分页获取列表（封装类）----------------
-interface officialGetNoticeListData{
-    createTime: string,
-    current: bigint,
-    detail: string,
-    id: bigint,
-    intro: string,
-    notificationState: bigint,
-    officialId: bigint,
-    pageSiz: bigint,
-    searchText: string,
-    sortField: string,
-    sortOrder: string,
-    title: string,
-    typeId: bigint,
-    updateTime: string,
-    userId: bigint,
-    viewCount: bigint
+export interface officialGetNoticeListData{
+    // createTime: string,
+    // current: bigint,
+    // detail: string,
+    // id: bigint,
+    // intro: string,
+    // notificationState: bigint,
+    // officialId: bigint,
+    // pageSiz: bigint,
+    // searchText: string,
+    // sortField: string,
+    // sortOrder: string,
+    // title: string,
+    // typeId: bigint,
+    // updateTime: string,
+    // userId: bigint,
+    // viewCount: bigint
   }
 export function officialGetNoticeList(data:officialGetNoticeListData){
     return service({
-        url:"/official/notification/list/page/vo",
+        url:`${baseurl}/notification/list/page/vo`,
         method:"POST",
         data
     })
@@ -82,7 +82,7 @@ interface officialNoticeUpdateData{
   }
 export function officialNoticeUpdate(data:officialNoticeUpdateData){
     return service({
-        url:"/official/notification/update",
+        url:`${baseurl}/notification/update`,
         method:"POST",
         data
     })

@@ -1,28 +1,22 @@
 <template>
     <div>
-      <textarea name="" id="" cols="30" rows="10" type="text" v-model="content"></textarea>
+      {{ ss }}
+      <a-button @click="a">aaa</a-button>
+      <a-switch v-model:checked="ss"></a-switch>
     </div>
-    <a-button @click="sa">sdsada</a-button>
-    <p v-html="sss"></p>
   </template>
   
   <script setup lang="ts">
-  import {computed,ref} from 'vue'
-  import markdownIt from 'markdown-it'
-  const content = ref('')
- 
-  const markdown = new markdownIt()
-  let sss = computed(()=>{
-    return markdown.render(content.value)
-  })
- const sa = () =>{
-    console.log(content.value)
-    console.log(markdown.render(content.value))
-    console.log(sss.value)
-    
-  
+  import {computed,ref, watch} from 'vue'
+  const ss = ref(false)
+  const a=()=>{
+    ss.value = !ss.value
+    console.log(ss.value)
   }
- 
+  watch(ss,(value,oldvalue)=>{
+    ss.value = true
+    console.log(ss)
+  })
   </script>
   
   <style scoped></style>

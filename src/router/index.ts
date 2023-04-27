@@ -164,7 +164,7 @@ const routes = [
                 path:'AdminCenterPublish',
                 name:'AdminCenterPublish',
                 component:AdminCenterPublish,
-                redirect:'/AdminCenter/AdminCenterPublish/Video',
+                redirect:'/AdminCenter/AdminCenterPublish/Write',
                 children:[
                     {
                         path:'Official',
@@ -239,9 +239,9 @@ const routes = [
         ]
     },
     {
-        path:'/TeamDeatil',
-        name:'TeamDeatil',
-        redirect:'/TeamDeatil/TeamHome',
+        path:'/TeamDetail',
+        name:'TeamDetail',
+        redirect:'/TeamDetail/TeamHome',
         component:TeamDeatil,
         children:[
             {

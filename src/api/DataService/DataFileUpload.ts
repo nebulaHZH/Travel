@@ -1,15 +1,17 @@
 import service from ".."
 
 // -------------文件上传----------------
-interface fileUploadData{
-    biz:string,
-    file:File
+export interface fileUploadData{
+    file:FormData
   }
 export function fileUpload(data:fileUploadData){
     return service({
-        url:"/data/file/upload",
+        url:"/api/data/file/upload",
         method:"POST",
-        data
+        headers:{
+            'Content-Type': 'multipart/form-data'
+        },
+        data:data.file
     })
 }
 

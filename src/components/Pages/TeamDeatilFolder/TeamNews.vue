@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="SendMessage">
-            <a-textarea id="contents" class="ContentArea" name=""  cols="30" rows="3" style="height: 30px;overflow-y: auto;" ></a-textarea>
+            <a-textarea id="contents" class="ContentArea" name=""  cols="30" rows="3" style="height: 30px;overflow-y: auto;" v-model:value="content"></a-textarea>
             <br>
             <a-upload v-model:file-list="fileList1" style="width: 50%;" action="https://www.mocky.io/v2/5cc8019d300000980a055e76" list-type="picture" class="upload-list-inline">
                 <a-button id="upPictures">
@@ -14,44 +14,62 @@
                 <EmojiPicker id="emojis" v-model="emoji" @select="selectEmoji($event)" :searchEmojisFeat="false" style="display: none;overflow-y: auto;height: 300px;width: 360px ;;"/>
             </div>
             <div>
-                <a-button type="primary" style="float: right;margin-top: -100px;margin-left: 10px;">发送</a-button>
+                <a-button type="primary" style="float: right;margin-top: -100px;margin-left: 10px;" @click="sendNews">发送</a-button>
             </div>
             
         </div>
-        <div  style="text-align:left;margin-left: 10%;border: solid 0.01cm;margin-top: 30px;margin-right: 10%;border-radius: 10px;">
-                <div v-for="item in newsMessage" style="width: max-content;position: relative;">
-                    <img class="newHead" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,jpg/quality,q_100" alt="" >
-                    <span style="margin-left:30px;font-weight: 600;margin-top: 120px;position: absolute;width: max-content;">{{item.writer}}</span>
-                    <span style=" margin-left:30px;font-weight: 600;margin-top: 160px;position: absolute;width: max-content;">{{item.team}}</span>
-                    <div style="margin-left: 60px;border: solid 0.01pc;padding: 10px;border-radius: 5px;">
-                        <pre style="width:800px;white-space: pre-wrap;word-wrap: break-word">豆瓣9.0、2.2亿的点击量、海量的媒体采访......11位分集导演纵览古今，从多个全然不同的角度切入，为动画呈现了动画是如何承载中国的文化传统以及哲学积淀。其中有着这样一部作品——它娓娓道来，极富想象力地展现了一位乡村少年质朴、有趣的童年图景，并由此引起了观众对于时光易逝、童年不再的乡愁与思索。这部作品，就是由刘毛宁执导的《中国奇谭》第四集——《乡村巴士带走了王孩儿和神仙》。 作者：动画学术趴 https://www.bilibili.com/read/cv22268997?from=category_0 出处：bilibili</pre>
-                        <div  style="margin-left: 1%;margin-right: 1%;">
-                            <a-row  >
-                                <a-col v-for="ss in item.imgs">
-                                    <img  :src="ss.url" alt="" style="width: 150px;height: 150px;margin: 20px;">
-                                </a-col>
-                            </a-row>
-                            
+        <div style="text-align: left;">
+            <a-button style="margin-left: 80%;" type="primary" @click="refreshNews">刷新动态</a-button>
+        </div>
+        
+        <div  style="text-align:left;margin-left: 10%;border: solid 0.01cm;padding:10px;margin-top: 30px;margin-right: 10%;border-radius: 10px;">
+                <div v-for="item in newsList" style="width: 100%;position: relative;">
+                    <div style="background-color: ghostwhite;padding:20px">
+                        <img class="newHead" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,jpg/quality,q_100" alt="" >
+                        <span style="font-weight: 600;margin-top: 120px;position: absolute;width: 100%;">{{item.user.userName}}</span>
+                        <div style="background-color: gainsboro;width: 100%;;padding: 10px;border-radius: 5px;">
+                            <pre style="width:100%;white-space: pre-wrap;word-wrap: break-word">{{ item.content }}</pre>
+                            <div  style="margin-left: 1%;margin-right: 1%;">
+                                <a-row  >
+                                    <a-col v-for="ss in 1">
+                                        <img  src="https://note.mafengwo.net/img/80/ab/91dd3de62487b946b1ff2815303722b4.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90" alt="" style="width: 150px;height: 150px;margin: 20px;">
+                                    </a-col>
+                                    <a-col v-for="ss in 1">
+                                        <img  src="https://note.mafengwo.net/img/b8/5f/a44aedded4ad2a353c92f4fe776f5acb.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90" alt="" style="width: 150px;height: 150px;margin: 20px;">
+                                    </a-col>
+                                </a-row>
+                                
+                            </div>
                         </div>
                     </div>
+                    
                     
                     
                     <br>
                     <br>
                 </div>
-                
+                <div v-if="newsList.length === 0" style="margin-left: 45%;">
+                    <a-span>暂无动态消息</a-span>
+                </div>
             </div>
+            
             <br>
     </div>
 </template>
 
 <script setup lang="ts">
 import { UploadOutlined } from '@ant-design/icons-vue';
-import { watch,ref } from 'vue';
+import { watch,ref, onMounted } from 'vue';
 import type { UploadProps } from 'ant-design-vue';
 import { EmojiPicker } from 'vue3-twemoji-picker-final'
-
+import { useCounterStore } from '../../../pinia';
+import { storeToRefs } from 'pinia';
+import { teamNewsList, teamNewsListData,teamNewsPublishData,teamNewsPublish } from '../../../api/team/teamNews';
+const load = useCounterStore()
+const {teamDetails,newsList} = storeToRefs(load)
 const emoji = ref()
+// 文本框中的数据
+const content = ref('')
 const showDialog = ()=>{
     if(document.getElementById("emojis")?.style.display === "none"){
         document.getElementById("emojis")!.style.display = ""
@@ -65,43 +83,43 @@ const selectEmoji=(e:any)=>{
     console.log(e.i)
 }
 //动态消息部分
-const newsMessage = [
-    {
-        writer:'h2asx',
-        team:'撒啊了',
-        imgs:[//只能上传四张图片
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-        ]
-    },
-    {
-        writer:'h2asx',
-        team:'撒啊了',
-        imgs:[
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            ]
-    },
-    {
-        writer:'h2asx',
-        team:'大苏打',
-        imgs:[
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-            {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-        ]
-    },
-    {
-        writer:'h2asx',
-        team:'8iyuj',    
-        imgs:[
-        ]
-    }
-]
+// const newsMessage = [
+//     {
+//         writer:'h2asx',
+//         team:'撒啊了',
+//         imgs:[//只能上传四张图片
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//             {url:'https://note.mafengwo.net/img/80/ab/91dd3de62487b946b1ff2815303722b4.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90'},
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//         ]
+//     },
+//     {
+//         writer:'h2asx',
+//         team:'撒啊了',
+//         imgs:[
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//             ]
+//     },
+//     {
+//         writer:'h2asx',
+//         team:'大苏打',
+//         imgs:[
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
+//         ]
+//     },
+//     {
+//         writer:'h2asx',
+//         team:'8iyuj',    
+//         imgs:[
+//         ]
+//     }
+// ]
 // 上传图片部分
 const fileList1 = ref<UploadProps['fileList']>([
       {
@@ -128,6 +146,36 @@ watch(fileList1,(newVal, oldVal) =>{
     }
 })
 //meoji部分
+
+// 进入时请求最新的动态
+onMounted(() => {
+    refreshNews();
+})
+//刷新动态：
+const refreshNews=()=>{
+    const l:teamNewsListData={
+        sortField: 'create_time',
+        teamId: teamDetails.value.id,
+        current: 0,
+        pageSize: 5
+    }
+    teamNewsList(l).then((res)=>{
+        newsList.value = res.data.data.records
+        console.log(newsList.value.length)
+    })
+}
+// 发送动态消息
+const sendNews=()=>{
+    const n:teamNewsPublishData={
+        content: content.value,
+        imageUrl: '123.com',
+        teamId: teamDetails.value.id
+    }
+    teamNewsPublish(n).then((res)=>{
+        console.log(res.data)
+        console.log(content.value)
+    })
+}
 </script>
 
 <style lang="scss" scoped>
