@@ -344,6 +344,8 @@
 import { ref,reactive } from 'vue';
 import { UserOutlined,LogoutOutlined } from '@ant-design/icons-vue';
 import { func } from 'vue-types';
+import { message } from 'ant-design-vue';
+import { useRouter } from 'vue-router';
 const current = ref<string[]>(['TravelName']);
 const info=ref<string>('')
 const history=ref<HTMLElement | null>(null)
@@ -375,8 +377,19 @@ const tabListNoTitle = [
         tab: '消息',
       },
     ];
+const router = useRouter()
 const search = ()=>{
-    window.open('/Search'+'?'+info.value,'_blank')
+    if(info.value === ''){
+        message.error('尚未输入关键词')
+    }else{
+        router.push({
+            path:'/Search',
+            query:{
+                key:info.value
+            }
+        })
+    }
+    
 }
 const key = ref('tab1');
 const noTitleKey = ref('动态');

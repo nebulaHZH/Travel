@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     cors: true, // 允许跨域  8月更新
+    host:'0.0.0.0',
     port: 8090, // 端口号
     proxy: {
       "/api": {

@@ -39,7 +39,9 @@ export interface officialGetDerivativeByIdData{
       return service({
           url:`${baseurl}/derivative/get/vo`,
           method:"GET",
-          data
+          params:{
+            id:data.id
+          }
       })
   }
 
@@ -50,7 +52,7 @@ export interface officialGetDerivativeListData{
     // derivativeState: bigint,
     // id: bigint,
     // intro: string,
-    // obtainMethod: bigint,
+    obtainMethod: number,
     // officialId: bigint,
     pageSize: number,
     // price: bigint,

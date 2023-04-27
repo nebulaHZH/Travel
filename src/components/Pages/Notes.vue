@@ -12,10 +12,10 @@
             </div>
             </template>
             <div>
-                <img src="https://youimg1.tripcdn.com/target/fd/tg/g1/M04/5F/2C/CghzfFW4TKGAaaOlAAX9H1cljyU402_C_880_350_R5.jpg?proc=source%2ftrip" style="width: 100%;height: 100%;">
+                <img src="https://p1-q.mafengwo.net/s19/M00/AA/40/CoNKtmRGbaQiPTK8AC21c2sPcj8.png?imageView2%2F2%2Fw%2F1920%2Fq%2F90%2Fformat%2Fjpeg" style="width: 100%;height: 100%;">
             </div>
-            <div><img src="https://youimg1.tripcdn.com/target/100j0s000000i8kplE8EF_C_880_350_R5.jpg?proc=source%2ftrip" style="width: 100%;height: 100%;"></div>
-            <div><img src="../../assets/navPicture.png" alt=""></div>
+            <div><img src="https://p1-q.mafengwo.net/s19/M00/0D/6E/CoNELmRFCl0sAdV5AB4sGjCNdl0.png?imageView2%2F2%2Fw%2F1920%2Fq%2F90%2Fformat%2Fjpeg" style="width: 100%;height: 100%;"></div>
+            <div><img src="https://p1-q.mafengwo.net/s19/M00/A7/1C/CoNJZGRGeYUOLdpcACtWUwQ8lZY.png?imageView2%2F2%2Fw%2F1920%2Fq%2F90%2Fformat%2Fjpeg" alt=""></div>
             <div><img src="../../assets/navPicture.png" alt=""></div>
         </a-carousel>
         <div id="choose">
@@ -175,7 +175,7 @@ const linkDetail=(id:number)=>{
 /* 这里是轮播图对应的css样式 */
 .ant-carousel :deep(.slick-slide) {
   text-align: center;
-  height: 300px;
+  height: 400px;
   line-height: 160px;
 
   overflow: hidden;

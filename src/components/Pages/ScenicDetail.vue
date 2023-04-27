@@ -432,16 +432,14 @@ const toSpotContent = (id:number,resourceDetailId:number)=>{
 
 }
 const toTravelDeatil=(id:number)=>{
-    let msg:officialGetIntroByIdData={
-    detailId: 1, //这里是登录的用户的id
-    offId: id//官方的id
-  }
-  officialGetIntroById(msg).then((res)=>{
-    console.log(res.data.data)
-    scenicDetail.value = res.data.data
-  })
-  console.log(scenicDetail.value)
-  window.open('./ScenicDetail')
+    console.log(id)
+    const u = router.resolve({
+        path:'./ScenicDetail',
+        query:{
+            id:id
+        }
+    })
+    window.open(u.href)
 }
 const spotIntro=()=>{
     let msg:officialGetResourceListData={

@@ -1,53 +1,71 @@
 <template>
 	<div class="swiperbox" style="padding:50px">
-        <swiper 
-               :spaceBetween="10" :thumbs="{ swiper: thumbsSwiper }" :modules="modules" class="mySwiper2" :navigation="{
-                            nextEl: '.swiper-button1-next',
-                            prevEl: '.swiper-button1-prev'
-                        }">
-                    <swiper-slide v-for="(item, index) of bigImg" :key="index"> <img class="img" :src="item" />
-                    </swiper-slide>
-                   
-                </swiper>
-                <swiper @swiper="setThumbsSwiper" :spaceBetween="10" :slidesPerView="3" :freeMode="true" style="display: flex;width: 50%;flex-direction: column;"
-                    :watchSlidesProgress="true" :modules="modules" class="mySwiper">
-                <swiper-slide v-for="(item, index) of bigImg" :key="index"> 
-                        <img class="img" :src="item" />
-                    </swiper-slide>
-                </swiper>
+        <div style="width: 500px;">
+            <swiper 
+            :spaceBetween="10" :thumbs="{ swiper: thumbsSwiper }" :modules="modules" class="mySwiper2" :navigation="{
+                        nextEl: '.swiper-button1-next',
+                        prevEl: '.swiper-button1-prev'
+                    }">
+                <swiper-slide v-for="item in goods?.coverUrl.slice(1,-1).split(',')"> <img class="img" :src="item.slice(1,-1)" />
+                </swiper-slide>
+                
+            </swiper>
+            <swiper @swiper="setThumbsSwiper" :spaceBetween="10" :slidesPerView="3" :freeMode="true" style="display: flex;width: 50%;flex-direction: column;"
+                :watchSlidesProgress="true" :modules="modules" class="mySwiper">
+            <swiper-slide v-for="item in goods?.coverUrl.slice(1,-1).split(',')"> 
+                    <img class="img" :src=item.slice(1,-1) />
+                </swiper-slide>
+            </swiper>
+        </div>
+        
         <div style="text-align: left;font-size: 20px;">
-            <span style="margin-left: 20px;">商品名：</span>
-            {{ goodName }}
-            <br>
-            <br>
-            <div style="background-color: gainsboro;margin-left: 54%;">
-                <span style="font-size: 40px;color: brown;margin-left: 20px;">￥{{ price }}</span>
+            <div style="margin-left: 45%;">
+                <span style="font-weight: 600;font-size: 25px;">【T纪念品T】：</span>
+                <span style="color: blueviolet;font-weight: bolder;">《{{ goods?.derivativeName }}》</span>
             </div>
             <br>
-            <span style="margin-left: 20px;">详细介绍：</span>
-            <pre style="width: 46%;height: 390px;font-size: 20px;white-space: pre-wrap;word-wrap: break-word;text-align: left;font-weight: 500;margin-left: 54%;background-color:darkgray;">
-  随便写几句话应付一下------------------------------------------------------
+            <br>
+            <div style="background: linear-gradient(to right,pink,white);margin-left: 45%;width: 50% ;border-radius: 10px;">
+                <span style="font-size: 40px;color: brown;margin-left: 20px;">￥{{ goods?.price }}</span>
+            </div>
+            <br>
+            <div>
+                <span style="margin-left: 9%;font-weight: 600;">【详细介绍】：</span>
+                <br>
+                <br>
+            <pre style=";width: 50%;height: 300px;font-size: 18px;border-radius: 10px;;white-space: pre-wrap;word-wrap: break-word;text-align: left;font-weight: 600;margin-left: 45%;background: linear-gradient(to bottom right,rgb(176,224,230), pink);">  {{ goods?.intro }}
             </pre>
+            </div>
+            
         </div>          
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 import "swiper/css/free-mode"
 import "swiper/css/navigation"
 import "swiper/css/thumbs"
 import { FreeMode, Navigation, Thumbs } from 'swiper'
-const goodName = ref('卡莎手办模型')
-const price = ref('106')
+import { officialGetDerivativeById, officialGetDerivativeByIdData } from '../../api/official/officialMall';
+import { useRoute } from 'vue-router';
 const modules = [Thumbs, FreeMode]
-const bigImg = reactive([
-    'https://t7.baidu.com/it/u=3165657288,4248157545&fm=193&f=GIF',
-    'https://t7.baidu.com/it/u=2942499027,2479446682&fm=193&f=GIF',
-    'https://t7.baidu.com/it/u=2610975262,3538281461&fm=193&f=GIF',
-])
+const goods = ref()
+
+onMounted(()=>{
+    const {query} = useRoute()
+    let msg:officialGetDerivativeByIdData={
+        id: query.id
+    }
+    officialGetDerivativeById(msg).then((res)=>{
+        console.log(res.data.data)
+        goods.value = res.data.data
+        console.log(goods.value?.coverUrl.slice(1,-1).split(","))
+    })
+})
+const bigImg = reactive(goods.value?.coverUrl.slice(1,-1).split(","))
 const thumbsSwiper = ref(null);
  
 const setThumbsSwiper = (swiper: any) => {
@@ -56,6 +74,7 @@ const setThumbsSwiper = (swiper: any) => {
 </script>
 
 <style scoped>
+
 .swiper-button-next {
     /*先将原始箭头的颜色设置为透明的  然后设置一个背景图片  达到修改按钮样式的目的*/
     right: 1.5%;
@@ -120,21 +139,19 @@ const setThumbsSwiper = (swiper: any) => {
 }
  
 .mySwiper2 {
-    position: relative;
     float: left;
-    height: 400px;
-    width: 50%;
+    height:450px;
+    width: 100%;
     margin-left: 2%;
     border-radius: 12px;
 }
  
 .mySwiper {
-    position: relative;
+
     margin-top: 10px;
     float: left;
-    margin-left: 2%;
-    overflow-x: auto;
-    width: 300px;
+    margin-left: 22%;
+    width: 100%;
     height: 80%;
     box-sizing: border-box;
     padding: 10px 0;

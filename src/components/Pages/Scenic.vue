@@ -96,7 +96,7 @@ onMounted(() => {
 
 .ant-carousel :deep(.slick-slide) {
   text-align: center;
-  height: 450px;
+  height: 400px;
   line-height: 160px;
 
   overflow: hidden;
