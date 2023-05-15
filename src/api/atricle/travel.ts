@@ -95,7 +95,7 @@ export interface getArticleDeatilData{
 }
 export function getArticleDeatil(data:getArticleDeatilData){
     return service({
-        url:`${baseurl}/detail`,
+        url:'/api/travel/detail',
         method:"GET",
         params:data
     })

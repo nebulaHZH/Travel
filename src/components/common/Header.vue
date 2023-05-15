@@ -108,7 +108,7 @@
                     </a-menu-item>
 <!-- 动态 -->
                     <a-menu-item key="space" class="titleRight" >
-                        <a class="ant-dropdown-link" href="/My?key=news" @mouseover="changeNews">动态</a>
+                        <router-link class="ant-dropdown-link" to="/My?key=news" @mouseover="changeNews">动态</router-link>
                         <!-- <a-dropdown  :getPopupContainer="(trigger:any) => trigger.parentNode" v-model="news"> -->
                             
                             <!-- <template #overlay @click.stop>
@@ -228,7 +228,7 @@
                     </a-menu-item>
 <!-- 收藏 -->
                     <a-menu-item key="collection"  class="titleRight" >
-                        <a class="ant-dropdown-link" href="/My?key=collection"   @mouseover="change" >收藏</a>
+                        <router-link class="ant-dropdown-link" to="/My?key=collection"   @mouseover="change" >收藏</router-link>
                         <!-- <a-dropdown v-model="vise"  :getPopupContainer="(trigger:any) => trigger.parentNode"  style="margin-top:12px;" :visible="vise"> -->
                             
                             <!-- <template #overlay>
@@ -283,7 +283,7 @@
                     </a-menu-item>
 <!-- 历史 -->
                     <a-menu-item v-model="visible" key="history"  class="titleRight" >
-                        <a href="/My?key=history" class="ant-dropdown-link" @mouseover="changeHistory">历史</a>
+                        <router-link to="/My?key=history" class="ant-dropdown-link" @mouseover="changeHistory">历史</router-link>
                         <!-- <a-dropdown  :getPopupContainer="(trigger:any) => trigger.parentNode"> -->
                             
                             <!-- <template #overlay>
@@ -322,7 +322,7 @@
 <!-- 管理中心 -->
                     <a-menu-item key="administrator" class="titleRight">
                         <div class="titleIcon">
-                            <a class="menuName" href="/AdminCenter">管理中心</a>
+                            <router-link class="menuName" to="/AdminCenter">管理中心</router-link>
                         </div>
                     </a-menu-item>
 <!-- 发布 -->

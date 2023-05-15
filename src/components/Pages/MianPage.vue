@@ -8,12 +8,12 @@
 <div style="height: 40px;width: 100%"></div>
     <!-- 热点景区 -->
     <div >
-        <img src="../../assets/左箭头travel.png" alt="" style="width: 200px;height: 150px;">
+        <img src="https://travel-1310703557.cos.ap-shanghai.myqcloud.com/team_cover/1/UCO3Bril-travel%E7%AE%AD%E5%A4%B4.png" alt="" style="width: 200px;height: 150px;">
         <span class="selectName">
             热门景区
         </span>
         
-        <img src="../../assets/travel箭头.png" style="width: 200px;height: 150px;">
+        <img src="https://travel-1310703557.cos.ap-shanghai.myqcloud.com/team_cover/1/NL7usDZJ-左箭头travel.png" style="width: 200px;height: 150px;">
     </div>
     <a-row type="flex" justify="space-around" align="middle" v-for="items in  2" key="row" style="margin-bottom: 30px;margin-left: 0;text-align: left;">              
         <a-col :span="4" v-for="item in selection.slice(items*3-3,items*3)" key="column">
@@ -47,12 +47,12 @@
     <br>
 <!-- 优质游记 -->
     <div >
-        <img src="../../assets/左箭头travel.png" alt="" style="width: 200px;height: 150px;">
+        <img src="https://travel-1310703557.cos.ap-shanghai.myqcloud.com/team_cover/1/UCO3Bril-travel%E7%AE%AD%E5%A4%B4.png" alt="" style="width: 200px;height: 150px;">
         <span class="selectName">
             优质游记
         </span>
         
-        <img src="../../assets/travel箭头.png" style="width: 200px;height: 150px;">
+        <img src="https://travel-1310703557.cos.ap-shanghai.myqcloud.com/team_cover/1/NL7usDZJ-左箭头travel.png" style="width: 200px;height: 150px;">
     </div>
     <a-row type="flex" justify="space-around" align="middle" v-for="items in  2" key="row" style="margin-bottom: 30px;margin-left: 0;text-align: left;">              
         <a-col :span="4" v-for="item in travel.slice(items*3-3,items*3)" key="column">
@@ -85,12 +85,12 @@
     <br>
 <!-- 热门团队 -->
     <div >
-        <img src="../../assets/左箭头travel.png" alt="" style="width: 200px;height: 150px;">
+        <img src="https://travel-1310703557.cos.ap-shanghai.myqcloud.com/team_cover/1/UCO3Bril-travel%E7%AE%AD%E5%A4%B4.png" alt="" style="width: 200px;height: 150px;">
         <span class="selectName">
             热门团队
         </span>
         
-        <img src="../../assets/travel箭头.png" style="width: 200px;height: 150px;">
+        <img src="https://travel-1310703557.cos.ap-shanghai.myqcloud.com/team_cover/1/NL7usDZJ-左箭头travel.png" style="width: 200px;height: 150px;">
     </div>
     <a-row  type="flex" justify="space-around" align="middle" v-for="items in  2"     style="margin-bottom: 30px;margin-left: 0;text-align: left;">              
             <a-col :span="4" v-for="item in teams.slice(items*3-3,items*3)">
@@ -123,12 +123,12 @@
     <br>
 <!-- 周边商城 -->
     <div >
-        <img src="../../assets/左箭头travel.png" alt="" style="width: 200px;height: 150px;">
+        <img src="https://travel-1310703557.cos.ap-shanghai.myqcloud.com/team_cover/1/UCO3Bril-travel%E7%AE%AD%E5%A4%B4.png" alt="" style="width: 200px;height: 150px;">
         <span class="selectName">
             周边商城
         </span>
         
-        <img src="../../assets/travel箭头.png" style="width: 200px;height: 150px;">
+        <img src="https://travel-1310703557.cos.ap-shanghai.myqcloud.com/team_cover/1/NL7usDZJ-左箭头travel.png" style="width: 200px;height: 150px;">
     </div>
     <a-row type="flex" justify="space-around" align="middle" v-for="items in  2" key="row" style="margin-bottom: 30px;margin-left: 0;text-align: left;">              
         <a-col :span="4" v-for="item in derivative.slice(items*3-3,items*3)" key="column">
@@ -223,19 +223,11 @@ const linkToScenicDetail=(id:number)=>{
     })
 }
 const linkToTravelDetail=(id:number)=>{
-    let msg:getArticleDeatilData={
-    detailId: 1,
-    articleId: id
-}
-    getArticleDeatil(msg).then((res)=>{
-        console.log(res.data.data)
-        travelDetail.value = res.data.data
-    })
     router.push({
         path:'./NotesDetail',
-    // query:{
-    //   teamId:id
-    // }
+    query:{
+      id:id
+    }
     })
 }
 const linkToTeamDetail=(id:number)=>{
@@ -250,31 +242,24 @@ const linkToTeamDetail=(id:number)=>{
     })
 }
 const linkToGoodsDetail=(id:number)=>{
-    let msg:officialGetDerivativeByIdData={
-        id: id
-    }
-    officialGetDerivativeById(msg).then((res)=>{
-        console.log(res.data.data)
-        derivativeDetail.value = res.data.data
-    })
     router.push({
         path:'./MallDetail',
-    // query:{
-    //   teamId:id
-    // }
+    query:{
+      id:id
+    }
     })
 }
 const moreScenic=()=>{
-    window.open("/Scenic",'_blank')
+    window.open("/#/Scenic",'_blank')
 }
 const moreTeams=()=>{
-    window.open("/Teams",'_blank')
+    window.open("/#/Teams",'_blank')
 }
 const moreTravel=()=>{
-    window.open("/Notes",'_blank')
+    window.open("/#/Notes",'_blank')
 }
 const moreGoods=()=>{
-    window.open("/Mall",'_blank')
+    window.open("/#/Mall",'_blank')
 }
 </script>
 <style scoped lang="scss">
