@@ -322,13 +322,13 @@
 <!-- 管理中心 -->
                     <a-menu-item key="administrator" class="titleRight">
                         <div class="titleIcon">
-                            <router-link class="menuName" to="/AdminCenter">管理中心</router-link>
+                            <router-link class="menuName" to="/AdminCenter" target="_blank">管理中心</router-link>
                         </div>
                     </a-menu-item>
 <!-- 发布 -->
                     <a-menu-item key="publish" class="titleRight" style="background-color:cornflowerblue">
                         <div class="titleIcon">
-                            <router-link to="/AdminCenter/AdminCenterPublish/Video" class="menuName" style="color: white;">发布</router-link>
+                            <router-link to="/AdminCenter/AdminCenterPublish/Video" class="menuName"  target="_blank" style="color: white;">发布</router-link>
                         </div> 
                     </a-menu-item>
                 </div>
