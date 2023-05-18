@@ -3,8 +3,8 @@
         <div style="width: 100%;height:200px">
             <div class="top">
                 <div style="width: max-content;position: relative;">
-                    <img class="head" :src="writer.header" alt="" >
-                    <span class="myName" style="">{{ travelDetail?.title }}</span>
+                    <img class="head" :src="travelDetail?.userAvatar" alt="" >
+                    <span class="myName" style="">{{ travelDetail?.userName }}</span>
                     <span class="motor">发表时间：{{ travelDetail?.createTime }}</span>                
                 </div>
                 <div style="float: right;margin-top: -100px;margin-right: 10%;">
@@ -165,8 +165,9 @@ onMounted(()=>{
         tag:travelDetail.value?.tag
     }
     TravelRecommendList(msg).then((res)=>{
+        console.log(res.data.data)
         travelRecommendList.value = res.data.data.dataPage.records
-        console.log(res.data.data.dataPage.records)
+        
     })
     
     let msg2:commentQueryRequestData={

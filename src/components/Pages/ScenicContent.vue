@@ -3,9 +3,9 @@
         <div style="width: 100%;height:200px">
             <div class="top">
                 <div style="width: max-content;position: relative;">
-                    <img class="head" :src=spotDetail?.user?.userAvatar alt="" >
-                    <span class="myName" style="">{{ spotDetail?.user?.userName }}</span>
-                    <span class="motor">更新于 ：{{ spotDetail?.createTime }}</span>
+                    <img class="head" :src=user?.user?.userAvatar alt="" >
+                    <span class="myName" style="">{{ user?.user?.userName }}</span>
+                    <span class="motor">更新于 ：{{ user?.createTime }}</span>
                     
                 </div>
             </div>
@@ -30,17 +30,31 @@
 </template>
 
 <script setup lang="ts">
-import {computed,ref} from 'vue'
+import {computed,onMounted,ref} from 'vue'
 import md from 'markdown-it'
-import { useCounterStore } from '../../pinia';
-import { storeToRefs } from 'pinia';
-const load = useCounterStore();
-const {spotDetail} = storeToRefs(load);
-const markdown = spotDetail.value?.detail
+import { useRoute } from 'vue-router';
+import { officialGetNoticeById, officialGetNoticeByIdData } from '../../api/official/officialNotification';
+const markdown = ref("")
 const mds = new md()
-const SpotName = spotDetail.value?.title
-let markdowns = computed(()=>(mds.render(markdown)))
+const SpotName = ref("")
+const markdowns = computed(()=>(mds.render(markdown.value)))
+const user = ref()
 const getLikes = ref('关注')
+const route = useRoute()
+onMounted(() => {
+    if(route.query.Nid!==null){
+        let data:officialGetNoticeByIdData={
+            id: route.query.Nid
+        }
+        officialGetNoticeById(data).then((res)=>{
+            console.log(res.data)
+            markdown.value = res.data.data.detail
+            SpotName.value = res.data.data.title
+            user.value = res.data.data
+        })
+    }
+    
+})
 </script>
 
 <style scoped>

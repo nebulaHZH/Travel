@@ -1,18 +1,18 @@
 <template>
     <div>
         <div style="text-align: left;padding: 10px;">
-            <img class="head" src="https://p1-q.mafengwo.net/s19/M00/78/E3/CoNI4WO2ZdUm9DPyAACJ8w1yY9w.jpeg?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90" >
+            <img class="head" :src="userMessage.avatar" >
             <div style="margin-top: 50px;position: absolute;margin-left: 200px;">
-                <a-input type="text" style="font-weight: 400;font-size: 20px;width: max-content;" :placeholder="name"></a-input>
+                <a-input type="text" style="font-weight: 400;font-size: 20px;width: max-content;" :placeholder="userMessage.name"></a-input>
                 <br>
                 <br>
-                <a-input style="color: gray;width: 700px;" type="small" :placeholder="moto" ></a-input>
+                <a-input style="color: gray;width: 700px;" type="small" :placeholder="userMessage.moto" ></a-input>
             </div>
         </div>
         <div style="text-align: left;margin-top: 170px;margin-left: 210px;font-size: 20px;">
             <div style="">
                 <span>账号：</span>
-                <span>123456789789</span>
+                <span>{{ userMessage.userAccount }}</span>
             </div>
             <div>
                 <br>
@@ -27,22 +27,53 @@
                 <span>出生日期：</span>
                 <a-date-picker v-model:value="value" />
             </div>
-            <div style="text-align: center;">
+            <div style="text-align: center;padding: 00px;">
                 <br>
-                <a-button type="primary" style="margin-left: -35%;margin-top: 100px;">保存修改</a-button>
+                <a-button type="primary" style="margin-left: -35%;margin-top: 100px;" @click="updateMessage">保存修改</a-button>
             </div>
+            <br>
         </div>
     </div>
     
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import {h, onMounted, ref} from 'vue'
 import type { Dayjs } from 'dayjs';
+import { getUserById } from '../../../api/user/users';
+import { Modal } from 'ant-design-vue';
+const userMessage = ref({
+    name:'Travel',
+    moto:'none',
+    checked:'boy',
+    avatar:"",
+    userAccount:""
+})
 const name = ref('球球来了 (上海)')
 const moto = ref('独立摄影师，人生理想是踏遍地球七大洲，目前还剩南极洲！')
 const checked = ref<string>('boy')
 const value = ref<Dayjs>()
+const userid = 1 //改id：window.localStorage?.getItem('userId')
+onMounted(() => {
+    localStorage.setItem('userId','1')
+    getUserById(userid).then((res)=>{
+        console.log(res.data)
+        userMessage.value.name = res.data.data.userName
+        userMessage.value.moto = res.data.data.signature
+        userMessage.value.avatar = res.data.data.userAvatar
+        userMessage.value.userAccount = res.data.data.userAccount
+    })
+})
+const updateMessage=()=>{
+    Modal.info({
+        centered:true,
+        title: '该业务还在粉刷中....',
+        content: h('div', {}, []),
+        onOk() {
+          console.log('知道了');
+        },
+      });
+}
 </script>
 
 <style scoped>

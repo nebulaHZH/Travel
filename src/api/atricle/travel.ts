@@ -8,7 +8,7 @@ export interface articleAddRequestData{
     intro: string,
     //location: string,
     permission: number,
-    tag: string,
+    tag:string,
     title: string,
 }
 export function articleAddRequest(data:articleAddRequestData){
@@ -41,12 +41,56 @@ export function searchTravelById(id:number){
 }
 // -------------分页查询文章游记【热门和最新】----------------
 export interface articleQueryRequestData{
-    //current: number,
+    current: number,
     //pageSize: number,
     sortField: string,
     orderType:number,
 }
 export function articleQueryRequest(data:articleQueryRequestData){
+    return service({
+        url:`${baseurl}/list/page/vo`,
+        method:"POST",
+        data
+    })
+}
+// -------------分页查询文章游记根据userid【热门和最新】----------------
+export interface RequestByUserIdData{
+    current: number,
+    pageSize: number,
+    sortField: string,
+    userId:number
+}
+export function RequestByUserId(data:RequestByUserIdData){
+    return service({
+        url:`${baseurl}/list/page/vo`,
+        method:"POST",
+        data
+    })
+}
+// -------------根据teamId分页查询文章游记【热门和最新】----------------
+export interface articleQueryRequestByTeamIdData{
+    current: number,
+    pageSize: number,
+    sortOrder:string,
+    teamId:number
+}
+export function articleQueryRequestByTeamId(data:articleQueryRequestByTeamIdData){
+    return service({
+        url:`${baseurl}/list/page/vo`,
+        method:"POST",
+        data
+    })
+}
+// -------------分页查询文章游记【热门和最新】----------------
+export interface articleQueryRequestByIdData{
+    
+    pageSize: number,
+    sortField: string,
+    orderType:number,
+    userId:number,
+    currents: number,
+}
+export function articleQueryRequestById(data:articleQueryRequestByIdData){
     return service({
         url:`${baseurl}/list/page/vo`,
         method:"POST",

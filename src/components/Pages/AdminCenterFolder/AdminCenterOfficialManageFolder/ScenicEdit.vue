@@ -61,14 +61,16 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
-import { ref  } from 'vue';
+import { onMounted, ref  } from 'vue';
 import type { UploadChangeParam, UploadProps } from 'ant-design-vue';
 import { fileUpload, fileUploadData } from '../../../../api/DataService/DataFileUpload';
-import { officialUpdateIntro, officialUpdateIntroData } from '../../../../api/official/official';
+import { officialGetIntroById, officialGetIntroByIdData, officialUpdateIntro, officialUpdateIntroData } from '../../../../api/official/official';
 const officialName = ref('')
+const text = ref('请输入您想输入的内容！'+'输入图片：![](https://note.mafengwo.net/img/d8/42/15ee1878d06b351714e4a06e24beae28.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90)'+
+                '\n输入代码块：\n```python\n'+'print("hello World")'+'\n```\n'+'表格:\n|column1|column2|column3|\n'+'|-|-|-|\n'+'|content1|content2|content3|')
+
 const header = {
   authentication:'2b5d7640af954456b07e0604d90dbb83'
 }
@@ -76,6 +78,19 @@ const coverurl = ref('')
 const coverurl1 = ref('')
 // 图片上传
 const fileList1 = ref([]);
+onMounted(()=>{
+    let data:officialGetIntroByIdData={
+        detailId: 1,
+        offId: 1 ///改
+    }
+    officialGetIntroById(data).then((res)=>{
+        console.log(res.data)
+        officialName.value = res.data.data.officialName
+        text.value = res.data.data.detail
+        coverurl.value = res.data.data.coverUrl
+        coverurl1.value = res.data.data.videoUrl
+    })
+})
 //上传文件【markdown内】
 const handleUploadImage = (event:any,insertImage:any,file:any)=>{
   //这里上传
@@ -140,8 +155,6 @@ const beforeUpload2 = (file: UploadProps['fileList'][number]) => {
   }
   return isVideo && isLt10GB;
 }
-const text = ref('请输入您想输入的内容！'+'输入图片：![](https://note.mafengwo.net/img/d8/42/15ee1878d06b351714e4a06e24beae28.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90)'+
-                '\n输入代码块：\n```python\n'+'print("hello World")'+'\n```\n'+'表格:\n|column1|column2|column3|\n'+'|-|-|-|\n'+'|content1|content2|content3|')
 
 // 视频上传
 const fileList = ref([]);
@@ -165,7 +178,7 @@ const submit=()=>{
     message.error("没有填写标题")
   }else if(text.value === ''){
     message.error("请填写官方资源内容")
-  }else if(fileList.value.length === 0){
+  }else if(coverurl.value.length === 0){
     message.error("请上传封面")
   }else{
     let msg:officialUpdateIntroData={
@@ -177,15 +190,16 @@ const submit=()=>{
     detail: text.value,
     officialName: officialName.value,
     officialDetailId: 1
-}
-officialUpdateIntro(msg).then((res)=>{
-      console.log(res.data)
-      message.success("更新成功！")
-      text.value = '请输入您想输入的内容！'+'输入图片：![](https://note.mafengwo.net/img/d8/42/15ee1878d06b351714e4a06e24beae28.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90)'+
-      '\n输入代码块：\n```python\n'+'print("hello World")'+'\n```\n'+'表格:\n|column1|column2|column3|\n'+'|-|-|-|\n'+'|content1|content2|content3|'
-      officialName.value = ''  
-      fileList.value = []
-    })
+  }
+  officialUpdateIntro(msg).then((res)=>{
+        console.log(res.data)
+        message.success("更新成功！")
+        text.value = '请输入您想输入的内容！'+'输入图片：![](https://note.mafengwo.net/img/d8/42/15ee1878d06b351714e4a06e24beae28.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90)'+
+        '\n输入代码块：\n```python\n'+'print("hello World")'+'\n```\n'+'表格:\n|column1|column2|column3|\n'+'|-|-|-|\n'+'|content1|content2|content3|'
+        officialName.value = ''  
+        fileList.value = []
+      })
+      window.location.reload()
   }
 }
 </script>

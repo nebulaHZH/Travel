@@ -66,10 +66,11 @@
 <script setup lang="ts">
 import { InboxOutlined } from '@ant-design/icons-vue';
 import _default, { UploadProps, message } from 'ant-design-vue';
-import {  ref } from 'vue';
+import {  onMounted, ref } from 'vue';
 import type { UploadChangeParam } from 'ant-design-vue';
-import { articleAddRequest, articleAddRequestData } from '../../../../api/atricle/travel';
+import { articleAddRequest, articleAddRequestData, searchTravelById } from '../../../../api/atricle/travel';
 import { fileUpload, fileUploadData } from '../../../../api/DataService/DataFileUpload';
+import { useRoute } from 'vue-router';
 const fileList = ref([])
 const titleName = ref('')
 const header = {
@@ -80,8 +81,25 @@ const text = ref('请输入您想输入的内容！'+'输入图片：![](https:/
 
 const tagDiy =ref()
 const value = ref<string>('1')
-const tags=ref<string[]>([])
+const tags=ref([])
 const coverUrl = ref('')
+const route = useRoute()
+onMounted(() => {
+  if(route.query.id){
+    searchTravelById(route?.query?.id).then((res)=>{
+      console.log(res)
+      text.value = res.data.data.detail
+      titleName.value = res.data.data.title
+
+      var xx = res.data.data.tag.slice(2,-2).split("','")
+      for(var i in xx){
+        console.log(xx[i])
+        tags.value.push(xx[i])
+      }
+      
+    })
+  }
+})
 //上传文件【markdown内】
 const handleUploadImage = (event:any,insertImage:any,file:any)=>{
   //这里上传
@@ -139,7 +157,8 @@ const changes=(e:any)=>{
 
 //添加标签
 const moreTags = ()=>{
-    const s = (tagDiy.value);
+  console.log(tags.value)
+    const s = tagDiy.value
     tags.value.push(s)
 }
 //删除标签
@@ -158,13 +177,15 @@ const submit=()=>{
   }else if(fileList.value.length === 0){
     message.error("请上传封面")
   }else{
-    console.log('"'+ tags.value + '"')
+    const uu = tags.value.join("','")
+    console.log("["+uu+"]")
+   
     let msg:articleAddRequestData={
       coverUrl: coverUrl.value,
       detail: text.value,
       intro: text.value.slice(1,20),
       permission: parseInt(value.value),
-      tag: '"'+ tags.value + '"',
+      tag: "["+uu+"]",
       title: titleName.value,
     }
     articleAddRequest(msg).then((res)=>{

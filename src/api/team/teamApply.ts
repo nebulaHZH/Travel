@@ -1,21 +1,13 @@
 import service from ".."
 
 // -------------分页获取列表（封装类）----------------
-interface teamApplyAllUserListData{
-    auditState: BigInt,
-    current: BigInt,
-    id: BigInt,
-    pageSize: BigInt,
-    searchText: string,
-    sortField: string,
-    sortOrder: string,
-    teamId: BigInt,
-    teamState: BigInt,
-    userId: BigInt
+export interface teamApplyAllUserListData{
+    current: number,
+    userId: number
 }
 export function teamApplyAllUserList(data:teamApplyAllUserListData){
     return service({
-        url:"/team/apply/list/page/vo",
+        url:"/api/team/list/page/vo",
         method:"POST",
         data
     })

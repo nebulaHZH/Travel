@@ -1,9 +1,11 @@
 <template>
     <div>
+        <img style="z-index: -1;width: 100%;height: 300px;object-fit: cover;image-rendering: auto;"  :src="teamDetails?.coverUrl" alt=""/>
         <div class="TeamBackground">
-            <img class="TeamIcon" src="https://p1-q.mafengwo.net/s11/M00/DA/01/wKgBEFpkXbWAVcW3ABsoxkLFtX482.jpeg?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90" alt="">
+            <img class="TeamIcon" :src="teamDetails.iconUrl" alt="">
             <h1 class="TeamName">{{ teamDetails.teamName }}</h1>
         </div>
+        
         <div style="margin-top: 20px;">
             <router-link to="/TeamDetail/TeamHome">
                 <a-button class="select">团队主页</a-button>
@@ -34,19 +36,21 @@ const {teamDetails} = storeToRefs(load)
 console.log(teamDetails.value)
 </script>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 /* 头像部分的css */
 .TeamBackground{
-    background-image: url("https://p1-q.mafengwo.net/s19/M00/E3/2F/CoNJlGO6WztNm4atABlXboQIOWI.jpeg?imageMogr2%2Fstrip");
     background-size: cover;
+    background: transparent;;
     height:300px;
+    margin-top: -300px;
 
     .TeamIcon{
-    border-radius:50%;
     margin-top: 30px;
     border: solid 0.01cm;
-    widows: 150px;
+    width: 150px;
     height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
     }
     .TeamName{
         margin-top: 10px;

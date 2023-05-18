@@ -9,6 +9,10 @@
                     上传图片
                 </a-button>
             </a-upload>
+            <br>
+            <br>
+            <br>
+            <br>
             <a-button type="text" @click="showDialog()" style="float: right; margin-top: -100px;margin-right: 70px;">😃</a-button>
             <div style="float: right;position: absolute;margin-left: 55%;margin-top: -65px;z-index: 999;background-color: aliceblue;border-radius: 20px;">  
                 <EmojiPicker id="emojis" v-model="emoji" @select="selectEmoji($event)" :searchEmojisFeat="false" style="display: none;overflow-y: auto;height: 300px;width: 360px ;;"/>
@@ -22,12 +26,12 @@
             <a-button style="margin-left: 80%;" type="primary" @click="refreshNews">刷新动态</a-button>
         </div>
         
-        <div  style="text-align:left;margin-left: 10%;border: solid 0.01cm;padding:10px;margin-top: 30px;margin-right: 10%;border-radius: 10px;">
+        <div  style="background-color: rgb(247, 223, 217);text-align:left;margin-left: 10%;border: solid 0.01cm;padding:10px;margin-top: 30px;margin-right: 10%;border-radius: 10px;">
                 <div v-for="item in newsList" style="width: 100%;position: relative;">
-                    <div style="background-color: ghostwhite;padding:20px">
-                        <img class="newHead" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,jpg/quality,q_100" alt="" >
+                    <div style=";padding:20px">
+                        <img class="newHead" :src="item.user.userAvatar" alt="" >
                         <span style="font-weight: 600;margin-top: 120px;position: absolute;width: 100%;">{{item.user.userName}}</span>
-                        <div style="background-color: gainsboro;width: 100%;;padding: 10px;border-radius: 5px;">
+                        <div style="box-shadow: 2px 2px;background-color: rgb(180, 211, 243);width: 100%;;padding: 10px;border-radius: 5px;">
                             <pre style="width:100%;white-space: pre-wrap;word-wrap: break-word">{{ item.content }}</pre>
                             <div  style="margin-left: 1%;margin-right: 1%;">
                                 <a-row  >
@@ -81,62 +85,9 @@ const showDialog = ()=>{
 const selectEmoji=(e:any)=>{
     document.getElementById("contents")!.value=document.getElementById("contents")!.value +  e.i
     console.log(e.i)
-}
-//动态消息部分
-// const newsMessage = [
-//     {
-//         writer:'h2asx',
-//         team:'撒啊了',
-//         imgs:[//只能上传四张图片
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//             {url:'https://note.mafengwo.net/img/80/ab/91dd3de62487b946b1ff2815303722b4.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90'},
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//         ]
-//     },
-//     {
-//         writer:'h2asx',
-//         team:'撒啊了',
-//         imgs:[
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//             ]
-//     },
-//     {
-//         writer:'h2asx',
-//         team:'大苏打',
-//         imgs:[
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//             {url:'//puui.qpic.cn/tv/0/1249827613_276386/450?max_age=7776001'},
-//         ]
-//     },
-//     {
-//         writer:'h2asx',
-//         team:'8iyuj',    
-//         imgs:[
-//         ]
-//     }
-// ]
+} 
 // 上传图片部分
-const fileList1 = ref<UploadProps['fileList']>([
-      {
-        uid: '-1',
-        name: 'xxx.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-      {
-        uid: '-2',
-        name: 'yyy.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-    ]);
+const fileList1 = ref<UploadProps['fileList']>();
 watch(fileList1,(newVal, oldVal) =>{
     if(newVal!.length>=4){
         document.getElementById("upPictures")!.disabled = "false"
@@ -203,7 +154,7 @@ const sendNews=()=>{
     margin-top: 100px;
     margin-left: 10px;
     height:100px;
-    border: solid;
+    border: solid 0.01cm;
     border-radius: 50%;
     margin-bottom: 30px;
     padding: 0;

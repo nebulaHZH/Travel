@@ -328,7 +328,7 @@
 <!-- 发布 -->
                     <a-menu-item key="publish" class="titleRight" style="background-color:cornflowerblue">
                         <div class="titleIcon">
-                            <router-link to="AdminCenter/AdminCenterPublish/Video" class="menuName" style="color: white;">发布</router-link>
+                            <router-link to="/AdminCenter/AdminCenterPublish/Video" class="menuName" style="color: white;">发布</router-link>
                         </div> 
                     </a-menu-item>
                 </div>

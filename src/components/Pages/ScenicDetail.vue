@@ -29,7 +29,7 @@
                     <a-radio-button class="searchButton" style="width: 120px;" value="scenicIntroduction">景区介绍</a-radio-button>
                     <a-radio-button class="searchButton" style="width: 120px;" value="spotIntrouduction" @click="spotIntro">景点展示</a-radio-button>
                     <a-radio-button class="searchButton" style="width: 120px;" value="notices" @click="noticeIntro">咨询通知</a-radio-button>
-                    <a-radio-button class="searchButton" style="width: 120px;" value="items">周边商城</a-radio-button>
+                    <a-radio-button class="searchButton" style="width: 120px;" value="items" @click="itemsIntro">周边商城</a-radio-button>
                 </a-radio-group>
             </div>
             <div v-if="values=== 'spotIntrouduction'" style="border-radius: 10px;padding: 20px;background-color: white;width: 80%;border: solid 0.01cm;margin-left: 10%;;margin-right: 10%;">
@@ -76,7 +76,7 @@
 
                         </div>
                         <div>
-                        <p style="margin-top: 20px;width: 100%;" v-html="markdowns"></p>
+                        <p style="margin-top: 20px;width: 100%;" v-html="mds.render(scenicDetail.detail)"></p>
                     </div>
                     </div>
                     <div style="margin-left: 1%;;border: solid 0.01cm;padding: 20px;text-align: left;">
@@ -234,30 +234,29 @@
                 </div>
                 <br>
                 <div style="margin-top: 120px;">
-                    <div v-for="selection in selections" key="selection">
-                            <a-row type="flex" justify="space-around" align="middle" v-for="row of 1" key="row" style="margin-bottom: 30px;margin-left: 0;">              
-                            <a-col :span="6.5" v-for="column of 4" key="column">
-                                <a-card hoverable style="width: 300px;border-radius: 10px;">
+                        <a-row type="flex" justify="space-around" align="middle" v-for="row in 2" key="row" style="margin-bottom: 30px;margin-left: 0;">              
+                            <a-col :span="6.5" v-for="item of MallMessages.slice(row*4-4,4*row)" key="item">
+                                <a-card hoverable style="width: 290px;border-radius: 10px;">
                                     <template #cover>
                                     <img
                                         
-                                        src="https://img14.360buyimg.com/n7/jfs/t1/187265/35/32321/43201/64008f01F1081ce7c/808779cce08abe06.jpg"
-                                        style="width: 300px;height:270px;overflow: hidden;border-radius: 10px;"
+                                        :src="item?.coverUrl.slice(1,-1).split(',')[0].slice(1,-1)"
+                                        style="width: 290px;height:270px;overflow: hidden;border-radius: 10px;"
+                                        @click="toDerivative(item.id)"
                                     />
                                     </template>
                                 <div>
-                                    <span style="float:left;font-weight: 500;">52TOYS Panda Roll</span>
+                                    <span style="float:left;font-weight: 500;">{{ item?.derivativeName }}</span>
                                 </div>        
                                 <br>
                                 <div>
                                     <span style="text-align: left;float:left">
-                                        生日礼物熊猫潮玩手办 单只 52TOYS Panda Roll日常第二弹系列盲盒 生日礼物熊猫潮玩手办
+                                        {{ item?.intro }}
                                     </span>
                                 </div>
                                 </a-card>
                             </a-col>
                         </a-row>
-                    </div>
                     <a-pagination v-model:current="current" :total="50" show-less-items />
                     <br>
                 </div>
@@ -286,7 +285,8 @@ import { officialGetIntroByIdData,officialGetIntroById } from '../../api/officia
 import { officialGetResourceList,officialGetResourceListData,officialGetResourceDetailByIdData,officialGetResourceDetailById } from '../../api/official/officialResource';
 import {officialGetReviewListData,officialGetReviewList,officialReviewAddData,officialReviewAdd} from '../../api/official/officialReview'
 import { message } from 'ant-design-vue';
-import { officialGetNoticeById, officialGetNoticeByIdData, officialGetNoticeList, officialGetNoticeListData } from '../../api/official/officialNotification';
+import {officialGetNoticeList, officialGetNoticeListData } from '../../api/official/officialNotification';
+import {officialGetDerivativeList, officialGetDerivativeListData} from '../../api/official/officialMall'
 const load = useCounterStore();
 const {spotDetail,notificationDetail} = storeToRefs(load);
 const scenicDetail = ref()
@@ -367,6 +367,7 @@ officialGetReviewList(msg2).then((res)=>{
     console.log(review.value)
 })
   handleScroll();
+  
 })
 const values = ref('scenicIntroduction')
 const options = reactive({
@@ -398,8 +399,6 @@ const options = reactive({
 const recommend = ref('recommendWrite')
 const markdown =scenicDetail.value?.detail
 const mds = new md()
-const markdowns = ref()
-markdowns.value = computed(()=>(mds?.render(markdown)))
 // 周边
 const groups = ref<any>()
 const purchase = ref<string>('purchase')
@@ -410,6 +409,7 @@ const changes = ()=>{
     }
 }
 // 这里是卡片的数据
+const MallMessages = ref([])
 const selections=[
             {name:"热点景区"},
             {name:"优质游记"},
@@ -489,15 +489,30 @@ const noticeIntro=()=>{
     })
 }
 const toNoticeDetail=(id:number)=>{
-    let msg:officialGetNoticeByIdData={
-        id: id
-    }
-    officialGetNoticeById(msg).then((res)=>{
-        spotDetail.value = res.data.data
-        console.log(spotDetail.value)
-    })
     router.push({
-        path:'./ScenicContent'
+        path:'./ScenicContent',
+        query:{
+            Nid:id
+        }
+    })
+}
+const itemsIntro=()=>{
+    let data:officialGetDerivativeListData={
+        current: 0,
+        obtainMethod: 0,
+        pageSize: 8
+    }
+    officialGetDerivativeList(data).then((res)=>{
+        console.log(res.data)
+        MallMessages.value = res.data.data.records
+    })
+}
+const toDerivative=(id:number)=>{
+    router.push({
+        path:"/MallDetail",
+        query:{
+            id:id
+        }
     })
 }
 </script>

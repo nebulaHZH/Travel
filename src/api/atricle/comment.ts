@@ -40,3 +40,16 @@ export function commentQueryRequest(data:commentQueryRequestData){
         data
     })
 }
+// -------------获取所有评论----------------
+export interface commentAllQueryRequestData{
+    commentObjType: number,
+    current:number,
+    pageSize:number
+}
+export function commentAllQueryRequest(data:commentAllQueryRequestData){
+    return service({
+        url:`${baseurl}/list/page/vo`,
+        method:"POST",
+        data
+    })
+}

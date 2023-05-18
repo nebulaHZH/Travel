@@ -92,6 +92,10 @@ const newsManage=()=>{
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background-color: transparent;
+}
 </style>

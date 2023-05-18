@@ -1,4 +1,4 @@
-import axios, { Axios } from 'axios'
+import axios from 'axios'
 const service = axios.create({
     timeout:5000,
     headers:{

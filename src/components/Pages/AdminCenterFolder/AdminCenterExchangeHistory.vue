@@ -34,39 +34,39 @@
 const message = [
     {
         head:'https://p1-q.mafengwo.net/s13/M00/E2/37/wKgEaV2cOiaAKJ_yAACOXfWIS1Q40.jpeg?imageMogr2%2Fthumbnail%2F%2148x48r%2Fgravity%2FCenter%2Fcrop%2F%2148x48%2Fquality%2F90',
-        scenicname:'武当山',
+        scenicname:'魔都',
         time:'2023.4.5',
-        record:'xxxxxxxxxxxxxxxxxxxxxxxx',
+        record:'31235453123514531588',
         goodsimage:'https://p1-q.mafengwo.net/s19/M00/4C/18/CoNBGWN8ekABCF9lAAQ-qn9CeSA.jpeg?imageMogr2%2Fthumbnail%2F%21680x400r%2Fgravity%2FCenter%2Fcrop%2F%21680x400%2Fquality%2F90',
-        goosname:'Sakrucat',
-        goodsdetail:'一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！'
+        goosname:'一日游',
+        goodsdetail:'上海魔都超巨魅力！'
     },
     {
-        head:'https://p1-q.mafengwo.net/s14/M00/6E/D6/wKgE2l0N9Z6AUUoIAACMbPRWxLc01.jpeg?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90',
-        scenicname:'武当山',
+        head:'https://note.mafengwo.net/img/94/4d/a215494cc269054d1040f8b9e7e96139.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
+        scenicname:'巴厘岛',
         time:'2023.4.5',
-        record:'xxxxxxxxxxxxxxxxxxxxxxxx',
-        goodsimage:'https://p1-q.mafengwo.net/s19/M00/4C/18/CoNBGWN8ekABCF9lAAQ-qn9CeSA.jpeg?imageMogr2%2Fthumbnail%2F%21680x400r%2Fgravity%2FCenter%2Fcrop%2F%21680x400%2Fquality%2F90',
-        goosname:'Sakrucat',
-        goodsdetail:'一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！'
+        record:'48121354534343153152',
+        goodsimage:'https://note.mafengwo.net/img/e5/45/48a383a15329085353943a33f72ec063.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
+        goosname:'纪念卡片',
+        goodsdetail:'蔚蓝，壮阔了踏浪勇气，浩渺了心灵半径'
     },
     {
-        head:'https://p1-q.mafengwo.net/s14/M00/6E/D6/wKgE2l0N9Z6AUUoIAACMbPRWxLc01.jpeg?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90',
-        scenicname:'武当山',
+        head:'https://note.mafengwo.net/img/b9/a5/b3a19b74a3692ab2bf5a3af004c21a9f.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90',
+        scenicname:'三亚',
         time:'2023.4.5',
         record:'xxxxxxxxxxxxxxxxxxxxxxxx',
-        goodsimage:'https://p1-q.mafengwo.net/s19/M00/4C/18/CoNBGWN8ekABCF9lAAQ-qn9CeSA.jpeg?imageMogr2%2Fthumbnail%2F%21680x400r%2Fgravity%2FCenter%2Fcrop%2F%21680x400%2Fquality%2F90',
-        goosname:'Sakrucat',
-        goodsdetail:'一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！'
+        goodsimage:'https://note.mafengwo.net/img/c4/98/c704430d38960234a0b252b6a3dda6a7.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
+        goosname:'明信片',
+        goodsdetail:'续写人生之旅'
     },
     {
-        head:'https://p1-q.mafengwo.net/s14/M00/6E/D6/wKgE2l0N9Z6AUUoIAACMbPRWxLc01.jpeg?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90',
-        scenicname:'武当山',
+        head:'https://note.mafengwo.net/img/8b/1d/45bbfbf5253d09cd8f9ef6d5423ffeb9.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90',
+        scenicname:'菲律宾',
         time:'2023.4.5',
         record:'xxxxxxxxxxxxxxxxxxxxxxxx',
-        goodsimage:'https://p1-q.mafengwo.net/s19/M00/4C/18/CoNBGWN8ekABCF9lAAQ-qn9CeSA.jpeg?imageMogr2%2Fthumbnail%2F%21680x400r%2Fgravity%2FCenter%2Fcrop%2F%21680x400%2Fquality%2F90',
-        goosname:'Sakrucat',
-        goodsdetail:'一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！一个好用的梯子！'
+        goodsimage:'https://note.mafengwo.net/img/bd/ab/a9bd22ce3a54fa17bd75128918c640f4.jpeg?imageMogr2%2Fthumbnail%2F%21440x300r%2Fstrip%2Fgravity%2FCenter%2Fcrop%2F%21440x300%2Fquality%2F90',
+        goosname:'一日游',
+        goodsdetail:'速来，手慢无'
     },
 ]
 </script>

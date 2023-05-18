@@ -30,7 +30,7 @@
                     <template #cover>
                     <img
                         alt="example"
-                        :src="item.coverUrl"
+                        :src="item.iconUrl"
                         style="width: 250px;height:250px;overflow: hidden;border-radius: 50%;object-fit: cover;margin-left: 25px;margin-top: 10px;"
                     />
                     </template>

@@ -39,7 +39,8 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
+import { commentAllQueryRequest, commentAllQueryRequestData } from '../../../api/atricle/comment'
 const message=[
     {
         header:'https://p1-q.mafengwo.net/s10/M00/73/96/wKgBZ1kSsyKAa_91AACgQYkA64o659.png?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90',
@@ -48,7 +49,27 @@ const message=[
            tourl:''
         },
         reply:{
-           name: '帅气的hhz',
+           name: '张三',
+           tourl:''
+        },
+        notename:{
+            name:'关于xx的讨论',
+            tourl:''
+        },
+        content:'我觉得你说的不对',
+        time:'2023.4.5',
+        replycount:2000,
+        likecount:100
+
+    },
+    {
+        header:'https://p1-q.mafengwo.net/s19/M00/C1/5C/CoNJF2HtcFRQ8k-LAAZVPTmA7Ng.jpeg?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90',
+        username:{
+           name: '游记总编辑',
+           tourl:''
+        },
+        reply:{
+           name: '张三',
            tourl:''
         },
         notename:{
@@ -68,27 +89,7 @@ const message=[
            tourl:''
         },
         reply:{
-           name: '帅气的hhz',
-           tourl:''
-        },
-        notename:{
-            name:'关于xx的讨论',
-            tourl:''
-        },
-        content:'我觉得你说的不对',
-        time:'2023.4.5',
-        replycount:2000,
-        likecount:100
-
-    },
-    {
-        header:'https://p1-q.mafengwo.net/s10/M00/73/96/wKgBZ1kSsyKAa_91AACgQYkA64o659.png?imageMogr2%2Fthumbnail%2F%21200x200r%2Fgravity%2FCenter%2Fcrop%2F%21200x200%2Fquality%2F90',
-        username:{
-           name: '游记总编辑',
-           tourl:''
-        },
-        reply:{
-           name: '帅气的hhz',
+           name: '张三',
            tourl:''
         },
         notename:{
@@ -109,6 +110,16 @@ const del=()=>{
 const jubao=()=>{
     // 举报操作
 }
+onMounted(() => {
+    let data:commentAllQueryRequestData={
+        current:0,
+        commentObjType: 1,
+        pageSize:5
+    }
+    commentAllQueryRequest(data).then((res)=>{
+        console.log(res.data.data)
+    })
+})
 </script>
 
 <style scoped>

@@ -38,8 +38,8 @@
         <div style="margin-top: 80px;margin-left: 12%;width: max-content;margin-bottom: 40px;" >
             <a-radio-group v-model:value="values"  size="large" style="width:max-content;">
                 <a-radio-button value="news">最新动态</a-radio-button>
-                <a-radio-button value="notes">我的游记</a-radio-button>
-                <a-radio-button value="teams">我的团队</a-radio-button>
+                <a-radio-button value="notes" @click="toMyNotes">我的游记</a-radio-button>
+                <a-radio-button value="teams" @click="toMyTeams">我的团队</a-radio-button>
                 <a-radio-button value="likes">我的关注</a-radio-button>
                 <a-radio-button value="collection">我的收藏</a-radio-button>
                 <a-radio-button value="history">历史记录</a-radio-button>
@@ -52,8 +52,8 @@
         </div>
         <div v-if="values=== 'notes'" class="myNotes" style="background-color: white;width: 100%;;">
             <div style="width: 100%;background-color: white;width: 88%%;margin-left: 12%;border-radius:10px">
-                <a-row v-for="item in items" ref="items">
-                <div style="text-align: left;background-color: transparent;; height: max-content;margin-top: 30px;" :id="item.id">
+                <a-row v-for="item in myNotes" ref="items">
+                <div @click="noteDetail(item.id)" class="notesStyle" style="text-align: left;; height: max-content;margin-top: 30px;" :id="item.id">
                     <div style="float: right;margin-right: 10%;margin-top: 10px;">
                         
                         <a-dropdown :getPopupContainer="(trigger) => trigger.parentNode">
@@ -77,33 +77,26 @@
                         </a-dropdown>
                         
                     </div>
-                    <img src="https://youimg1.c-ctrip.com/target/0102h120008g8yxwy973B_C_286_190.jpg" style="border-radius: 10px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
+                    <img :src="item.coverUrl" style="border-radius: 10px;width: 300px;height:200px;overflow: hidden;float: left;margin: 10px;">
                     <div style="margin-left: 50px;width: max-content;float: left;">
-                        <span style="font-size: 20px;">巴厘岛 | 总有一个假日，要属于bali</span>
+                        <span style="font-size: 20px;">{{ item.title }}</span>
                         <div style="width: 100%;height:max-content">
                             <div style="text-align: left;position: relative;display: flex;">
                                 <a-avatar class="ant-dropdown-link" @click.prevent style="margin-top:10px;width: 20px;height: 20px;">
                                     <template #icon>
-                                    <img src="https://dimg04.c-ctrip.com/images/0Z85u120009d7a407CAD8_C_180_180.jpg" alt="">
+                                    <img :src="item.userAvatar" alt="">
                                     </template>
                                 </a-avatar>
-                                <span style="margin-left:10px;margin-top: 8px;">用户名</span>
+                                <span style="margin-left:10px;margin-top: 8px;">{{ item.userName }}</span>
                             </div>
                         </div>
                         
                         <div style="margin-top: 5px;min-width: 800px;">
-                            <pre style="width:800px;white-space: pre-wrap;word-wrap: break-word;text-align: left;">是没想到，提笔写此篇 巴厘岛 之行的回忆时，是此番境况。</pre>
+                            <pre style="width:800px;white-space: pre-wrap;word-wrap: break-word;text-align: left;">{{ item.intro }}</pre>
                         </div>
                         <div style="float: right;margin-right: 10%;margin-top: 20px;">
                             <span  key="comment-basic-like">
-                                <a-tooltip title="Like">
-                                <template v-if="item.islike">
-                                    <LikeFilled @click="like(item.id)" />
-                                </template>
-                                <template v-else>
-                                    <LikeOutlined @click="like(item.id)" />
-                                </template>
-                                </a-tooltip>
+                                <LikeOutlined @click="like(item.id)" />
                                 <span style="padding-left: 8px; cursor: auto">
                                 {{ item.likeCount }}
                                 </span>
@@ -114,7 +107,7 @@
                             </span>
                             <span>
                                 <img style="width: 20px;height: 20px;margin-left: 20px;" src="https://s1.chu0.com/src/img/png/95/95d22610a232417c9dbb068729c2c16d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:VmeHyGmnsxXvY1SpNzBOKVG17dc=" alt="">
-                                <span style="margin-left: 10px;">{{ item.browserCount }}</span>
+                                <span style="margin-left: 10px;">{{ item.viewCount }}</span>
                             </span>
                         </div>
                     </div>
@@ -125,11 +118,7 @@
             
         
         </div>
-        <div v-if="values === 'collection'" class="myCollection" >
-            <br>
-            <div style="float: left;padding: 0;margin-top: 60px;border-radius: 5px;height: 650px;overflow-y: auto;border-width: 0.005cm;" class="myTeamsLeftList" >
                 <a-button style="font-weight: 500;font-size:larger;;width: 172px;height: 50px;">
-                    <img src="https://s1.aigei.com/src/img/png/83/83c0164a722043789df68e793c9b0ecd.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:HP1AjZiW-IrqT9k30sRzezOpvZk=" alt="" style="width: 20px;height:20px;overflow: hidden;float: left;">
                     <span>添加收藏</span> 
                 </a-button>
                 <div v-for="item in files" >
@@ -178,50 +167,42 @@
                 </a-button>
                 <div v-for="item in teams" >
                     
-                    <a-button style="font-weight: 500;font-size:larger;;width: 170px;height: 50px;">
-                        <img src="https://s1.aigei.com/src/img/png/1c/1c702401b53947b79e6a424df8c06696.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:KHVn3X2XiPLjs645LnFB6VVzbZE=" alt="" style="width: 20px;height:20px;overflow: hidden;float: left;;">
-                        {{item.name.substring(0,6)}}
+                    <a-button style="font-weight: 500;font-size:larger;;width: 170px;height: 50px;" @click="teamsDeatil">
+                        <img :src="item.iconUrl" alt="" style="width: 20px;height:20px;border-radius: 50%;overflow: hidden;float: left;;">
+                        {{item.teamName.substring(0,6)}}
                     </a-button>
                 </div>
             </div>
             <div style="float:right;margin-right: 10%;margin-top: 60px;padding: 0;width: max-content;">
                 <!-- 这部分是团队标题栏 -->
                 <div style="width: 100%;height:200px;margin: 0;padding: 0;">
-                    <div class="top">
-                        <div style="width: max-content;position: relative;">
-                            <img class="head" src="https://img.zcool.cn/community/0149d95f4ba8a311013e3187856dad.jpg?x-oss-process=image/resize,m_fill,w_160,h_160,limit_0/auto-orient,1/sharpen,100/format,webp/quality,q_100" alt="" >
-                            <span class="myName" style="">骆驼驼Mango</span>
-                            <a-button class="apply">申请官方</a-button>
-                            <a-input class="motor"  placeholder='没有消息就是好消息~~'/>
-                            <a-button class="edit" ghost="true">
-                                <img class="editIcon" src="https://s1.aigei.com/src/img/png/c1/c1397c87cde441dca3252b026ac0c39d.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:7-_pE33tleIC5NDkx0MFWJ-JKcg=" alt="" style="width: 20px;">
-                            </a-button>
-                        </div>
-                        <div style="float: right;margin-top: -100px;margin-right: 10%;">
-                            <a-button @click="chageLikeState()"  style="background-color:blueviolet;border: solid blueviolet;color: aliceblue;">{{ likes }}</a-button>
+                    <div style="background-color: rgb(182, 217, 239);padding: 20px;">
+                        <div  style="width: max-content;">
+                            <img :src="teams[0].iconUrl" alt="" style="border-radius: 50%;width: 120px;height: 120px;border: solid 0.01cm;">
+                            <span  style="margin-left: 50px;font-weight: 600;font-size: 20px;margin-top: -30px;">{{ teams[0].teamName }}</span>
                         </div>
                     </div>
                 </div>
                 <!-- 这部分是团队的游记栏 -->
-                <div style="margin-top: 100px;width:100%">
-                    <div v-for="selection in selections" key="selection" style="padding: 0;">
-                        <a-row type="flex" justify="space-around" align="middle" v-for="row of 1" key="row" style="margin-bottom: 30px;margin-left: 0;">              
-                        <a-col :span="5.5" v-for="column of 4" key="column">
+                <div style="margin-top: 20px;width:100%">
+                    <div  style="padding: 0;">
+                        <a-row type="flex" justify="space-around" align="middle" v-for="row of 3" key="row" style="margin-bottom: 30px;margin-left: 0;">              
+                        <a-col :span="5.5" v-for="item of teamNotes.slice(row*4-4,row*4)" key="column">
                             <a-card hoverable style="width: 260px;border-radius: 10px;">
                                 <template #cover>
                                 <img
-                                    
-                                    src="https://img14.360buyimg.com/n7/jfs/t1/187265/35/32321/43201/64008f01F1081ce7c/808779cce08abe06.jpg"
-                                    style="width: 210px;height:170px;overflow: hidden;border-radius: 10px;margin-left: 30px;"
+                                    @click="toTeamNoteDetail"
+                                    :src="item.coverUrl"
+                                    style="width: 200px;margin-top: 10px;overflow: hidden;border-radius: 10px;margin-left: 30px;"
                                 />
                                 </template>
                             <div>
-                                <span style="float:left;font-weight: 500;">52TOYS Panda Roll</span>
+                                <span style="float:left;font-weight: 600;">{{ item.title }}</span>
                             </div>        
                             <br>
                             <div>
                                 <span style="text-align: left;float:left">
-                                    生日礼物熊猫潮玩手办 单只 52TOYS Panda Roll日常第二弹系列盲盒 生日礼物熊猫潮玩手办
+                                    {{ item.intro }}
                                 </span>
                             </div>
                             </a-card>
@@ -467,7 +448,9 @@ import { LikeFilled,LikeOutlined } from '@ant-design/icons-vue';
 import { UploadChangeParam, UploadProps, message } from 'ant-design-vue';
 import { getUserById } from '../../api/user/users';
 import { teamNewsList, teamNewsListData } from '../../api/team/teamNews';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import {RequestByUserIdData,RequestByUserId, articleQueryRequestByTeamIdData, articleQueryRequestByTeamId} from '../../api/atricle/travel.ts'
+import { teamApplyAllUserList, teamApplyAllUserListData } from '../../api/team/teamApply';
 const likes = ref<string>('关注')
 const news = ref()
 const chageLikeState=()=>{
@@ -560,24 +543,27 @@ const selections=[
 
         ]
 //这里是我的团队部分：
-const teams=[
-    {name:'宇宙无敌暴龙战士'},
-    {name:'vue团队'},
-    {name:'QQ群'},
-    {name:'微信群'},
-    {name:'aBCA'},
-    {name:'胡桁彰'},
-    {name:'宇宙无敌暴龙战士'},
-    {name:'宇宙无敌暴龙战士'},
-    {name:'宇宙无敌暴龙战士'},
-    {name:'宇宙无敌暴龙战士'},
-    {name:'宇宙无敌暴龙战士'},
-    {name:'宇宙无敌暴龙战士'},
-    {name:'宇宙无敌暴龙战士'},
-    {name:'宇宙无敌暴龙战士'},
-    {name:'宇宙无敌暴龙战士'},
-
-]
+const teams=ref()
+const toMyTeams=()=>{
+    let data:teamApplyAllUserListData={
+        current: 0,
+        userId: 1
+    }
+    teamApplyAllUserList(data).then((res)=>{
+        console.log(res.data.data.records)
+        teams.value = res.data.data.records
+    })
+    let data2:articleQueryRequestByTeamIdData={
+        current: 0,
+        sortOrder: 'create_time',
+        pageSize:8,
+        teamId: 6  //改
+    }
+    articleQueryRequestByTeamId(data2).then((res)=>{
+        console.log(res.data.data)
+        teamNotes.value = res.data.data.records
+    })
+}
 //这里是最新动态部分
 const newValues = ref('newNews')
 const texts = 
@@ -618,26 +604,7 @@ const items = [
     commentCount:200,
     browserCount:1000,
     id:'10102',
-    islike:false},
-    
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:13,
-    browserCount:1000,
-    commentCount:200,
-    id:'10103',
-    islike:false},
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:13,
-    commentCount:200,
-    browserCount:1000,
-    id:'10103',
-    islike:false},
-    {name:'aaaaaaaaaaaaaaaa',
-    likeCount:13,
-    commentCount:200,
-    browserCount:1000,
-    id:'10103',
-    islike:false},
+    islike:false}
 ]
 // 这里是我的关注部分：
 const myLikes=[
@@ -653,31 +620,6 @@ const myLikes=[
     },
     {
         name:'abcdasda',
-        islike:'取消关注',
-        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
-    },
-    {
-        name:'absaacda',
-        islike:'取消关注',
-        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
-    },
-    {
-        name:'absaacda',
-        islike:'取消关注',
-        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
-    },
-    {
-        name:'absaacda',
-        islike:'取消关注',
-        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
-    },
-    {
-        name:'absaacda',
-        islike:'取消关注',
-        cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
-    },
-    {
-        name:'absaacda',
         islike:'取消关注',
         cover:'一名普普通通爱摸鱼的设计师，如果你喜欢的这个新人up的话记得关注我哦，说不定下期音乐更好听哦~（日推日系带欧美和纯音）'
     },
@@ -743,6 +685,31 @@ const itemHistroy = [
     id:'10103',
     islike:false},
 ]
+const myNotes = ref()
+const teamNotes=ref([])
+const toMyNotes=()=>{
+    let data:RequestByUserIdData={
+        current: 0,
+        pageSize:5,
+        sortField: 'create_time',
+        userId: 1
+    }
+    RequestByUserId(data).then((res)=>{
+        console.log(res.data.data)
+        myNotes.value = res.data.data.records
+
+    })
+}
+const router = useRouter()
+const noteDetail=(id:number)=>{
+    router.push({
+        path:"/NotesDetail",
+        query:{
+            id:id
+        }
+    })
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -753,7 +720,7 @@ const itemHistroy = [
 .myName{
     margin-left:120px;
     font-weight: 600;
-    margin-top: -80px;
+    margin-top: -90px;
     position: absolute;
     width: max-content;
 }
@@ -851,5 +818,9 @@ const itemHistroy = [
     margin-bottom: 30px;
     padding: 0;
     overflow: hidden;
+}
+.notesStyle:hover{
+    background-color: #e0e2e4;
+    cursor: pointer;
 }
 </style>
