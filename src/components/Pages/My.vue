@@ -116,47 +116,6 @@
                 <a-pagination style="margin-top:20px;padding-bottom: 20px;" v-model:current="current" :total="50" show-less-items />
             </div>
             
-        
-        </div>
-                <a-button style="font-weight: 500;font-size:larger;;width: 172px;height: 50px;">
-                    <span>添加收藏</span> 
-                </a-button>
-                <div v-for="item in files" >
-                    
-                    <a-button style="font-weight: 500;font-size:larger;;width: 172px;height: 50px;">
-                        <img src="https://s1.aigei.com/src/img/png/1c/1c702401b53947b79e6a424df8c06696.png?imageMogr2/auto-orient/thumbnail/!240x240r/gravity/Center/crop/240x240/quality/85/&e=1735488000&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:KHVn3X2XiPLjs645LnFB6VVzbZE=" alt="" style="width: 20px;height:20px;overflow: hidden;float: left;;">
-                        {{item.name}}
-                    </a-button>
-                </div>
-            </div>
-            <div style="float:right;;margin-top: 60px;margin-right: 7%;" class="myTeamsRightList">
-                <div v-for="selection in selections" key="selection" style="padding: 0;">
-                    <a-row type="flex" justify="space-around"  v-for="row of 1" key="row" style="margin-bottom: 30px;margin-left: 0;">              
-                    <a-col :span="5" v-for="column of 4" key="column">
-                        <a-card hoverable style="width: 260px;border-radius: 10px;">
-                            <template #cover>
-                            <img
-                                
-                                src="https://img14.360buyimg.com/n7/jfs/t1/187265/35/32321/43201/64008f01F1081ce7c/808779cce08abe06.jpg"
-                                style="width: 210px;height:170px;overflow: hidden;border-radius: 10px;margin-left: 30px;"
-                            />
-                            </template>
-                        <div>
-                            <span style="float:left;font-weight: 500;">52TOYS Panda Roll</span>
-                        </div>        
-                        <br>
-                        <div>
-                            <span style="text-align: left;float:left">
-                                生日礼物熊猫潮玩手办 单只 52TOYS Panda Roll日常第二弹系列盲盒 生日礼物熊猫潮玩手办
-                            </span>
-                        </div>
-                        </a-card>
-                    </a-col>
-                </a-row>
-            </div>
-            <a-pagination v-model:current="current" :total="50" show-less-items />
-            <br>
-            </div>
         </div>
         <div v-if="values === 'teams'" class="myTeams">
             <br>
